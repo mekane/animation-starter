@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+<head>
+    <title>Procedural Graphics</title>
+    <style>
+        body {
+            background: #112;
+        }
+
+        canvas {
+            height: 100vh;
+            left: 0;
+            position: absolute;
+            top: 0;
+            width: 100vw;
+        }
+    </style>
+</head>
+<body>
+<canvas id="main"></canvas>
+<script type="module">
+    import {getControlState, initializeControls} from './src/controls.js';
+    import {step} from './src/gameState.js';
+    import {draw, setSize} from './src/view.js';
+
+    let graphicsContext;
+    let gameState = {}
+
+    function resizeGraphics() {
+        const main = document.getElementById('main');
+        main.width = main.clientWidth;
+        main.height = main.clientHeight;
+        graphicsContext = main.getContext('2d');
+
+        setSize(main.clientWidth, main.clientHeight);
+    }
+
+    window.addEventListener('resize', resizeGraphics);
+    
+    function animationLoop(time) {
+        gameState = step(gameState, getControlState());
+        draw(graphicsContext, time, gameState);
+
+        requestAnimationFrame(animationLoop);
+    }
+
+    initializeControls();
+    resizeGraphics();
+    animationLoop();
+</script>
+</body>
+</html>
