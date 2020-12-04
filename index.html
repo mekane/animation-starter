@@ -37,14 +37,21 @@
 
     window.addEventListener('resize', resizeGraphics);
 
+
+    let secondsSinceLastUpdate = 0;
+    let previousTime = 0;
+
     function animationLoop(time) {
+        secondsSinceLastUpdate = (time - previousTime) / 1000;
+        previousTime = time;
+
         const controls = getControlState();
 
         if (controls.pause) {
             showPaused(graphicsContext);
         } else {
             gameState = step(gameState, getControlState());
-            draw(graphicsContext, time, gameState);
+            draw(graphicsContext, secondsSinceLastUpdate, gameState);
         }
         requestAnimationFrame(animationLoop);
     }

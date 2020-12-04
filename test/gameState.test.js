@@ -47,11 +47,44 @@ describe('Changing next state based on controls', () => {
         const newState = step(oldState, {})
 
         expect(newState).to.deep.equal({
-            x: 3,
-            y: 4,
+            x: 1.2,
+            y: 1.3,
             vx: 2,
-            vy: 3,
-            pause: false
+            vy: 3
+        })
+    })
+
+    it('takes the next time as a parameter to use for movement calculations', () => {
+        const oldState = {
+            x: 1,
+            y: 1,
+            vx: 6,
+            vy: 6
+        }
+        const newState = step(oldState, {}, .5)
+
+        expect(newState).to.deep.equal({
+            x: 1.6,
+            y: 1.6,
+            vx: 6,
+            vy: 6
+        })
+    })
+
+    it('clamps the update step time to .1s time internal', () => {
+        const oldState = {
+            x: 1,
+            y: 1,
+            vx: 10,
+            vy: 10
+        }
+        const newState = step(oldState, {}, 0.05)
+
+        expect(newState).to.deep.equal({
+            x: 1.5,
+            y: 1.5,
+            vx: 10,
+            vy: 10
         })
     })
 

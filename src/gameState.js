@@ -5,7 +5,9 @@ const defaults = {
     vy: 0
 };
 
-export function step(oldState, controls) {
+export function step(oldState, controls, timeStep = .1) {
+    const time = Math.min(timeStep, 0.1);
+
     const nextState = Object.assign({}, defaults, oldState);
 
     if (controls.up)
@@ -20,8 +22,8 @@ export function step(oldState, controls) {
     nextState.vx = Math.min(Math.max(-20, nextState.vx), 20);
     nextState.vy = Math.min(Math.max(-20, nextState.vy), 20);
 
-    nextState.x += nextState.vx;
-    nextState.y += nextState.vy;
+    nextState.x += (nextState.vx * time);
+    nextState.y += (nextState.vy * time);
 
     return nextState;
 }
