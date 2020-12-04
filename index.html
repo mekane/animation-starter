@@ -24,7 +24,7 @@
     import {draw, setSize} from './src/view.js';
 
     let graphicsContext;
-    let gameState = {}
+    let gameState = {};
 
     function resizeGraphics() {
         const main = document.getElementById('main');
@@ -36,7 +36,7 @@
     }
 
     window.addEventListener('resize', resizeGraphics);
-    
+
     function animationLoop(time) {
         gameState = step(gameState, getControlState());
         draw(graphicsContext, time, gameState);

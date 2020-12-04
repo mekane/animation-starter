@@ -22,7 +22,7 @@ describe('The step function', () => {
         expect(newState.y).to.equal(0);
         expect(newState.vx).to.equal(0);
         expect(newState.vy).to.equal(0);
-    });
+    })
 })
 
 describe('Changing next state based on controls', () => {
@@ -37,9 +37,49 @@ describe('Changing next state based on controls', () => {
         expect(newState.y).to.equal(1);
     })
 
-    it('adds the previous velocities to x and y')
+    it('sets pause state according to the pause control', () => {
+        expect(step({}, {pause: true})).to.have.property('pause', true)
+        expect(step({}, {pause: false})).to.have.property('pause', false)
+    })
 
-    it('accelerates the velocities if controls indicate')
+    it('adds the previous velocities to x and y', () => {
+        const oldState = {
+            x: 1,
+            y: 1,
+            vx: 2,
+            vy: 3
+        }
+        const newState = step(oldState, {})
 
-    it('caps velocities at 20')
+        expect(newState).to.deep.equal({
+            x: 3,
+            y: 4,
+            vx: 2,
+            vy: 3,
+            pause: false
+        })
+    })
+
+    it('accelerates the velocities if controls indicate', () => {
+        expect(step({}, {up: true})).to.have.property('vy', -1)
+        expect(step({}, {down: true})).to.have.property('vy', 1)
+        expect(step({}, {left: true})).to.have.property('vx', -1)
+        expect(step({}, {right: true})).to.have.property('vx', 1)
+    })
+
+    it('caps velocities at 20', () => {
+        let newState = step({
+            vx: -25,
+            vy: -25
+        }, {});
+        expect(newState).to.have.property('vx', -20)
+        expect(newState).to.have.property('vy', -20)
+
+        newState = step({
+            vx: 25,
+            vy: 25
+        }, {});
+        expect(newState).to.have.property('vx', 20)
+        expect(newState).to.have.property('vy', 20)
+    })
 })
