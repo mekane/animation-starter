@@ -2,14 +2,11 @@ const defaults = {
     x: 0,
     y: 0,
     vx: 0,
-    vy: 0,
-    pause: false
+    vy: 0
 };
 
 export function step(oldState, controls) {
     const nextState = Object.assign({}, defaults, oldState);
-
-    nextState.pause = controls.pause || false;
 
     if (controls.up)
         nextState.vy--;

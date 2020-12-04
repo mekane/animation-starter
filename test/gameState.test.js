@@ -37,11 +37,6 @@ describe('Changing next state based on controls', () => {
         expect(newState.y).to.equal(1)
     })
 
-    it('sets pause state according to the pause control', () => {
-        expect(step({}, {pause: true})).to.have.property('pause', true)
-        expect(step({}, {pause: false})).to.have.property('pause', false)
-    })
-
     it('adds the previous velocities to x and y', () => {
         const oldState = {
             x: 1,

@@ -6,7 +6,11 @@ let h2 = height / 2;
 
 export function draw(g, time, state) {
 
-    showFPS(g, time)
+    if (state.paused) {
+        showPaused();
+        return;
+    } else
+        showFPS(g, time)
 }
 
 export function setSize(w, h) {
