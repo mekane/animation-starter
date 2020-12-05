@@ -1,4 +1,5 @@
 import chai from 'chai';
+import deepFreeze from 'deep-freeze';
 import {getInitialState, step} from '../src/gameState.js';
 
 const expect = chai.expect;
@@ -9,15 +10,21 @@ describe('Getting initial state', () => {
             x: 0,
             y: 0,
             vx: 0,
-            vy: 0
+            vy: 0,
+            entities: []
         })
+    })
+
+    it('fills the initial list of entities according to the count', () => {
+        const initialState = getInitialState(3)
+        expect(initialState.entities).to.be.an('array').with.length(3)
     })
 })
 
 describe('The step function', () => {
-    it('exports a function that takes the previous game state and the current controls state and returns the next state', () => {
+    it('exports a function that takes the previous game state and returns the next state', () => {
         expect(step).to.be.a('function')
-        expect(step({}, {})).to.be.an('object')
+        expect(step({})).to.be.an('object')
     })
 
     it('always returns a new object', () => {
@@ -28,7 +35,7 @@ describe('The step function', () => {
     })
 
     it('returns default values if old state is missing any', () => {
-        const newState = step({}, {})
+        const newState = step({})
         expect(newState.x).to.equal(0)
         expect(newState.y).to.equal(0)
         expect(newState.vx).to.equal(0)
@@ -55,34 +62,15 @@ describe('Changing next state based on controls', () => {
             vx: 2,
             vy: 3
         }
-        const newState = step(oldState, {})
+        const newState = step(oldState)
 
-        expect(newState).to.deep.equal({
-            x: 1.2,
-            y: 1.3,
-            vx: 2,
-            vy: 3
-        })
+        expect(newState.x).to.equal(1.2)
+        expect(newState.y).to.equal(1.3)
+        expect(newState.vx).to.equal(2)
+        expect(newState.vy).to.equal(3)
     })
 
     it('takes the next time as a parameter to use for movement calculations', () => {
-        const oldState = {
-            x: 1,
-            y: 1,
-            vx: 6,
-            vy: 6
-        }
-        const newState = step(oldState, {}, .5)
-
-        expect(newState).to.deep.equal({
-            x: 1.6,
-            y: 1.6,
-            vx: 6,
-            vy: 6
-        })
-    })
-
-    it('clamps the update step time to .1s time internal', () => {
         const oldState = {
             x: 1,
             y: 1,
@@ -91,12 +79,23 @@ describe('Changing next state based on controls', () => {
         }
         const newState = step(oldState, {}, 0.05)
 
-        expect(newState).to.deep.equal({
-            x: 1.5,
-            y: 1.5,
-            vx: 10,
-            vy: 10
-        })
+        expect(newState.x).to.equal(1.5)
+        expect(newState.y).to.equal(1.5)
+    })
+
+    it('clamps the update step time to .1s max', () => {
+        const oldState = {
+            x: 1,
+            y: 1,
+            vx: 6,
+            vy: 6
+        }
+        const newState = step(oldState, {}, .5)
+
+        expect(newState.x).to.equal(1.6)
+        expect(newState.y).to.equal(1.6)
+        expect(newState.vx).to.equal(6)
+        expect(newState.vy).to.equal(6)
     })
 
     it('accelerates the velocities if controls indicate', () => {
@@ -122,3 +121,48 @@ describe('Changing next state based on controls', () => {
         expect(newState).to.have.property('vy', 20)
     })
 })
+
+describe('Entities', () => {
+    it('has an x and y position and x and y velocities', () => {
+        const entity = getInitialState(1).entities[0];
+
+        expect(entity.size).to.be.a('number').at.least(5);
+        expect(entity.x).to.be.a('number');
+        expect(entity.y).to.be.a('number');
+        expect(entity.vx).to.be.a('number');
+        expect(entity.vx).to.be.a('number');
+    })
+
+    it('updates entity positions according to their velocities on step', () => {
+        const oldState = {
+            entities: [
+                {
+                    size: 1,
+                    x: 1,
+                    y: 1,
+                    vx: 4,
+                    vy: 5
+                }
+            ]
+        }
+
+        const newState = step(oldState);
+        const newEntity = newState.entities[0];
+        expect(newEntity.x).to.equal(1.4)
+        expect(newEntity.y).to.equal(1.5)
+        expect(newEntity.vx).to.equal(4)
+        expect(newEntity.vy).to.equal(5)
+    })
+
+    it('does not modify the old entities in the previous state', () => {
+        const oldState = getInitialState(1);
+        deepFreeze(oldState);
+
+        function update() {
+            step(oldState);
+        }
+
+        expect(update).to.not.throw();
+    })
+})
+

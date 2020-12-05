@@ -2,15 +2,21 @@ const defaults = {
     x: 0,
     y: 0,
     vx: 0,
-    vy: 0
+    vy: 0,
+    entities: []
 };
 
 export function getInitialState(numObjects) {
     const state = Object.assign({}, defaults);
+
+    for (let i = 0; i < numObjects; i++) {
+        state.entities.push(newEntity());
+    }
+
     return state;
 }
 
-export function step(oldState, controls, timeStep = .1) {
+export function step(oldState, controls = {}, timeStep = .1) {
     const time = Math.min(timeStep, 0.1);
 
     const nextState = Object.assign({}, defaults, oldState);
@@ -30,5 +36,35 @@ export function step(oldState, controls, timeStep = .1) {
     nextState.x += (nextState.vx * time);
     nextState.y += (nextState.vy * time);
 
+    nextState.entities = [];
+    if (oldState.entities) {
+        oldState.entities.forEach(e => {
+            const entity = Object.assign({}, e);
+
+            entity.x += (entity.vx * time);
+            entity.y += (entity.vy * time);
+
+            nextState.entities.push(entity);
+        })
+    }
+
     return nextState;
+}
+
+function getRandomInt(max) {
+    return Math.floor(Math.random() * Math.floor(max));
+}
+
+function evenOrOdd(number) {
+    return getRandomInt(2) ? number : number * -1;
+}
+
+function newEntity() {
+    return {
+        size: 10,
+        x: evenOrOdd(getRandomInt(100) + 10),
+        y: evenOrOdd(getRandomInt(100) + 10),
+        vx: evenOrOdd(getRandomInt(4) + 1),
+        vy: evenOrOdd(getRandomInt(4) + 1)
+    }
 }
