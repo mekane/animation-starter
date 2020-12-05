@@ -20,11 +20,11 @@
 <canvas id="main"></canvas>
 <script type="module">
     import {getControlState, initializeControls} from './src/controls.js';
-    import {step} from './src/gameState.js';
+    import {getInitialState, step} from './src/gameState.js';
     import {draw, setSize} from './src/view.js';
 
     let graphicsContext;
-    let gameState = {};
+    let gameState = getInitialState(1);
 
     function resizeGraphics() {
         const main = document.getElementById('main');

@@ -5,6 +5,11 @@ const defaults = {
     vy: 0
 };
 
+export function getInitialState(numObjects) {
+    const state = Object.assign({}, defaults);
+    return state;
+}
+
 export function step(oldState, controls, timeStep = .1) {
     const time = Math.min(timeStep, 0.1);
 

@@ -1,7 +1,18 @@
 import chai from 'chai';
-import {step} from '../src/gameState.js';
+import {getInitialState, step} from '../src/gameState.js';
 
 const expect = chai.expect;
+
+describe('Getting initial state', () => {
+    it('exports a function that returns an initial game state', () => {
+        expect(getInitialState()).to.deep.equal({
+            x: 0,
+            y: 0,
+            vx: 0,
+            vy: 0
+        })
+    })
+})
 
 describe('The step function', () => {
     it('exports a function that takes the previous game state and the current controls state and returns the next state', () => {
