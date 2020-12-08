@@ -68,3 +68,14 @@ function newEntity() {
         vy: evenOrOdd(getRandomInt(4) + 1)
     }
 }
+
+export function collision(e1 = {}, e2 = {}) {
+    const dx = e1.x - e2.x;
+    const dy = e1.y - e2.y;
+    const dSquared = (dx * dx) + (dy * dy);
+
+    const dr = (e1.size + e2.size);
+    const rSquared = dr * dr;
+
+    return dSquared <= rSquared;
+}
