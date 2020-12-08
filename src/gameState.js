@@ -88,3 +88,31 @@ export function rectangleHit(r1 = {}, r2 = {}) {
 
     return rightEdge && leftEdge && topEdge && bottomEdge;
 }
+
+export function circleHitRectangle(c = {}, r = {}) {
+    const leftEdge = r.x;
+    const rightEdge = (r.x + r.width);
+    let horizontalEdge = c.x;
+
+    if (c.x < leftEdge)
+        horizontalEdge = leftEdge;
+    else if (c.x > rightEdge)
+        horizontalEdge = rightEdge;
+
+    const bottomEdge = r.y;
+    const topEdge = r.y + r.height;
+    let verticalEdge = c.y;
+
+    if (c.y > topEdge)
+        verticalEdge = topEdge;
+    else if (c.y <= bottomEdge)
+        verticalEdge = bottomEdge;
+
+    const dx = c.x - horizontalEdge;
+    const dy = c.y - verticalEdge;
+    const dSquared = (dx * dx) + (dy * dy);
+
+    const rSquared = c.size * c.size;
+
+    return dSquared < rSquared;
+}

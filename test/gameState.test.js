@@ -1,6 +1,6 @@
 import chai from 'chai';
 import deepFreeze from 'deep-freeze';
-import {circleHit, getInitialState, rectangleHit, step} from '../src/gameState.js';
+import {circleHit, circleHitRectangle, getInitialState, rectangleHit, step} from '../src/gameState.js';
 
 const expect = chai.expect;
 
@@ -246,5 +246,53 @@ describe('Intersecting Entities - two rectangles', () => {
         const r2 = {x: 10, y: 10, width: 20, height: 20};
 
         expect(rectangleHit(r1, r2)).to.equal(true)
+    })
+})
+
+describe('Intersecting Entities - a rectangle and a circle', () => {
+    it('returns false for missing and bogus data', () => {
+        expect(circleHitRectangle()).to.equal(false)
+        expect(circleHitRectangle({})).to.equal(false)
+        expect(circleHitRectangle({}, {})).to.equal(false)
+    })
+
+    it('returns false for circles and rectangles far apart', () => {
+        const r = {x: 30, y: 30, width: 30, height: 30}
+
+        const cLeft = {x: 15, y: 45, size: 5}
+        expect(circleHitRectangle(cLeft, r)).to.equal(false)
+
+        const cTop = {x: 45, y: 90, size: 5}
+        expect(circleHitRectangle(cTop, r)).to.equal(false)
+
+        const cRight = {x: 95, y: 45, size: 5}
+        expect(circleHitRectangle(cRight, r)).to.equal(false)
+
+        const cBottom = {x: 45, y: 10, size: 5}
+        expect(circleHitRectangle(cBottom, r)).to.equal(false)
+    })
+
+    it('returns true if the circle overlaps the left edge of the rectangle', () => {
+        const r = {x: 30, y: 30, width: 30, height: 30}
+        const c = {x: 20, y: 45, size: 15}
+        expect(circleHitRectangle(c, r)).to.equal(true)
+    })
+
+    it('returns true if the circle overlaps the right edge of the rectangle', () => {
+        const r = {x: 30, y: 30, width: 30, height: 30}
+        const c = {x: 70, y: 45, size: 15}
+        expect(circleHitRectangle(c, r)).to.equal(true)
+    })
+
+    it('returns true if the circle overlaps the top edge of the rectangle', () => {
+        const r = {x: 30, y: 30, width: 30, height: 30}
+        const c = {x: 45, y: 70, size: 15}
+        expect(circleHitRectangle(c, r)).to.equal(true)
+    })
+
+    it('returns true if the circle overlaps the bottom edge of the rectangle', () => {
+        const r = {x: 30, y: 30, width: 30, height: 30}
+        const c = {x: 45, y: 20, size: 15}
+        expect(circleHitRectangle(c, r)).to.equal(true)
     })
 })
