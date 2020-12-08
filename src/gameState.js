@@ -40,12 +40,25 @@ export function step(oldState, controls = {}, timeStep = .1) {
     if (oldState.entities) {
         oldState.entities.forEach(e => {
             const entity = Object.assign({}, e);
+            entity.hit = false;
 
             entity.x += (entity.vx * time);
             entity.y += (entity.vy * time);
 
             nextState.entities.push(entity);
         })
+    }
+
+    for (let i = 0; i < nextState.entities.length; i++) {
+        const e1 = nextState.entities[i]
+
+        for (let j = i + 1; j < nextState.entities.length; j++) {
+            const e2 = nextState.entities[j];
+            if (hit(e1, e2)) {
+                e1.hit = true;
+                e2.hit = true;
+            }
+        }
     }
 
     return nextState;
@@ -60,12 +73,21 @@ function evenOrOdd(number) {
 }
 
 function newEntity() {
-    return {
-        size: 10,
-        x: evenOrOdd(getRandomInt(100) + 10),
-        y: evenOrOdd(getRandomInt(100) + 10),
-        vx: evenOrOdd(getRandomInt(4) + 1),
-        vy: evenOrOdd(getRandomInt(4) + 1)
+    if (getRandomInt(2) - 1)
+        return {
+            size: 12,
+            x: getRandomInt(100) + 450,
+            y: getRandomInt(100) + 450,
+            vx: evenOrOdd(getRandomInt(4) + 1),
+            vy: evenOrOdd(getRandomInt(4) + 1)
+        }
+    else return {
+        x: getRandomInt(100) + 450,
+        y: getRandomInt(100) + 450,
+        width: 20 + getRandomInt(30),
+        height: 20 + getRandomInt(30),
+        vx: evenOrOdd(getRandomInt(5) + 1),
+        vy: evenOrOdd(getRandomInt(5) + 1)
     }
 }
 
@@ -115,4 +137,15 @@ export function circleHitRectangle(c = {}, r = {}) {
     const rSquared = c.size * c.size;
 
     return dSquared < rSquared;
+}
+
+export function hit(e1, e2) {
+    if (e1.size && e2.size)
+        return circleHit(e1, e2)
+    else if (e1.size && !e2.size)
+        return circleHitRectangle(e1, e2)
+    else if (!e1.size && e2.size)
+        return circleHitRectangle(e2, e1)
+    else
+        return rectangleHit(e1, e2)
 }

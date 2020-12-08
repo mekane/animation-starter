@@ -5,6 +5,7 @@ let w2 = width / 2;
 let h2 = height / 2;
 
 export function draw(g, time, state) {
+    g.clearRect(0, 0, width, height);
 
     if (state.paused) {
         showPaused();
@@ -13,6 +14,14 @@ export function draw(g, time, state) {
         const fps = Math.round(1 / time);
         showFPS(g, fps)
     }
+
+    state.entities.forEach(e => {
+        if (e.size) {
+            drawCircle(g, e)
+        } else {
+            drawRectangle(g, e)
+        }
+    });
 }
 
 export function setSize(w, h) {
@@ -35,4 +44,32 @@ function showPosition(g, x, y) {
     g.font = '25px Arial';
     g.fillStyle = 'black';
     g.fillText(`(${x}, ${y})`, 10, window.innerHeight - 10);
+}
+
+function drawCircle(g, c) {
+    g.lineWidth = 2;
+    g.fillStyle = '#333';
+
+    if (c.hit)
+        g.strokeStyle = '#c66';
+    else
+        g.strokeStyle = '#666';
+
+    g.beginPath();
+    g.arc(c.x, c.y, c.size, 0, 2 * Math.PI);
+    g.fill();
+    g.stroke();
+}
+
+function drawRectangle(g, r) {
+    g.lineWidth = 2;
+    g.fillStyle = '#333';
+
+    if (r.hit)
+        g.strokeStyle = '#c66';
+    else
+        g.strokeStyle = '#666';
+
+    g.fillRect(r.x, r.y, r.width, r.height);
+    g.strokeRect(r.x, r.y, r.width, r.height);
 }
