@@ -79,3 +79,12 @@ export function circleHit(c1 = {}, c2 = {}) {
 
     return dSquared <= rSquared;
 }
+
+export function rectangleHit(r1 = {}, r2 = {}) {
+    const rightEdge = (r1.x + r1.width) >= r2.x;
+    const leftEdge = r1.x <= (r2.x + r2.width);
+    const topEdge = (r1.y + r1.height) >= r2.y;
+    const bottomEdge = r1.y <= (r2.y + r2.height);
+
+    return rightEdge && leftEdge && topEdge && bottomEdge;
+}

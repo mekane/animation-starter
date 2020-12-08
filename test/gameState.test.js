@@ -1,6 +1,6 @@
 import chai from 'chai';
 import deepFreeze from 'deep-freeze';
-import {circleHit, getInitialState, step} from '../src/gameState.js';
+import {circleHit, getInitialState, rectangleHit, step} from '../src/gameState.js';
 
 const expect = chai.expect;
 
@@ -192,5 +192,59 @@ describe('Intersecting Entities - two circles', () => {
         const c2 = {size: 10, x: 15, y: 15};
 
         expect(circleHit(c1, c2)).to.equal(true)
+    })
+})
+
+describe('Intersecting Entities - two rectangles', () => {
+    it('the collision function returns false for missing and bogus data', () => {
+        expect(rectangleHit()).to.equal(false)
+        expect(rectangleHit({})).to.equal(false)
+        expect(rectangleHit({}, {})).to.equal(false)
+    })
+
+    it('returns false for rectangles far apart', () => {
+        const r1 = {x: 10, y: 0, width: 10, height: 10};
+        const r2 = {x: 99, y: 0, width: 10, height: 10};
+        expect(rectangleHit(r1, r2)).to.equal(false)
+
+        const r3 = {x: 99, y: 0, width: 10, height: 10};
+        const r4 = {x: 10, y: 0, width: 10, height: 10};
+        expect(rectangleHit(r3, r4)).to.equal(false)
+
+        const r5 = {x: 0, y: 10, width: 10, height: 10};
+        const r6 = {x: 0, y: 99, width: 10, height: 10};
+        expect(rectangleHit(r5, r6)).to.equal(false)
+
+        const r7 = {x: 0, y: 99, width: 10, height: 10};
+        const r8 = {x: 0, y: 10, width: 10, height: 10};
+        expect(rectangleHit(r7, r8)).to.equal(false)
+    })
+
+    it('returns true if r1 right edge overlaps r2 left edge', () => {
+        const r1 = {x: 10, y: 10, width: 15, height: 10};
+        const r2 = {x: 20, y: 0, width: 30, height: 30};
+
+        expect(rectangleHit(r1, r2)).to.equal(true)
+    })
+
+    it('returns true if r1 left edge overlaps r2 right edge', () => {
+        const r1 = {x: 20, y: 0, width: 30, height: 30};
+        const r2 = {x: 45, y: 10, width: 15, height: 10};
+
+        expect(rectangleHit(r1, r2)).to.equal(true)
+    })
+
+    it('returns true if r1 bottom edge overlaps r2 top edge', () => {
+        const r1 = {x: 20, y: 20, width: 10, height: 15};
+        const r2 = {x: 10, y: 10, width: 30, height: 30};
+
+        expect(rectangleHit(r1, r2)).to.equal(true)
+    })
+
+    it('returns true if r1 top edge overlaps r2 bottom edge', () => {
+        const r1 = {x: 20, y: 0, width: 10, height: 15};
+        const r2 = {x: 10, y: 10, width: 20, height: 20};
+
+        expect(rectangleHit(r1, r2)).to.equal(true)
     })
 })
