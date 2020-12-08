@@ -69,12 +69,12 @@ function newEntity() {
     }
 }
 
-export function collision(e1 = {}, e2 = {}) {
-    const dx = e1.x - e2.x;
-    const dy = e1.y - e2.y;
+export function circleHit(c1 = {}, c2 = {}) {
+    const dx = c1.x - c2.x;
+    const dy = c1.y - c2.y;
     const dSquared = (dx * dx) + (dy * dy);
 
-    const dr = (e1.size + e2.size);
+    const dr = (c1.size + c2.size);
     const rSquared = dr * dr;
 
     return dSquared <= rSquared;

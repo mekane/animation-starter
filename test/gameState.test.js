@@ -1,6 +1,6 @@
 import chai from 'chai';
 import deepFreeze from 'deep-freeze';
-import {collision, getInitialState, step} from '../src/gameState.js';
+import {circleHit, getInitialState, step} from '../src/gameState.js';
 
 const expect = chai.expect;
 
@@ -168,29 +168,29 @@ describe('Entities', () => {
 
 describe('Intersecting Entities - two circles', () => {
     it('the collision function returns false for missing and bogus data', () => {
-        expect(collision()).to.equal(false)
-        expect(collision({})).to.equal(false)
-        expect(collision({}, {})).to.equal(false)
+        expect(circleHit()).to.equal(false)
+        expect(circleHit({})).to.equal(false)
+        expect(circleHit({}, {})).to.equal(false)
     })
 
     it('returns false for circles far apart', () => {
-        const e1 = {size: 10, x: 10, y: 0};
-        const e2 = {size: 10, x: 99, y: 0};
+        const c1 = {size: 10, x: 10, y: 0};
+        const c2 = {size: 10, x: 99, y: 0};
 
-        expect(collision(e1, e2)).to.equal(false)
+        expect(circleHit(c1, c2)).to.equal(false)
     })
 
     it('returns true for circles at a distance equal to their radii', () => {
-        const e1 = {size: 10, x: 10, y: 0};
-        const e2 = {size: 10, x: 30, y: 0};
+        const c1 = {size: 10, x: 10, y: 0};
+        const c2 = {size: 10, x: 30, y: 0};
 
-        expect(collision(e1, e2)).to.equal(true)
+        expect(circleHit(c1, c2)).to.equal(true)
     })
 
     it('returns true for circles at a distance less than their radii', () => {
-        const e1 = {size: 10, x: 10, y: 10};
-        const e2 = {size: 10, x: 15, y: 15};
+        const c1 = {size: 10, x: 10, y: 10};
+        const c2 = {size: 10, x: 15, y: 15};
 
-        expect(collision(e1, e2)).to.equal(true)
+        expect(circleHit(c1, c2)).to.equal(true)
     })
 })
