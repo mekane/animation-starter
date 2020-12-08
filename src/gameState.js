@@ -139,7 +139,7 @@ export function circleHitRectangle(c = {}, r = {}) {
     return dSquared < rSquared;
 }
 
-export function hit(e1, e2) {
+function hit(e1, e2) {
     if (e1.size && e2.size)
         return circleHit(e1, e2)
     else if (e1.size && !e2.size)
@@ -148,4 +148,8 @@ export function hit(e1, e2) {
         return circleHitRectangle(e2, e1)
     else
         return rectangleHit(e1, e2)
+}
+
+export function collide(e1, e2) {
+
 }

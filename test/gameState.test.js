@@ -1,6 +1,6 @@
 import chai from 'chai';
 import deepFreeze from 'deep-freeze';
-import {circleHit, circleHitRectangle, getInitialState, rectangleHit, step} from '../src/gameState.js';
+import {circleHit, circleHitRectangle, collide, getInitialState, rectangleHit, step} from '../src/gameState.js';
 
 const expect = chai.expect;
 
@@ -126,11 +126,13 @@ describe('Entities', () => {
     it('has an x and y position and x and y velocities', () => {
         const entity = getInitialState(1).entities[0];
 
-        expect(entity.size).to.be.a('number').at.least(5);
         expect(entity.x).to.be.a('number');
         expect(entity.y).to.be.a('number');
         expect(entity.vx).to.be.a('number');
         expect(entity.vx).to.be.a('number');
+
+        //TODO: circles have 'size', rectangles have 'width' and 'height'
+        //expect(entity.size).to.be.a('number').at.least(5);
     })
 
     it('updates entity positions according to their velocities on step', () => {
@@ -295,4 +297,16 @@ describe('Intersecting Entities - a rectangle and a circle', () => {
         const c = {x: 45, y: 20, size: 15}
         expect(circleHitRectangle(c, r)).to.equal(true)
     })
+})
+
+describe('Entity Physics - collision effects', () => {
+    it('does nothing to missing or bogus arguments', () => {
+        const e1 = deepFreeze({});
+        const e2 = deepFreeze({});
+        expect(f => collide()).not.to.throw();
+        expect(f => collide(e1)).not.to.throw();
+        expect(f => collide(e1, e2)).not.to.throw();
+    })
+
+
 })
