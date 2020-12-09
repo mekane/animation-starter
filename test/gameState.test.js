@@ -1,6 +1,6 @@
 import chai from 'chai';
 import deepFreeze from 'deep-freeze';
-import {getInitialState, step} from '../src/gameState.js';
+import {getInitialState, setPhysics, step} from '../src/gameState.js';
 
 const expect = chai.expect;
 
@@ -157,7 +157,16 @@ describe('Entities', () => {
     })
 
     it('does not modify the old entities in the previous state', () => {
-        const oldState = getInitialState(1);
+        const oldState = {
+            x: 0,
+            y: 0,
+            vx: 0,
+            vy: 0,
+            entities: [
+                {x: 530, y: 455, size: 10, vx: -4, vy: -4},
+            ]
+        };
+
         deepFreeze(oldState);
 
         function update() {
@@ -165,5 +174,86 @@ describe('Entities', () => {
         }
 
         expect(update).to.not.throw();
+    })
+
+    it('resets the "hit" state of entities each update step', () => {
+        const oldState = {
+            x: 0,
+            y: 0,
+            vx: 0,
+            vy: 0,
+            entities: [
+                {x: 530, y: 455, size: 10, vx: -4, vy: -4, hit: true},
+            ]
+        };
+
+        const newState = step(oldState);
+        expect(newState.entities[0].hit).to.equal(false);
+    })
+
+    it('checks for collisions between circles using the physics provided', () => {
+        const oldState = {
+            x: 0,
+            y: 0,
+            vx: 0,
+            vy: 0,
+            entities: [
+                {x: 230, y: 255, size: 10, vx: -4, vy: 14},
+                {x: 300, y: 355, size: 10, vx: 12, vy: -4},
+            ]
+        };
+
+        let circlesIntersectCalled = 0;
+        const physicsSpy = {
+            circleHit: (c1, c2) => circlesIntersectCalled += 1
+        }
+        setPhysics(physicsSpy)
+
+        step(oldState);
+        expect(circlesIntersectCalled).to.equal(1);
+    })
+
+    it('checks for collisions between rectangles using the physics provided', () => {
+        const oldState = {
+            x: 0,
+            y: 0,
+            vx: 0,
+            vy: 0,
+            entities: [
+                {x: 230, y: 255, width: 100, height: 120, vx: -4, vy: 14},
+                {x: 300, y: 355, width: 120, height: 100, vx: 12, vy: -4},
+            ]
+        };
+
+        let rectanglesIntersectCalled = 0;
+        const physicsSpy = {
+            rectangleHit: (r1, r2) => rectanglesIntersectCalled += 1
+        }
+        setPhysics(physicsSpy)
+
+        step(oldState);
+        expect(rectanglesIntersectCalled).to.equal(1);
+    })
+
+    it('checks for collisions between different shapes using the physics provided', () => {
+        const oldState = {
+            x: 0,
+            y: 0,
+            vx: 0,
+            vy: 0,
+            entities: [
+                {x: 230, y: 255, size: 10, vx: -4, vy: 14},
+                {x: 300, y: 355, width: 120, height: 100, vx: 12, vy: -4},
+            ]
+        };
+
+        let mixedIntersectCalled = 0;
+        const physicsSpy = {
+            circleHitRectangle: (r1, r2) => mixedIntersectCalled += 1
+        }
+        setPhysics(physicsSpy)
+
+        step(oldState);
+        expect(mixedIntersectCalled).to.equal(1);
     })
 })
