@@ -68,6 +68,8 @@ export function step(oldState, controls = {}, timeStep = .1) {
             if (hit(e1, e2)) {
                 e1.hit = true;
                 e2.hit = true;
+
+                physics.collide(e1, e2)
             }
         }
     }

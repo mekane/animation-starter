@@ -205,7 +205,8 @@ describe('Entities', () => {
 
         let circlesIntersectCalled = 0;
         const physicsSpy = {
-            circleIntersectsCircle: (c1, c2) => circlesIntersectCalled += 1
+            circleIntersectsCircle: (c1, c2) => circlesIntersectCalled += 1,
+            collide: _ => _
         }
         setPhysics(physicsSpy)
 
@@ -227,7 +228,8 @@ describe('Entities', () => {
 
         let rectanglesIntersectCalled = 0;
         const physicsSpy = {
-            rectangleIntersectsRectangle: (r1, r2) => rectanglesIntersectCalled += 1
+            rectangleIntersectsRectangle: (r1, r2) => rectanglesIntersectCalled += 1,
+            collide: _ => _
         }
         setPhysics(physicsSpy)
 
@@ -249,11 +251,34 @@ describe('Entities', () => {
 
         let mixedIntersectCalled = 0;
         const physicsSpy = {
-            circleIntersectsRectangle: (r1, r2) => mixedIntersectCalled += 1
+            circleIntersectsRectangle: (r1, r2) => mixedIntersectCalled += 1,
+            collide: _ => _
         }
         setPhysics(physicsSpy)
 
         step(oldState);
         expect(mixedIntersectCalled).to.equal(1);
+    })
+
+    it('applies collision effects using the physics provided', () => {
+        const oldState = {
+            x: 0,
+            y: 0,
+            vx: 0,
+            vy: 0,
+            entities: [{x: 0, y: 0, vx: 1, vy: 0, size: 10},
+                {x: 10, y: 0, vx: -1, vy: 0, size: 10}
+            ]
+        };
+
+        let collideCalled = 0;
+        const physicsSpy = {
+            circleIntersectsCircle: _ => _,
+            collide: (e1, e2) => collideCalled += 1
+        }
+        setPhysics(physicsSpy)
+
+        step(oldState)
+        expect(collideCalled).to.equal(1);
     })
 })
