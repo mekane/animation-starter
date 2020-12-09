@@ -79,8 +79,31 @@ function getCenter(entity = {}) {
     }
 }
 
-export function collide(e1, e2) {
+export function collide(e1 = {}, e2 = {}) {
+    const norm = collisionNormal(e1, e2);
 
+    const relativeVelocity = {
+        x: e1.vx - e2.vx,
+        y: e1.vy - e2.vy
+    }
+
+    const speed = dot(norm, relativeVelocity)
+
+    if (speed <= 0 || isNaN(speed))
+        return;
+
+    const dvx = speed * norm.x;
+    const dvy = speed * norm.y;
+
+    e1.vx -= dvx;
+    e1.vy -= dvy;
+
+    e2.vx += dvx;
+    e2.vy += dvy;
+}
+
+function dot(v1, v2) {
+    return v1.x * v2.x + v1.y * v2.y;
 }
 
 export default {

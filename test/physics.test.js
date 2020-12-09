@@ -165,12 +165,42 @@ describe('Collision effects - computing collision normal vector', () => {
     })
 })
 
-describe('Collision effects - computing ', () => {
+describe('Collision effects - updating entities after collision', () => {
     it('does nothing to missing or bogus arguments', () => {
         const e1 = deepFreeze({});
         const e2 = deepFreeze({});
         expect(f => collide()).not.to.throw();
         expect(f => collide(e1)).not.to.throw();
         expect(f => collide(e1, e2)).not.to.throw();
+    })
+
+    it('has no effect if the objects are not moving', () => {
+        const e1 = {x: 0, y: 0, vx: 0, vy: 0, size: 10}
+        const e2 = {x: 10, y: 0, vx: 0, vy: 0, size: 10}
+        deepFreeze(e1)
+        deepFreeze(e2)
+
+        expect(f => collide(e1, e2)).not.to.throw();
+    })
+
+    it('has no effect if the objects are moving away from each other', () => {
+        const e1 = {x: 0, y: 0, vx: -1, vy: 0, size: 10}
+        const e2 = {x: 10, y: 0, vx: 1, vy: 0, size: 10}
+        deepFreeze(e1)
+        deepFreeze(e2)
+
+        expect(f => collide(e1, e2)).not.to.throw();
+    })
+
+    it('changes the entity velocities based on the collision direction and speed', () => {
+        const e1 = {x: 0, y: 0, vx: 1, vy: 0, size: 10}
+        const e2 = {x: 10, y: 0, vx: -1, vy: 0, size: 10}
+
+        collide(e1, e2);
+
+        expect(e1.vx).to.equal(-1);
+        expect(e1.vy).to.equal(0);
+        expect(e2.vx).to.equal(1);
+        expect(e2.vy).to.equal(0);
     })
 })
