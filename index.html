@@ -20,8 +20,11 @@
 <canvas id="main"></canvas>
 <script type="module">
     import {getControlState, initializeControls} from './src/controls.js';
-    import {getInitialState, step} from './src/gameState.js';
+    import {getInitialState, setPhysics, step} from './src/gameState.js';
     import {draw, setSize} from './src/view.js';
+    import physics from './src/physics.js';
+
+    setPhysics(physics);
 
     let graphicsContext;
     let gameState = getInitialState(10);
