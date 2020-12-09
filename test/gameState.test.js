@@ -266,7 +266,8 @@ describe('Entities', () => {
             y: 0,
             vx: 0,
             vy: 0,
-            entities: [{x: 0, y: 0, vx: 1, vy: 0, size: 10},
+            entities: [
+                {x: 0, y: 0, vx: 1, vy: 0, size: 10},
                 {x: 10, y: 0, vx: -1, vy: 0, size: 10}
             ]
         };

@@ -194,13 +194,25 @@ describe('Collision effects - updating entities after collision', () => {
 
     it('changes the entity velocities based on the collision direction and speed', () => {
         const e1 = {x: 0, y: 0, vx: 1, vy: 0, size: 10}
-        const e2 = {x: 10, y: 0, vx: -1, vy: 0, size: 10}
+        const e2 = {x: 20, y: 0, vx: -1, vy: 0, size: 10}
 
         collide(e1, e2);
 
         expect(e1.vx).to.equal(-1);
         expect(e1.vy).to.equal(0);
         expect(e2.vx).to.equal(1);
+        expect(e2.vy).to.equal(0);
+    })
+
+    it('changes the entity velocities proportional to their mass', () => {
+        const e1 = {x: 0, y: 0, vx: 1, vy: 0, size: 5}
+        const e2 = {x: 10, y: 0, vx: -1, vy: 0, size: 12}
+
+        collide(e1, e2);
+
+        expect(e1.vx).to.be.closeTo(-2.4, .01);
+        expect(e1.vy).to.equal(0);
+        expect(e2.vx).to.be.closeTo(-0.408, .01);
         expect(e2.vy).to.equal(0);
     })
 })

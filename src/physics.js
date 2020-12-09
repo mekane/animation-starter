@@ -92,14 +92,22 @@ export function collide(e1 = {}, e2 = {}) {
     if (speed <= 0 || isNaN(speed))
         return;
 
-    const dvx = speed * norm.x;
-    const dvy = speed * norm.y;
+    const e1Mass = getArea(e1);
+    const e2Mass = getArea(e2);
+    const impulse = 2 * speed / (e1Mass + e2Mass);
 
-    e1.vx -= dvx;
-    e1.vy -= dvy;
+    e1.vx -= impulse * e2Mass * norm.x;
+    e1.vy -= impulse * e2Mass * norm.y;
 
-    e2.vx += dvx;
-    e2.vy += dvy;
+    e2.vx += impulse * e1Mass * norm.x;
+    e2.vy += impulse * e1Mass * norm.y;
+}
+
+function getArea(entity = {}) {
+    if (entity.size)
+        return 3.14 * entity.size * entity.size;
+    else
+        return entity.width * entity.height;
 }
 
 function dot(v1, v2) {
