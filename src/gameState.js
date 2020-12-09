@@ -8,8 +8,8 @@ const defaults = {
 
 let physics = {
     circleIntersectsCircle: _ => _,
-    rectangleHit: _ => _,
-    circleHitRectangle: _ => _,
+    rectangleIntersectsRectangle: _ => _,
+    circleIntersectsRectangle: _ => _,
     collide: _ => _
 }
 
@@ -106,9 +106,9 @@ function hit(e1, e2) {
     if (e1.size && e2.size)
         return physics.circleIntersectsCircle(e1, e2)
     else if (e1.size && !e2.size)
-        return physics.circleHitRectangle(e1, e2)
+        return physics.circleIntersectsRectangle(e1, e2)
     else if (!e1.size && e2.size)
-        return physics.circleHitRectangle(e2, e1)
+        return physics.circleIntersectsRectangle(e2, e1)
     else
-        return physics.rectangleHit(e1, e2)
+        return physics.rectangleIntersectsRectangle(e1, e2)
 }

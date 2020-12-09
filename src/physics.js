@@ -9,7 +9,7 @@ export function circleIntersectsCircle(c1 = {}, c2 = {}) {
     return dSquared <= rSquared;
 }
 
-export function rectangleHit(r1 = {}, r2 = {}) {
+export function rectangleIntersectsRectangle(r1 = {}, r2 = {}) {
     const rightEdge = (r1.x + r1.width) >= r2.x;
     const leftEdge = r1.x <= (r2.x + r2.width);
     const topEdge = (r1.y + r1.height) >= r2.y;
@@ -18,7 +18,7 @@ export function rectangleHit(r1 = {}, r2 = {}) {
     return rightEdge && leftEdge && topEdge && bottomEdge;
 }
 
-export function circleHitRectangle(c = {}, r = {}) {
+export function circleIntersectsRectangle(c = {}, r = {}) {
     const leftEdge = r.x;
     const rightEdge = (r.x + r.width);
     let horizontalEdge = c.x;
@@ -53,7 +53,7 @@ export function collide(e1, e2) {
 
 export default {
     circleIntersectsCircle,
-    circleHitRectangle,
+    circleIntersectsRectangle,
     collide,
-    rectangleHit,
+    rectangleIntersectsRectangle
 }

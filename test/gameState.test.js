@@ -227,7 +227,7 @@ describe('Entities', () => {
 
         let rectanglesIntersectCalled = 0;
         const physicsSpy = {
-            rectangleHit: (r1, r2) => rectanglesIntersectCalled += 1
+            rectangleIntersectsRectangle: (r1, r2) => rectanglesIntersectCalled += 1
         }
         setPhysics(physicsSpy)
 
@@ -249,7 +249,7 @@ describe('Entities', () => {
 
         let mixedIntersectCalled = 0;
         const physicsSpy = {
-            circleHitRectangle: (r1, r2) => mixedIntersectCalled += 1
+            circleIntersectsRectangle: (r1, r2) => mixedIntersectCalled += 1
         }
         setPhysics(physicsSpy)
 
