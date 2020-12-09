@@ -1,6 +1,12 @@
 import chai from 'chai';
 import deepFreeze from "deep-freeze";
-import {circleIntersectsCircle, circleIntersectsRectangle, collide, rectangleIntersectsRectangle} from "../src/physics.js";
+import {
+    circleIntersectsCircle,
+    circleIntersectsRectangle,
+    collide,
+    collisionNormal,
+    rectangleIntersectsRectangle
+} from "../src/physics.js";
 
 const expect = chai.expect;
 
@@ -135,7 +141,31 @@ describe('Intersecting Entities - a rectangle and a circle', () => {
     })
 })
 
-describe('Entity Physics - collision effects', () => {
+describe('Collision effects - computing collision normal vector', () => {
+    it('returns zeros for missing or bogus arguments', () => {
+        expect(collisionNormal()).to.deep.equal({x: NaN, y: NaN});
+        expect(collisionNormal({})).to.deep.equal({x: NaN, y: NaN});
+        expect(collisionNormal({}, {})).to.deep.equal({x: NaN, y: NaN});
+    })
+
+    it('returns a normalized vector indicating direction of collision', () => {
+        const e1 = {x: 0, y: 0, size: 1}
+        const e2 = {x: 10, y: 0, size: 1}
+        expect(collisionNormal(e1, e2)).to.deep.equal({x: 1.0, y: 0});
+
+        const e3 = {x: 0, y: 0, size: 1}
+        const e4 = {x: 0, y: 10, size: 1}
+        expect(collisionNormal(e3, e4)).to.deep.equal({x: 0, y: 1.0});
+
+        const e5 = {x: 0, y: 0, size: 1}
+        const e6 = {x: 10, y: 10, size: 1}
+        const normal45Deg = collisionNormal(e5, e6);
+        expect(normal45Deg.x.toFixed(3)).to.equal('0.707');
+        expect(normal45Deg.y.toFixed(3)).to.equal('0.707');
+    })
+})
+
+describe('Collision effects - computing ', () => {
     it('does nothing to missing or bogus arguments', () => {
         const e1 = deepFreeze({});
         const e2 = deepFreeze({});
@@ -143,6 +173,4 @@ describe('Entity Physics - collision effects', () => {
         expect(f => collide(e1)).not.to.throw();
         expect(f => collide(e1, e2)).not.to.throw();
     })
-
-
 })

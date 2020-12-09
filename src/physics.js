@@ -46,6 +46,38 @@ export function circleIntersectsRectangle(c = {}, r = {}) {
     return dSquared < rSquared;
 }
 
+export function collisionNormal(e1 = {}, e2 = {}) {
+    const c1 = getCenter(e1)
+    const c2 = getCenter(e2)
+
+    const magnitude = {
+        x: c2.x - c1.x,
+        y: c2.y - c1.y
+    }
+
+    const d = Math.sqrt(magnitude.x * magnitude.x + magnitude.y * magnitude.y)
+
+    const normal = {
+        x: magnitude.x / d,
+        y: magnitude.y / d
+    }
+
+    return normal;
+}
+
+function getCenter(entity = {}) {
+    if (entity.size)
+        return {
+            x: entity.x,
+            y: entity.y
+        }
+    else {
+        return {
+            x: entity.x + entity.width / 2,
+            y: entity.y + entity.height / 2
+        }
+    }
+}
 
 export function collide(e1, e2) {
 
