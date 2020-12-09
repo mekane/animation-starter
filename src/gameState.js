@@ -7,7 +7,7 @@ const defaults = {
 };
 
 let physics = {
-    circleHit: _ => _,
+    circleIntersectsCircle: _ => _,
     rectangleHit: _ => _,
     circleHitRectangle: _ => _,
     collide: _ => _
@@ -104,7 +104,7 @@ function newEntity() {
 
 function hit(e1, e2) {
     if (e1.size && e2.size)
-        return physics.circleHit(e1, e2)
+        return physics.circleIntersectsCircle(e1, e2)
     else if (e1.size && !e2.size)
         return physics.circleHitRectangle(e1, e2)
     else if (!e1.size && e2.size)

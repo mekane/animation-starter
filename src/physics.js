@@ -1,4 +1,4 @@
-export function circleHit(c1 = {}, c2 = {}) {
+export function circleIntersectsCircle(c1 = {}, c2 = {}) {
     const dx = c1.x - c2.x;
     const dy = c1.y - c2.y;
     const dSquared = (dx * dx) + (dy * dy);
@@ -52,7 +52,7 @@ export function collide(e1, e2) {
 }
 
 export default {
-    circleHit,
+    circleIntersectsCircle,
     circleHitRectangle,
     collide,
     rectangleHit,

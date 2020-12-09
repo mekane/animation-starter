@@ -1,35 +1,35 @@
 import chai from 'chai';
 import deepFreeze from "deep-freeze";
-import {circleHit, circleHitRectangle, collide, rectangleHit} from "../src/physics.js";
+import {circleIntersectsCircle, circleHitRectangle, collide, rectangleHit} from "../src/physics.js";
 
 const expect = chai.expect;
 
 describe('Intersecting Entities - two circles', () => {
     it('the collision function returns false for missing and bogus data', () => {
-        expect(circleHit()).to.equal(false)
-        expect(circleHit({})).to.equal(false)
-        expect(circleHit({}, {})).to.equal(false)
+        expect(circleIntersectsCircle()).to.equal(false)
+        expect(circleIntersectsCircle({})).to.equal(false)
+        expect(circleIntersectsCircle({}, {})).to.equal(false)
     })
 
     it('returns false for circles far apart', () => {
         const c1 = {size: 10, x: 10, y: 0};
         const c2 = {size: 10, x: 99, y: 0};
 
-        expect(circleHit(c1, c2)).to.equal(false)
+        expect(circleIntersectsCircle(c1, c2)).to.equal(false)
     })
 
     it('returns true for circles at a distance equal to their radii', () => {
         const c1 = {size: 10, x: 10, y: 0};
         const c2 = {size: 10, x: 30, y: 0};
 
-        expect(circleHit(c1, c2)).to.equal(true)
+        expect(circleIntersectsCircle(c1, c2)).to.equal(true)
     })
 
     it('returns true for circles at a distance less than their radii', () => {
         const c1 = {size: 10, x: 10, y: 10};
         const c2 = {size: 10, x: 15, y: 15};
 
-        expect(circleHit(c1, c2)).to.equal(true)
+        expect(circleIntersectsCircle(c1, c2)).to.equal(true)
     })
 })
 
