@@ -8,7 +8,7 @@ let right = 0;
 let down = 0;
 let left = 0;
 
-let pause = false;
+let pause = true;
 
 function keyDown(e) {
     switch (e.key) {

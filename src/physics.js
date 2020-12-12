@@ -90,7 +90,7 @@ export function collide(e1 = {}, e2 = {}) {
     const speed = dot(norm, relativeVelocity)
 
     if (speed <= 0 || isNaN(speed))
-        return;
+    return;
 
     const e1Mass = getArea(e1);
     const e2Mass = getArea(e2);

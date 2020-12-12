@@ -17,16 +17,16 @@ export function setPhysics(newPhysics) {
     physics = newPhysics;
 }
 
-export function getInitialState(numObjects) {
-    const state = Object.assign({}, defaults);
-
-    for (let i = 0; i < numObjects; i++) {
-        state.entities.push(newEntity());
-    }
-
-    return state;
+export function getInitialState() {
+    return Object.assign({}, defaults);
 }
 
+/**
+ * Apply Forces
+ * Update Positions and Velocities
+ * Detect Collisions
+ * Solve Constraints
+ */
 export function step(oldState, controls = {}, timeStep = .1) {
     const time = Math.min(timeStep, 0.1);
 
@@ -75,33 +75,6 @@ export function step(oldState, controls = {}, timeStep = .1) {
     }
 
     return nextState;
-}
-
-function getRandomInt(max) {
-    return Math.floor(Math.random() * Math.floor(max));
-}
-
-function evenOrOdd(number) {
-    return getRandomInt(2) ? number : number * -1;
-}
-
-function newEntity() {
-    if (getRandomInt(2) - 1)
-        return {
-            size: 12,
-            x: getRandomInt(100) + 450,
-            y: getRandomInt(100) + 450,
-            vx: evenOrOdd(getRandomInt(4) + 1),
-            vy: evenOrOdd(getRandomInt(4) + 1)
-        }
-    else return {
-        x: getRandomInt(100) + 450,
-        y: getRandomInt(100) + 450,
-        width: 20 + getRandomInt(30),
-        height: 20 + getRandomInt(30),
-        vx: evenOrOdd(getRandomInt(5) + 1),
-        vy: evenOrOdd(getRandomInt(5) + 1)
-    }
 }
 
 function hit(e1, e2) {
