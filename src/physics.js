@@ -1,6 +1,6 @@
 export function circleIntersectsCircle(c1 = {}, c2 = {}) {
-    const dx = c1.x - c2.x;
-    const dy = c1.y - c2.y;
+    const dx = c2.x - c1.x;
+    const dy = c2.y - c1.y;
     const dSquared = (dx * dx) + (dy * dy);
 
     const dr = (c1.size + c2.size);
@@ -9,10 +9,15 @@ export function circleIntersectsCircle(c1 = {}, c2 = {}) {
     const hit = (dSquared <= rSquared);
 
     if (hit) {
-        c1.hit = true;
-        c2.hit = true;
+        const d = Math.sqrt(dSquared);
+        return {
+            normal: {
+                x: dx / d,
+                y: dy / d
+            }
+        }
     }
-    return hit;
+    return false;
 }
 
 export function rectangleIntersectsRectangle(r1 = {}, r2 = {}) {
@@ -68,25 +73,6 @@ export function circleIntersectsRectangle(c = {}, r = {}) {
     }
 
     return hit;
-}
-
-export function collisionNormal(e1 = {}, e2 = {}) {
-    const c1 = getCenter(e1)
-    const c2 = getCenter(e2)
-
-    const magnitude = {
-        x: c2.x - c1.x,
-        y: c2.y - c1.y
-    }
-
-    const d = Math.sqrt(magnitude.x * magnitude.x + magnitude.y * magnitude.y)
-
-    const normal = {
-        x: magnitude.x / d,
-        y: magnitude.y / d
-    }
-
-    return normal;
 }
 
 function getCenter(entity = {}) {

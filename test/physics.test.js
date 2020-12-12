@@ -1,6 +1,6 @@
 import chai from 'chai';
 import deepFreeze from "deep-freeze";
-import {
+import physics, {
     circleIntersectsCircle,
     circleIntersectsRectangle,
     collide,
@@ -24,27 +24,34 @@ describe('Intersecting Entities - two circles', () => {
         expect(circleIntersectsCircle(c1, c2)).to.equal(false)
     })
 
-    it('returns true for circles at a distance equal to their radii', () => {
+    it('returns hit data for circles at a distance equal to their radii', () => {
         const c1 = {size: 10, x: 10, y: 0};
         const c2 = {size: 10, x: 30, y: 0};
 
-        expect(circleIntersectsCircle(c1, c2)).to.equal(true)
+        expect(circleIntersectsCircle(c1, c2)).to.be.an('object').with.property('normal')
     })
 
-    it('returns true for circles at a distance less than their radii', () => {
+    it('returns hit data for circles at a distance less than their radii', () => {
         const c1 = {size: 10, x: 10, y: 10};
         const c2 = {size: 10, x: 15, y: 15};
 
-        expect(circleIntersectsCircle(c1, c2)).to.equal(true)
+        expect(circleIntersectsCircle(c1, c2)).to.be.an('object').with.property('normal')
     })
 
-    it('sets hit = true for circles that collide', () => {
-        const c1 = {size: 10, x: 10, y: 10};
-        const c2 = {size: 10, x: 15, y: 15};
+    it('returns a normalized vector indicating direction of collision', () => {
+        const e1 = {x: 0, y: 0, size: 10}
+        const e2 = {x: 10, y: 0, size: 1}
+        expect(circleIntersectsCircle(e1, e2).normal).to.deep.equal({x: 1.0, y: 0});
 
-        circleIntersectsCircle(c1, c2)
-        expect(c1.hit).to.equal(true)
-        expect(c1.hit).to.equal(true)
+        const e3 = {x: 0, y: 0, size: 10}
+        const e4 = {x: 0, y: 10, size: 1}
+        expect(circleIntersectsCircle(e3, e4).normal).to.deep.equal({x: 0, y: 1.0});
+
+        const e5 = {x: 0, y: 0, size: 9}
+        const e6 = {x: 10, y: 10, size: 6}
+        const normal45Deg = circleIntersectsCircle(e5, e6).normal;
+        expect(normal45Deg.x.toFixed(3)).to.equal('0.707');
+        expect(normal45Deg.y.toFixed(3)).to.equal('0.707');
     })
 })
 
@@ -194,21 +201,6 @@ describe('Collision effects - computing collision normal vector', () => {
         expect(collisionNormal({}, {})).to.deep.equal({x: NaN, y: NaN});
     })
 
-    it('returns a normalized vector indicating direction of collision', () => {
-        const e1 = {x: 0, y: 0, size: 1}
-        const e2 = {x: 10, y: 0, size: 1}
-        expect(collisionNormal(e1, e2)).to.deep.equal({x: 1.0, y: 0});
-
-        const e3 = {x: 0, y: 0, size: 1}
-        const e4 = {x: 0, y: 10, size: 1}
-        expect(collisionNormal(e3, e4)).to.deep.equal({x: 0, y: 1.0});
-
-        const e5 = {x: 0, y: 0, size: 1}
-        const e6 = {x: 10, y: 10, size: 1}
-        const normal45Deg = collisionNormal(e5, e6);
-        expect(normal45Deg.x.toFixed(3)).to.equal('0.707');
-        expect(normal45Deg.y.toFixed(3)).to.equal('0.707');
-    })
 
     it('returns something better for circle and rectangle')
 
