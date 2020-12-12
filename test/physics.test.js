@@ -37,6 +37,15 @@ describe('Intersecting Entities - two circles', () => {
 
         expect(circleIntersectsCircle(c1, c2)).to.equal(true)
     })
+
+    it('sets hit = true for circles that collide', () => {
+        const c1 = {size: 10, x: 10, y: 10};
+        const c2 = {size: 10, x: 15, y: 15};
+
+        circleIntersectsCircle(c1, c2)
+        expect(c1.hit).to.equal(true)
+        expect(c1.hit).to.equal(true)
+    })
 })
 
 describe('Intersecting Entities - two rectangles', () => {
@@ -91,6 +100,8 @@ describe('Intersecting Entities - two rectangles', () => {
 
         expect(rectangleIntersectsRectangle(r1, r2)).to.equal(true)
     })
+
+    it('sets hit data on both rectangles')
 })
 
 describe('Intersecting Entities - a rectangle and a circle', () => {
@@ -139,6 +150,41 @@ describe('Intersecting Entities - a rectangle and a circle', () => {
         const c = {x: 45, y: 20, size: 15}
         expect(circleIntersectsRectangle(c, r)).to.equal(true)
     })
+
+    it('remembers hit edge and position on the rectangle', () => {
+        const rect = {x: 30, y: 30, width: 30, height: 30}
+        const cLeft = {x: 20, y: 45, size: 15}
+        circleIntersectsRectangle(cLeft, rect)
+        expect(rect.hit).to.deep.equal({
+            edge: 'left',
+            x: 30,
+            y: 45
+        });
+
+        const cRight = {x: 70, y: 45, size: 15}
+        circleIntersectsRectangle(cRight, rect)
+        expect(rect.hit).to.deep.equal({
+            edge: 'right',
+            x: 60,
+            y: 45
+        });
+
+        const cTop = {x: 45, y: 70, size: 15}
+        circleIntersectsRectangle(cTop, rect)
+        expect(rect.hit).to.deep.equal({
+            edge: 'top',
+            x: 45,
+            y: 60
+        });
+
+        const cBottom = {x: 45, y: 20, size: 15}
+        circleIntersectsRectangle(cBottom, rect)
+        expect(rect.hit).to.deep.equal({
+            edge: 'bottom',
+            x: 45,
+            y: 30
+        });
+    })
 })
 
 describe('Collision effects - computing collision normal vector', () => {
@@ -163,6 +209,10 @@ describe('Collision effects - computing collision normal vector', () => {
         expect(normal45Deg.x.toFixed(3)).to.equal('0.707');
         expect(normal45Deg.y.toFixed(3)).to.equal('0.707');
     })
+
+    it('returns something better for circle and rectangle')
+
+    it('returns something better for two rectangles')
 })
 
 describe('Collision effects - updating entities after collision', () => {

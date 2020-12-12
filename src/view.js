@@ -65,11 +65,22 @@ function drawRectangle(g, r) {
     g.lineWidth = 2;
     g.fillStyle = '#333';
 
-    if (r.hit)
-        g.strokeStyle = '#c66';
-    else
-        g.strokeStyle = '#666';
+    g.strokeStyle = '#666';
 
     g.fillRect(r.x, r.y, r.width, r.height);
     g.strokeRect(r.x, r.y, r.width, r.height);
+
+    if (r.hit) {
+        g.strokeStyle = '#c66';
+        if (r.hit.edge === 'top')
+            g.strokeRect(r.x, r.y, r.width, 2);
+        else if (r.hit.edge === 'right')
+            g.strokeRect(r.x + r.width, r.y, 2, r.height);
+        else if (r.hit.edge === 'bottom')
+            g.strokeRect(r.x, r.y + r.height, r.width, 2);
+        else if (r.hit.edge === 'left')
+            g.strokeRect(r.x, r.y, 2, r.height);
+        else
+            g.strokeRect(r.x, r.y, r.width, r.height);
+    }
 }

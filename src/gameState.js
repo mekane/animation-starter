@@ -66,9 +66,7 @@ export function step(oldState, controls = {}, timeStep = .1) {
         for (let j = i + 1; j < nextState.entities.length; j++) {
             const e2 = nextState.entities[j];
             if (hit(e1, e2)) {
-                e1.hit = true;
-                e2.hit = true;
-
+                console.log(e1)
                 physics.collide(e1, e2)
             }
         }

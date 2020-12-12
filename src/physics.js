@@ -6,7 +6,13 @@ export function circleIntersectsCircle(c1 = {}, c2 = {}) {
     const dr = (c1.size + c2.size);
     const rSquared = dr * dr;
 
-    return dSquared <= rSquared;
+    const hit = (dSquared <= rSquared);
+
+    if (hit) {
+        c1.hit = true;
+        c2.hit = true;
+    }
+    return hit;
 }
 
 export function rectangleIntersectsRectangle(r1 = {}, r2 = {}) {
@@ -22,20 +28,27 @@ export function circleIntersectsRectangle(c = {}, r = {}) {
     const leftEdge = r.x;
     const rightEdge = (r.x + r.width);
     let horizontalEdge = c.x;
+    let hitEdge = '';
 
-    if (c.x < leftEdge)
+    if (c.x < leftEdge) {
         horizontalEdge = leftEdge;
-    else if (c.x > rightEdge)
+        hitEdge = 'left';
+    } else if (c.x > rightEdge) {
         horizontalEdge = rightEdge;
+        hitEdge = 'right'
+    }
 
     const bottomEdge = r.y;
     const topEdge = r.y + r.height;
     let verticalEdge = c.y;
 
-    if (c.y > topEdge)
+    if (c.y > topEdge) {
         verticalEdge = topEdge;
-    else if (c.y <= bottomEdge)
+        hitEdge = 'top'
+    } else if (c.y <= bottomEdge) {
         verticalEdge = bottomEdge;
+        hitEdge = 'bottom'
+    }
 
     const dx = c.x - horizontalEdge;
     const dy = c.y - verticalEdge;
@@ -43,7 +56,18 @@ export function circleIntersectsRectangle(c = {}, r = {}) {
 
     const rSquared = c.size * c.size;
 
-    return dSquared < rSquared;
+    const hit = (dSquared < rSquared);
+
+    if (hit) {
+        c.hit = true;
+        r.hit = {
+            edge: hitEdge,
+            x: horizontalEdge,
+            y: verticalEdge
+        }
+    }
+
+    return hit;
 }
 
 export function collisionNormal(e1 = {}, e2 = {}) {
@@ -90,7 +114,7 @@ export function collide(e1 = {}, e2 = {}) {
     const speed = dot(norm, relativeVelocity)
 
     if (speed <= 0 || isNaN(speed))
-    return;
+        return;
 
     const e1Mass = getArea(e1);
     const e2Mass = getArea(e2);

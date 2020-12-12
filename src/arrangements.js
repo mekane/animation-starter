@@ -3,13 +3,25 @@ const twoBalls = [
     {x: 960, y: 480, vx: -16, vy: 0, size: 20}
 ]
 
-const ballAndRectangle = [
+const ballAndRectangleDirect = [
     {x: 100, y: 380, vx: 10, vy: 0, width: 200, height: 200},
     {x: 960, y: 480, vx: -20, vy: 0, size: 20}
 ]
 
 // illustrates weird rectangle normal for collision
-const ballAndRectangleAtAngle = [
+const ballAndRectangleAtAngleOk = [
+    {x: 100, y: 180, vx: 0, vy: 0, width: 300, height: 500},
+    {x: 800, y: 80, vx: -30, vy: 30, size: 20}
+]
+
+// illustrates weird rectangle normal for collision that's not quite right
+const ballAndRectangleAtAngleWonky = [
+    {x: 100, y: 180, vx: 0, vy: 0, width: 300, height: 450},
+    {x: 700, y: 185, vx: -30, vy: 30, size: 20}
+]
+
+// illustrates weird rectangle normal for collision that's wrong
+const ballAndRectangleAtAngleWithBadCollision = [
     {x: 100, y: 380, vx: 0, vy: 0, width: 200, height: 200},
     {x: 800, y: 80, vx: -30, vy: 30, size: 20}
 ]
@@ -45,7 +57,7 @@ const circleOverlapCircle = [
 ]
 
 // const defaultArrangement = circleOverlapCircle;
-const defaultArrangement = ballAndRectangleAtAngle;
+const defaultArrangement = ballAndRectangleAtAngleWonky;
 
 
 const arrangements = {
