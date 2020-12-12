@@ -1,3 +1,11 @@
+const rectangleEdgeToNormal = {
+    '': {x: 0, y: 0},
+    'top': {x: 0, y: -1},
+    'right': {x: 1, y: 0},
+    'bottom': {x: 0, y: 1},
+    'left': {x: -1, y: 0}
+}
+
 export function circleIntersectsCircle(c1 = {}, c2 = {}) {
     const dx = c2.x - c1.x;
     const dy = c2.y - c1.y;
@@ -64,15 +72,15 @@ export function circleIntersectsRectangle(c = {}, r = {}) {
     const hit = (dSquared < rSquared);
 
     if (hit) {
-        c.hit = true;
-        r.hit = {
+        return {
             edge: hitEdge,
+            normal: rectangleEdgeToNormal[hitEdge],
             x: horizontalEdge,
             y: verticalEdge
         }
     }
 
-    return hit;
+    return false;
 }
 
 function getCenter(entity = {}) {
@@ -89,8 +97,8 @@ function getCenter(entity = {}) {
     }
 }
 
-export function collide(e1 = {}, e2 = {}) {
-    const norm = collisionNormal(e1, e2);
+export function collide(e1 = {}, e2 = {}, hitData = {}) {
+    const norm = hitData.normal || {};
 
     const relativeVelocity = {
         x: e1.vx - e2.vx,
@@ -99,7 +107,7 @@ export function collide(e1 = {}, e2 = {}) {
 
     const speed = dot(norm, relativeVelocity)
 
-    if (speed <= 0 || isNaN(speed))
+    if (isNaN(speed))
         return;
 
     const e1Mass = getArea(e1);

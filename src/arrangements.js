@@ -8,6 +8,11 @@ const ballAndRectangleDirect = [
     {x: 960, y: 480, vx: -20, vy: 0, size: 20}
 ]
 
+const ballAndRectangleDirect2 = [
+    {x: 960, y: 480, vx: -20, vy: 0, size: 20},
+    {x: 100, y: 380, vx: 10, vy: 0, width: 200, height: 200}
+]
+
 // illustrates weird rectangle normal for collision
 const ballAndRectangleAtAngleOk = [
     {x: 100, y: 180, vx: 0, vy: 0, width: 300, height: 500},
@@ -57,7 +62,7 @@ const circleOverlapCircle = [
 ]
 
 // const defaultArrangement = circleOverlapCircle;
-const defaultArrangement = ballAndRectangleAtAngleWonky;
+const defaultArrangement = ballAndRectangleDirect2;
 
 
 const arrangements = {

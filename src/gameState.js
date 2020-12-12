@@ -65,9 +65,10 @@ export function step(oldState, controls = {}, timeStep = .1) {
 
         for (let j = i + 1; j < nextState.entities.length; j++) {
             const e2 = nextState.entities[j];
-            if (hit(e1, e2)) {
-                console.log(e1)
-                physics.collide(e1, e2)
+            const hit = checkForCollision(e1, e2)
+            if (hit) {
+                console.log(hit)
+                physics.collide(e1, e2, hit)
             }
         }
     }
@@ -75,7 +76,7 @@ export function step(oldState, controls = {}, timeStep = .1) {
     return nextState;
 }
 
-function hit(e1, e2) {
+function checkForCollision(e1, e2) {
     if (e1.size && e2.size)
         return physics.circleIntersectsCircle(e1, e2)
     else if (e1.size && !e2.size)
