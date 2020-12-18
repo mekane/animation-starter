@@ -1,8 +1,8 @@
 const rectangleEdgeToNormal = {
     '': {x: 0, y: 0},
-    'top': {x: 0, y: -1},
+    'top': {x: 0, y: 1},
     'right': {x: 1, y: 0},
-    'bottom': {x: 0, y: 1},
+    'bottom': {x: 0, y: -1},
     'left': {x: -1, y: 0}
 }
 
@@ -18,11 +18,18 @@ export function circleIntersectsCircle(c1 = {}, c2 = {}) {
 
     if (hit) {
         const d = Math.sqrt(dSquared);
+
+        const normal = {
+            x: dx / d,
+            y: dy / d
+        };
+
+        const relativeVelocity = getRelativeVelocity(c1, c2);
+
         return {
-            normal: {
-                x: dx / d,
-                y: dy / d
-            }
+            normal,
+            relativeVelocity,
+            speed: dot(normal, relativeVelocity)
         }
     }
     return false;
@@ -35,6 +42,7 @@ export function rectangleIntersectsRectangle(r1 = {}, r2 = {}) {
     const bottomEdge = r1.y <= (r2.y + r2.height);
 
     return rightEdge && leftEdge && topEdge && bottomEdge;
+    //TODO: normal and other hit data
 }
 
 export function circleIntersectsRectangle(c = {}, r = {}) {
@@ -72,9 +80,13 @@ export function circleIntersectsRectangle(c = {}, r = {}) {
     const hit = (dSquared < rSquared);
 
     if (hit) {
+        const normal = rectangleEdgeToNormal[hitEdge];
+        const relativeVelocity = getRelativeVelocity(c, r);
         return {
             edge: hitEdge,
-            normal: rectangleEdgeToNormal[hitEdge],
+            normal,
+            relativeVelocity,
+            speed: dot(normal, relativeVelocity),
             x: horizontalEdge,
             y: verticalEdge
         }
@@ -98,27 +110,22 @@ function getCenter(entity = {}) {
 }
 
 export function collide(e1 = {}, e2 = {}, hitData = {}) {
-    const norm = hitData.normal || {};
+    const normal = hitData.normal;
+    const speed = hitData.speed;
 
-    const relativeVelocity = {
-        x: e1.vx - e2.vx,
-        y: e1.vy - e2.vy
-    }
-
-    const speed = dot(norm, relativeVelocity)
-
-    if (isNaN(speed))
+    // this is bad for squares but good for circles
+    if (speed < 0 || isNaN(speed))
         return;
 
     const e1Mass = getArea(e1);
     const e2Mass = getArea(e2);
     const impulse = 2 * speed / (e1Mass + e2Mass);
 
-    e1.vx -= impulse * e2Mass * norm.x;
-    e1.vy -= impulse * e2Mass * norm.y;
+    e1.vx -= impulse * e2Mass * normal.x;
+    e1.vy -= impulse * e2Mass * normal.y;
 
-    e2.vx += impulse * e1Mass * norm.x;
-    e2.vy += impulse * e1Mass * norm.y;
+    e2.vx += impulse * e1Mass * normal.x;
+    e2.vy += impulse * e1Mass * normal.y;
 }
 
 function getArea(entity = {}) {
@@ -126,6 +133,14 @@ function getArea(entity = {}) {
         return 3.14 * entity.size * entity.size;
     else
         return entity.width * entity.height;
+}
+
+function getRelativeVelocity(e1 = {}, e2 = {}) {
+
+    return {
+        x: (e1.vx || 0) - (e2.vx || 0),
+        y: (e1.vy || 0) - (e2.vy || 0)
+    };
 }
 
 function dot(v1, v2) {

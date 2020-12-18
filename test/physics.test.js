@@ -52,6 +52,18 @@ describe('Intersecting Entities - two circles', () => {
         expect(normal45Deg.x.toFixed(3)).to.equal('0.707');
         expect(normal45Deg.y.toFixed(3)).to.equal('0.707');
     })
+
+    it('includes the relative velocity and collision magnitude in the hit data', () => {
+        const c1 = {x: 0, y: 0, size: 10}
+        const c2 = {x: 0, y: 20, size: 10}
+        const hit = circleIntersectsCircle(c1, c2);
+        expect(hit.relativeVelocity).to.deep.equal({x: 0, y: 0});
+
+        const c3 = {x: 0, y: 0, vx: -10, size: 10}
+        const c4 = {x: 0, y: 20, size: 10}
+        const hit2 = circleIntersectsCircle(c3, c4);
+        expect(hit2.relativeVelocity).to.deep.equal({x: -10, y: 0});
+    })
 })
 
 describe('Intersecting Entities - two rectangles', () => {
@@ -138,63 +150,57 @@ describe('Intersecting Entities - a rectangle and a circle', () => {
         const cLeft = {x: 20, y: 45, size: 15}
 
         const hitData = circleIntersectsRectangle(cLeft, rect)
-        expect(hitData).to.deep.equal({
-            edge: 'left',
-            normal: {
-                x: -1,
-                y: 0
-            },
-            x: 30,
-            y: 45
-        });
+        expect(hitData.edge).to.equal('left');
+        expect(hitData.normal).to.deep.equal({x: -1, y: 0});
+        expect(hitData.x).to.equal(30);
+        expect(hitData.y).to.equal(45);
     })
 
-    it('returns true if the circle overlaps the right edge of the rectangle', () => {
+    it('returns a hit if the circle overlaps the right edge of the rectangle', () => {
         const rect = {x: 30, y: 30, width: 30, height: 30}
         const cRight = {x: 70, y: 45, size: 15}
 
         const hitData = circleIntersectsRectangle(cRight, rect)
-        expect(hitData).to.deep.equal({
-            edge: 'right',
-            normal: {
-                x: 1,
-                y: 0
-            },
-            x: 60,
-            y: 45
-        });
+        expect(hitData.edge).to.equal('right');
+        expect(hitData.normal).to.deep.equal({x: 1, y: 0});
+        expect(hitData.x).to.equal(60);
+        expect(hitData.y).to.equal(45);
     })
 
-    it('returns true if the circle overlaps the top edge of the rectangle', () => {
+    it('returns a hit if the circle overlaps the top edge of the rectangle', () => {
         const rect = {x: 30, y: 30, width: 30, height: 30}
         const cTop = {x: 45, y: 70, size: 15}
 
         const hitData = circleIntersectsRectangle(cTop, rect)
-        expect(hitData).to.deep.equal({
-            edge: 'top',
-            normal: {
-                x: 0,
-                y: -1
-            },
-            x: 45,
-            y: 60
-        });
+        expect(hitData.edge).to.equal('top');
+        expect(hitData.normal).to.deep.equal({x: 0, y: 1});
+        expect(hitData.x).to.equal(45);
+        expect(hitData.y).to.equal(60);
     })
 
-    it('returns true if the circle overlaps the bottom edge of the rectangle', () => {
+    it('returns a hit if the circle overlaps the bottom edge of the rectangle', () => {
         const rect = {x: 30, y: 30, width: 30, height: 30}
         const cBottom = {x: 45, y: 20, size: 15}
 
         const hitData = circleIntersectsRectangle(cBottom, rect)
-        expect(hitData).to.deep.equal({
-            edge: 'bottom',
-            normal: {
-                x: 0,
-                y: 1
-            },
-            x: 45,
-            y: 30
-        });
+        expect(hitData.edge).to.equal('bottom');
+        expect(hitData.normal).to.deep.equal({x: 0, y: -1});
+        expect(hitData.x).to.equal(45);
+        expect(hitData.y).to.equal(30);
+    })
+
+    it('includes the relative velocity and collision magnitude in the hit data', () => {
+        const c1 = {x: 0, y: 0, size: 10}
+        const r1 = {x: 0, y: -5, width: 10, height: 10}
+        const hit = circleIntersectsRectangle(c1, r1);
+        expect(hit.relativeVelocity).to.deep.equal({x: 0, y: 0});
+        expect(hit.speed).to.equal(0);
+
+        const c2 = {x: 0, y: 0, vx: 10, size: 10}
+        const r2 = {x: 9, y: -5, width: 10, height: 10}
+        const hit2 = circleIntersectsRectangle(c2, r2);
+        expect(hit2.relativeVelocity).to.deep.equal({x: 10, y: 0}); //TODO: figure out if it's always relative to rect or what?
+        expect(hit2.speed).to.equal(-10);
     })
 })
 
@@ -254,7 +260,8 @@ describe('Collision effects - updating entities after collision', () => {
         const circle = {x: 30, y: 20, vx: -1, vy: 1, size: 11}
         const rect = {x: 0, y: 0, vx: 0, vy: 0, width: 20, height: 40}
 
-        collide(rect, circle, circleIntersectsRectangle(circle, rect));
+        const hitData = circleIntersectsRectangle(circle, rect);
+        collide(circle, rect, hitData);
 
         expect(circle.vx).to.be.closeTo(0.356, .001);
         expect(circle.vy).to.equal(1);
@@ -262,11 +269,16 @@ describe('Collision effects - updating entities after collision', () => {
         expect(rect.vy).to.equal(0);
     })
 
+    //Currently have an issue where the hit switches the order of circle / rectangle pairs
+    // but collide always assumes e1, e2. This test is failing because the speed
+    // ends up negative and so the collision effect is skipped (apparently not necessary
+    // for rectangles, but I still need to understand this part better)
     it('applies collision effects regardless of order', () => {
-        const circle = {x: 30, y: 20, vx: -1, vy: 1, size: 11}
         const rect = {x: 0, y: 0, vx: 0, vy: 0, width: 20, height: 40}
+        const circle = {x: 30, y: 20, vx: -1, vy: 1, size: 11}
 
-        collide(circle, rect, circleIntersectsRectangle(circle, rect));
+        const hitData = circleIntersectsRectangle(rect, circle);
+        collide(rect, circle, hitData);
 
         expect(circle.vx).to.be.closeTo(0.356, .001);
         expect(circle.vy).to.equal(1);
@@ -275,4 +287,8 @@ describe('Collision effects - updating entities after collision', () => {
     })
 
     it('applies collision effects of two rectangles hitting')
+})
+
+describe('Test Scenarios', () => {
+
 })

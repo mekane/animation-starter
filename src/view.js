@@ -37,13 +37,13 @@ function showFPS(g, fps) {
     g.fillRect(0, 0, 110, 40);
     g.font = '25px Arial';
     g.fillStyle = 'black';
-    g.fillText(fps, 10, 30);
+    g.fillText(fps, 10, height - 30);
 }
 
 function showPosition(g, x, y) {
     g.font = '25px Arial';
     g.fillStyle = 'black';
-    g.fillText(`(${x}, ${y})`, 10, window.innerHeight - 10);
+    g.fillText(`(${x}, ${height - y})`, 10, window.innerHeight - 10);
 }
 
 function drawCircle(g, c) {
@@ -56,7 +56,7 @@ function drawCircle(g, c) {
         g.strokeStyle = '#666';
 
     g.beginPath();
-    g.arc(c.x, c.y, c.size, 0, 2 * Math.PI);
+    g.arc(c.x, height - c.y, c.size, 0, 2 * Math.PI);
     g.fill();
     g.stroke();
 }
@@ -67,20 +67,20 @@ function drawRectangle(g, r) {
 
     g.strokeStyle = '#666';
 
-    g.fillRect(r.x, r.y, r.width, r.height);
-    g.strokeRect(r.x, r.y, r.width, r.height);
+    g.fillRect(r.x, height - (r.y + r.height), r.width, r.height);
+    g.strokeRect(r.x, height - (r.y + r.height), r.width, r.height);
 
     if (r.hit) {
         g.strokeStyle = '#c66';
         if (r.hit.edge === 'top')
-            g.strokeRect(r.x, r.y, r.width, 2);
+            g.strokeRect(r.x, height - (r.y + r.height), r.width, 2);
         else if (r.hit.edge === 'right')
-            g.strokeRect(r.x + r.width, r.y, 2, r.height);
+            g.strokeRect(r.x + r.width, height - (r.y + r.height), 2, r.height);
         else if (r.hit.edge === 'bottom')
-            g.strokeRect(r.x, r.y + r.height, r.width, 2);
+            g.strokeRect(r.x, height - r.y, r.width, 2);
         else if (r.hit.edge === 'left')
-            g.strokeRect(r.x, r.y, 2, r.height);
+            g.strokeRect(r.x, height - (r.y + r.height), 2, r.height);
         else
-            g.strokeRect(r.x, r.y, r.width, r.height);
+            g.strokeRect(r.x, height - (r.y + r.height), r.width, r.height);
     }
 }

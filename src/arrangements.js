@@ -27,8 +27,8 @@ const ballAndRectangleAtAngleWonky = [
 
 // illustrates weird rectangle normal for collision that's wrong
 const ballAndRectangleAtAngleWithBadCollision = [
-    {x: 100, y: 380, vx: 0, vy: 0, width: 200, height: 200},
-    {x: 800, y: 80, vx: -30, vy: 30, size: 20}
+    {x: 800, y: 80, vx: -30, vy: 30, size: 20},
+    {x: 100, y: 380, vx: 0, vy: 0, width: 200, height: 200}
 ]
 
 const ballChasingOtherBallToTheRight = [
@@ -57,12 +57,11 @@ const rectChasingOtherRectLeft = [
 ]
 
 const circleOverlapCircle = [
-    {x: 400, y: 380, vx: 0, vy: 0, size: 100},
-    {x: 500, y: 380, vx: 0, vy: 0, size: 100}
+    {x: 500, y: 380, vx: 0, vy: 0, size: 80},
+    {x: 620, y: 380, vx: 0, vy: 0, size: 80}
 ]
 
-// const defaultArrangement = circleOverlapCircle;
-const defaultArrangement = ballAndRectangleDirect2;
+const defaultArrangement = ballAndRectangleAtAngleWithBadCollision;
 
 
 const arrangements = {

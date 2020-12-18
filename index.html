@@ -107,6 +107,11 @@
         g.fillText("Paused", 10, 30);
     }
 
+    window.addEventListener('keypress', e => {
+        if (e.key === ' ' || e.key === 'n' || e.key === 's') {
+            showOneFrame(.016);
+        }
+    })
 </script>
 </body>
 </html>
