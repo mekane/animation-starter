@@ -69,7 +69,15 @@ export function step(oldState, controls = {}, timeStep = .1) {
             if (hit) {
                 e1.hit = hit;
                 e2.hit = hit;
-                physics.collide(e1, e2, hit)
+
+                const de1 = hit.result[0];
+                const de2 = hit.result[1];
+
+                e1.vx += de1.vx;
+                e1.vy += de1.vy;
+
+                e2.vx += de2.vx;
+                e2.vy += de2.vy;
             }
         }
     }

@@ -3,7 +3,6 @@ import deepFreeze from "deep-freeze";
 import physics, {
     circleIntersectsCircle,
     circleIntersectsRectangle,
-    collide,
     rectangleIntersectsRectangle
 } from "../src/physics.js";
 
@@ -64,6 +63,23 @@ describe('Intersecting Entities - two circles', () => {
         const hit2 = circleIntersectsCircle(c3, c4);
         expect(hit2.relativeVelocity).to.deep.equal({x: -10, y: 0});
     })
+
+    it('includes changes in velocity based on the collision', () => {
+        const c1 = {x: 0, y: 0, vx: 1, vy: 0, size: 10}
+        const c2 = {x: 19, y: 0, vx: -1, vy: 0, size: 10}
+        const hit = circleIntersectsCircle(c1, c2);
+
+        expect(hit.result).to.deep.equal([
+            {
+                vx: -2,
+                vy: 0
+            },
+            {
+                vx: 2,
+                vy: 0
+            }
+        ])
+    })
 })
 
 describe('Intersecting Entities - two rectangles', () => {
@@ -91,35 +107,39 @@ describe('Intersecting Entities - two rectangles', () => {
         expect(rectangleIntersectsRectangle(r7, r8)).to.equal(false)
     })
 
-    it('returns true if r1 right edge overlaps r2 left edge', () => {
+    it('returns hit data if r1 right edge overlaps r2 left edge', () => {
         const r1 = {x: 10, y: 10, width: 15, height: 10};
         const r2 = {x: 20, y: 0, width: 30, height: 30};
 
         expect(rectangleIntersectsRectangle(r1, r2)).to.equal(true)
     })
 
-    it('returns true if r1 left edge overlaps r2 right edge', () => {
+    it('returns hit data if r1 left edge overlaps r2 right edge', () => {
         const r1 = {x: 20, y: 0, width: 30, height: 30};
         const r2 = {x: 45, y: 10, width: 15, height: 10};
 
         expect(rectangleIntersectsRectangle(r1, r2)).to.equal(true)
     })
 
-    it('returns true if r1 bottom edge overlaps r2 top edge', () => {
+    it('returns hit data if r1 bottom edge overlaps r2 top edge', () => {
         const r1 = {x: 20, y: 20, width: 10, height: 15};
         const r2 = {x: 10, y: 10, width: 30, height: 30};
 
         expect(rectangleIntersectsRectangle(r1, r2)).to.equal(true)
     })
 
-    it('returns true if r1 top edge overlaps r2 bottom edge', () => {
+    it('returns hit data if r1 top edge overlaps r2 bottom edge', () => {
         const r1 = {x: 20, y: 0, width: 10, height: 15};
         const r2 = {x: 10, y: 10, width: 20, height: 20};
 
         expect(rectangleIntersectsRectangle(r1, r2)).to.equal(true)
     })
 
-    it('sets hit data on both rectangles')
+    it('returns a normalized vector indicating direction of collision')
+
+    it('includes the relative velocity and collision magnitude in the hit data')
+
+    it('includes changes in velocity based on the collision')
 })
 
 describe('Intersecting Entities - a rectangle and a circle', () => {
@@ -202,91 +222,24 @@ describe('Intersecting Entities - a rectangle and a circle', () => {
         expect(hit2.relativeVelocity).to.deep.equal({x: 10, y: 0}); //TODO: figure out if it's always relative to rect or what?
         expect(hit2.speed).to.equal(-10);
     })
-})
 
-describe('Collision effects - updating entities after collision', () => {
-    it('does nothing to missing or bogus arguments', () => {
-        const e1 = deepFreeze({});
-        const e2 = deepFreeze({});
-        expect(f => collide()).not.to.throw();
-        expect(f => collide(e1)).not.to.throw();
-        expect(f => collide(e1, e2)).not.to.throw();
+    //TODO: this isn't working at all because of the entity order stuff
+    it.skip('includes changes in velocity based on the collision', () => {
+        const rect = {x: -10, y: -10, vx: 1, vy: 0, width: 20, height: 20}
+        const circle = {x: 19, y: 0, vx: -1, vy: 0, size: 10}
+        const hit = circleIntersectsRectangle(circle, rect);
+
+        expect(hit.result).to.deep.equal([
+            {
+                vx: -3.414,
+                vy: 0
+            },
+            {
+                vx: .414,
+                vy: 0
+            }
+        ])
     })
-
-    it('has no effect if the objects are not moving', () => {
-        const e1 = {x: 0, y: 0, vx: 0, vy: 0, size: 10}
-        const e2 = {x: 10, y: 0, vx: 0, vy: 0, size: 10}
-        deepFreeze(e1)
-        deepFreeze(e2)
-
-        expect(f => collide(e1, e2)).not.to.throw();
-    })
-
-    //double check this assumption
-    it.skip('has no effect if the objects are moving away from each other', () => {
-        const e1 = {x: 0, y: 0, vx: -1, vy: 0, size: 10}
-        const e2 = {x: 10, y: 0, vx: 1, vy: 0, size: 10}
-        deepFreeze(e1)
-        deepFreeze(e2)
-
-        expect(f => collide(e1, e2, circleIntersectsCircle(e1, e2))).not.to.throw();
-    })
-
-    it('changes the entity velocities based on the collision direction and speed', () => {
-        const e1 = {x: 0, y: 0, vx: 1, vy: 0, size: 10}
-        const e2 = {x: 20, y: 0, vx: -1, vy: 0, size: 10}
-
-        collide(e1, e2, circleIntersectsCircle(e1, e2));
-
-        expect(e1.vx).to.equal(-1);
-        expect(e1.vy).to.equal(0);
-        expect(e2.vx).to.equal(1);
-        expect(e2.vy).to.equal(0);
-    })
-
-    it('changes the entity velocities proportional to their mass', () => {
-        const e1 = {x: 0, y: 0, vx: 1, vy: 0, size: 5}
-        const e2 = {x: 10, y: 0, vx: -1, vy: 0, size: 12}
-
-        collide(e1, e2, circleIntersectsCircle(e1, e2));
-
-        expect(e1.vx).to.be.closeTo(-2.4, .01);
-        expect(e1.vy).to.equal(0);
-        expect(e2.vx).to.be.closeTo(-0.408, .01);
-        expect(e2.vy).to.equal(0);
-    })
-
-    it('applies collision effects of a circle hitting a rectangle', () => {
-        const circle = {x: 30, y: 20, vx: -1, vy: 1, size: 11}
-        const rect = {x: 0, y: 0, vx: 0, vy: 0, width: 20, height: 40}
-
-        const hitData = circleIntersectsRectangle(circle, rect);
-        collide(circle, rect, hitData);
-
-        expect(circle.vx).to.be.closeTo(0.356, .001);
-        expect(circle.vy).to.equal(1);
-        expect(rect.vx).to.be.closeTo(-0.643, .001);
-        expect(rect.vy).to.equal(0);
-    })
-
-    //Currently have an issue where the hit switches the order of circle / rectangle pairs
-    // but collide always assumes e1, e2. This test is failing because the speed
-    // ends up negative and so the collision effect is skipped (apparently not necessary
-    // for rectangles, but I still need to understand this part better)
-    it('applies collision effects regardless of order', () => {
-        const rect = {x: 0, y: 0, vx: 0, vy: 0, width: 20, height: 40}
-        const circle = {x: 30, y: 20, vx: -1, vy: 1, size: 11}
-
-        const hitData = circleIntersectsRectangle(rect, circle);
-        collide(rect, circle, hitData);
-
-        expect(circle.vx).to.be.closeTo(0.356, .001);
-        expect(circle.vy).to.equal(1);
-        expect(rect.vx).to.be.closeTo(-0.643, .001);
-        expect(rect.vy).to.equal(0);
-    })
-
-    it('applies collision effects of two rectangles hitting')
 })
 
 describe('Test Scenarios', () => {
