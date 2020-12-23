@@ -41,13 +41,17 @@ describe('Intersecting Entities - two circles', () => {
         const e2 = {x: 10, y: 0, size: 1}
         expect(circleIntersectsCircle(e1, e2).normal).to.deep.equal({x: 1.0, y: 0});
 
-        const e3 = {x: 0, y: 0, size: 10}
-        const e4 = {x: 0, y: 10, size: 1}
-        expect(circleIntersectsCircle(e3, e4).normal).to.deep.equal({x: 0, y: 1.0});
+        const e3 = {x: 10, y: 0, size: 1}
+        const e4 = {x: 0, y: 0, size: 10}
+        expect(circleIntersectsCircle(e3, e4).normal).to.deep.equal({x: -1.0, y: 0});
 
-        const e5 = {x: 0, y: 0, size: 9}
-        const e6 = {x: 10, y: 10, size: 6}
-        const normal45Deg = circleIntersectsCircle(e5, e6).normal;
+        const e5 = {x: 0, y: 0, size: 10}
+        const e6 = {x: 0, y: 10, size: 1}
+        expect(circleIntersectsCircle(e5, e6).normal).to.deep.equal({x: 0, y: 1.0});
+
+        const e7 = {x: 0, y: 0, size: 9}
+        const e8 = {x: 10, y: 10, size: 6}
+        const normal45Deg = circleIntersectsCircle(e7, e8).normal;
         expect(normal45Deg.x.toFixed(3)).to.equal('0.707');
         expect(normal45Deg.y.toFixed(3)).to.equal('0.707');
     })
@@ -169,7 +173,7 @@ describe('Intersecting Entities - a rectangle and a circle', () => {
         const rect = {x: 30, y: 30, width: 30, height: 30}
         const cLeft = {x: 20, y: 45, size: 15}
 
-        const hitData = circleIntersectsRectangle(cLeft, rect)
+        const hitData = circleIntersectsRectangle(rect, cLeft)
         expect(hitData.edge).to.equal('left');
         expect(hitData.normal).to.deep.equal({x: -1, y: 0});
         expect(hitData.x).to.equal(30);
@@ -180,7 +184,7 @@ describe('Intersecting Entities - a rectangle and a circle', () => {
         const rect = {x: 30, y: 30, width: 30, height: 30}
         const cRight = {x: 70, y: 45, size: 15}
 
-        const hitData = circleIntersectsRectangle(cRight, rect)
+        const hitData = circleIntersectsRectangle(rect, cRight)
         expect(hitData.edge).to.equal('right');
         expect(hitData.normal).to.deep.equal({x: 1, y: 0});
         expect(hitData.x).to.equal(60);
@@ -191,7 +195,7 @@ describe('Intersecting Entities - a rectangle and a circle', () => {
         const rect = {x: 30, y: 30, width: 30, height: 30}
         const cTop = {x: 45, y: 70, size: 15}
 
-        const hitData = circleIntersectsRectangle(cTop, rect)
+        const hitData = circleIntersectsRectangle(rect, cTop)
         expect(hitData.edge).to.equal('top');
         expect(hitData.normal).to.deep.equal({x: 0, y: 1});
         expect(hitData.x).to.equal(45);
@@ -202,7 +206,7 @@ describe('Intersecting Entities - a rectangle and a circle', () => {
         const rect = {x: 30, y: 30, width: 30, height: 30}
         const cBottom = {x: 45, y: 20, size: 15}
 
-        const hitData = circleIntersectsRectangle(cBottom, rect)
+        const hitData = circleIntersectsRectangle(rect, cBottom)
         expect(hitData.edge).to.equal('bottom');
         expect(hitData.normal).to.deep.equal({x: 0, y: -1});
         expect(hitData.x).to.equal(45);
@@ -219,23 +223,35 @@ describe('Intersecting Entities - a rectangle and a circle', () => {
         const c2 = {x: 0, y: 0, vx: 10, size: 10}
         const r2 = {x: 9, y: -5, width: 10, height: 10}
         const hit2 = circleIntersectsRectangle(c2, r2);
-        expect(hit2.relativeVelocity).to.deep.equal({x: 10, y: 0}); //TODO: figure out if it's always relative to rect or what?
-        expect(hit2.speed).to.equal(-10);
+        expect(hit2.relativeVelocity).to.deep.equal({x: 10, y: 0});
+        expect(hit2.speed).to.equal(10);
     })
 
-    //TODO: this isn't working at all because of the entity order stuff
-    it.skip('includes changes in velocity based on the collision', () => {
+    it('includes changes in velocity based on the collision', () => {
         const rect = {x: -10, y: -10, vx: 1, vy: 0, width: 20, height: 20}
         const circle = {x: 19, y: 0, vx: -1, vy: 0, size: 10}
-        const hit = circleIntersectsRectangle(circle, rect);
 
+        const hit = circleIntersectsRectangle(rect, circle)
         expect(hit.result).to.deep.equal([
             {
-                vx: -3.414,
+                vx: -1.759,
                 vy: 0
             },
             {
-                vx: .414,
+                vx: 2.241,
+                vy: 0
+            }
+        ])
+
+        /* Order should not matter */
+        const hit2 = circleIntersectsRectangle(circle, rect)
+        expect(hit2.result).to.deep.equal([
+            {
+                vx: 2.241,
+                vy: 0
+            },
+            {
+                vx: -1.759,
                 vy: 0
             }
         ])

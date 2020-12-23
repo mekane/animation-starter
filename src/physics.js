@@ -6,6 +6,11 @@ const rectangleEdgeToNormal = {
     'left': {x: -1, y: 0}
 }
 
+const rectangleNormalReversed = {};
+Object.keys(rectangleEdgeToNormal).forEach(name => {
+    rectangleNormalReversed[name] = reverse(rectangleEdgeToNormal[name])
+})
+
 export function circleIntersectsCircle(c1 = {}, c2 = {}) {
     const dx = c2.x - c1.x;
     const dy = c2.y - c1.y;
@@ -46,7 +51,21 @@ export function rectangleIntersectsRectangle(r1 = {}, r2 = {}) {
     //TODO: normal and other hit data
 }
 
-export function circleIntersectsRectangle(c = {}, r = {}) {
+export function circleIntersectsRectangle(e1 = {}, e2 = {}) {
+    let c;
+    let r;
+    let rectNormal;
+    if (e1.size && !e2.size) {
+        c = e1;
+        r = e2;
+        rectNormal = rectangleNormalReversed;
+    } else if (e2.size && !e1.size) {
+        c = e2;
+        r = e1;
+        rectNormal = rectangleEdgeToNormal;
+    } else
+        return false;
+
     const leftEdge = r.x;
     const rightEdge = (r.x + r.width);
     let horizontalEdge = c.x;
@@ -81,8 +100,8 @@ export function circleIntersectsRectangle(c = {}, r = {}) {
     const hit = (dSquared < rSquared);
 
     if (hit) {
-        const normal = rectangleEdgeToNormal[hitEdge];
-        const relativeVelocity = getRelativeVelocity(c, r);
+        const normal = rectNormal[hitEdge];
+        const relativeVelocity = getRelativeVelocity(e1, e2);
         const speed = dot(normal, relativeVelocity);
 
         return {
@@ -92,7 +111,7 @@ export function circleIntersectsRectangle(c = {}, r = {}) {
             speed,
             x: horizontalEdge,
             y: verticalEdge,
-            result: collide(c, r, normal, speed)
+            result: collide(e1, e2, normal, speed)
         }
     }
 
@@ -123,6 +142,13 @@ function getRelativeVelocity(e1 = {}, e2 = {}) {
 
 function dot(v1, v2) {
     return v1.x * v2.x + v1.y * v2.y;
+}
+
+function reverse({x, y}) {
+    return {
+        x: x * -1,
+        y: y * -1
+    }
 }
 
 function collide(e1 = {}, e2 = {}, normal, speed) {
