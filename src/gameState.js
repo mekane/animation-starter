@@ -89,10 +89,8 @@ export function step(oldState, controls = {}, timeStep = .1) {
 function checkForCollision(e1, e2) {
     if (e1.size && e2.size)
         return physics.circleIntersectsCircle(e1, e2)
-    else if (e1.size && !e2.size)
-        return physics.circleIntersectsRectangle(e1, e2)
-    else if (!e1.size && e2.size)
-        return physics.circleIntersectsRectangle(e2, e1)
-    else
+    else if (!e1.size && !e2.size)
         return physics.rectangleIntersectsRectangle(e1, e2)
+    else
+        return physics.circleIntersectsRectangle(e1, e2)
 }

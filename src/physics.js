@@ -47,8 +47,32 @@ export function rectangleIntersectsRectangle(r1 = {}, r2 = {}) {
     const topEdge = (r1.y + r1.height) >= r2.y;
     const bottomEdge = r1.y <= (r2.y + r2.height);
 
-    return rightEdge && leftEdge && topEdge && bottomEdge;
-    //TODO: normal and other hit data
+    const hit = rightEdge && leftEdge && topEdge && bottomEdge;
+
+    if (hit) {
+        const c1 = getCenter(r1);
+        const c2 = getCenter(r2);
+        const dx = c2.x - c1.x;
+        const dy = c2.y - c1.y;
+        const dSquared = (dx * dx) + (dy * dy);
+        const d = Math.sqrt(dSquared);
+        const normal = {
+            x: dx / d,
+            y: dy / d
+        };
+
+        const relativeVelocity = getRelativeVelocity(r1, r2);
+        const speed = dot(normal, relativeVelocity);
+
+        return {
+            normal,
+            relativeVelocity,
+            speed,
+            result: collide(r1, r2, normal, speed)
+        }
+    }
+
+    return false;
 }
 
 export function circleIntersectsRectangle(e1 = {}, e2 = {}) {

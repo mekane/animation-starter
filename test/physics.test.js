@@ -112,38 +112,48 @@ describe('Intersecting Entities - two rectangles', () => {
     })
 
     it('returns hit data if r1 right edge overlaps r2 left edge', () => {
-        const r1 = {x: 10, y: 10, width: 15, height: 10};
-        const r2 = {x: 20, y: 0, width: 30, height: 30};
+        const r1 = {x: 0, y: 0, width: 10, height: 10, vx: 1}
+        const r2 = {x: 9, y: 0, width: 10, height: 10, vx: -1}
 
-        expect(rectangleIntersectsRectangle(r1, r2)).to.equal(true)
+        const hitData = rectangleIntersectsRectangle(r1, r2)
+        expect(hitData.normal).to.deep.equal({x: 1, y: 0});
+        expect(hitData.relativeVelocity).to.deep.equal({x: 2, y: 0});
+        expect(hitData.speed).to.equal(2);
     })
 
     it('returns hit data if r1 left edge overlaps r2 right edge', () => {
-        const r1 = {x: 20, y: 0, width: 30, height: 30};
-        const r2 = {x: 45, y: 10, width: 15, height: 10};
+        const r1 = {x: 9, y: 0, width: 10, height: 10, vx: -1};
+        const r2 = {x: 0, y: 0, width: 10, height: 10, vx: 1};
 
-        expect(rectangleIntersectsRectangle(r1, r2)).to.equal(true)
+        const hitData = rectangleIntersectsRectangle(r1, r2)
+        expect(hitData.normal).to.deep.equal({x: -1, y: 0});
+        expect(hitData.relativeVelocity).to.deep.equal({x: -2, y: 0});
+        expect(hitData.speed).to.equal(2);
     })
 
     it('returns hit data if r1 bottom edge overlaps r2 top edge', () => {
-        const r1 = {x: 20, y: 20, width: 10, height: 15};
-        const r2 = {x: 10, y: 10, width: 30, height: 30};
+        const r1 = {x: 0, y: 0, width: 10, height: 10, vy: 1}
+        const r2 = {x: 0, y: 9, width: 10, height: 10, vy: -1}
 
-        expect(rectangleIntersectsRectangle(r1, r2)).to.equal(true)
+        const hitData = rectangleIntersectsRectangle(r1, r2)
+        expect(hitData.normal).to.deep.equal({x: 0, y: 1});
+        expect(hitData.relativeVelocity).to.deep.equal({x: 0, y: 2});
+        expect(hitData.speed).to.equal(2);
     })
 
     it('returns hit data if r1 top edge overlaps r2 bottom edge', () => {
-        const r1 = {x: 20, y: 0, width: 10, height: 15};
-        const r2 = {x: 10, y: 10, width: 20, height: 20};
+        const r1 = {x: 0, y: 9, width: 10, height: 10, vy: -1}
+        const r2 = {x: 0, y: 0, width: 10, height: 10, vy: 1}
 
-        expect(rectangleIntersectsRectangle(r1, r2)).to.equal(true)
+        const hitData = rectangleIntersectsRectangle(r1, r2)
+        expect(hitData.normal).to.deep.equal({x: 0, y: -1});
+        expect(hitData.relativeVelocity).to.deep.equal({x: 0, y: -2});
+        expect(hitData.speed).to.equal(2);
     })
 
-    it('returns a normalized vector indicating direction of collision')
+    it('includes changes in velocity based on the collision', () => {
 
-    it('includes the relative velocity and collision magnitude in the hit data')
-
-    it('includes changes in velocity based on the collision')
+    })
 })
 
 describe('Intersecting Entities - a rectangle and a circle', () => {
