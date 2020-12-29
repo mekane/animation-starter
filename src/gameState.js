@@ -9,8 +9,7 @@ const defaults = {
 let physics = {
     circleIntersectsCircle: _ => _,
     rectangleIntersectsRectangle: _ => _,
-    circleIntersectsRectangle: _ => _,
-    collide: _ => _
+    circleIntersectsRectangle: _ => _
 }
 
 export function setPhysics(newPhysics) {

@@ -79,11 +79,14 @@ export function circleIntersectsRectangle(e1 = {}, e2 = {}) {
     let c;
     let r;
     let rectNormal;
-    if (e1.size && !e2.size) {
+    const circleHitsRectangle = e1.size && !e2.size;
+    const rectangleHitsCircle = e2.size && !e1.size;
+
+    if (circleHitsRectangle) {
         c = e1;
         r = e2;
         rectNormal = rectangleNormalReversed;
-    } else if (e2.size && !e1.size) {
+    } else if (rectangleHitsCircle) {
         c = e2;
         r = e1;
         rectNormal = rectangleEdgeToNormal;
