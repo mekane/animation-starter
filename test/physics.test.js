@@ -152,7 +152,20 @@ describe('Intersecting Entities - two rectangles', () => {
     })
 
     it('includes changes in velocity based on the collision', () => {
+        const r1 = {x: 0, y: 0, width: 10, height: 10, vx: 1}
+        const r2 = {x: 9, y: 0, width: 10, height: 10, vx: -1}
 
+        const hitData = rectangleIntersectsRectangle(r1, r2)
+        expect(hitData.result).to.deep.equal([
+            {
+                vx: -2,
+                vy: 0
+            },
+            {
+                vx: 2,
+                vy: 0
+            }]
+        );
     })
 })
 

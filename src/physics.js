@@ -176,7 +176,6 @@ function reverse({x, y}) {
 }
 
 function collide(e1 = {}, e2 = {}, normal, speed) {
-    // this is bad for squares but good for circles
     if (speed < 0 || isNaN(speed))
         return [
             {vx: 0, vy: 0},

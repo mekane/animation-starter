@@ -61,11 +61,20 @@ const circleOverlapCircle = [
     {x: 620, y: 380, vx: 0, vy: 0, size: 80}
 ]
 
-const defaultArrangement = ballAndRectangleAtAngleWithBadCollision;
+const multipleRectangles = [
+    {x: 50, y: 380, width: 40, height: 40, vx: 8, vy: 0},
+    {x: 250, y: 380, width: 40, height: 40, vx: 6, vy: 0},
+    {x: 500, y: 380, width: 40, height: 40, vx: 4, vy: 0},
+    {x: 600, y: 380, width: 40, height: 40, vx: -4, vy: 0},
+    {x: 850, y: 380, width: 40, height: 40, vx: -6, vy: 0},
+    {x: 1050, y: 380, width: 40, height: 40, vx: -8, vy: 0}
+]
+
+const defaultArrangement = multipleRectangles;
 
 
 const arrangements = {
-    default: [],
+    default: defaultArrangement,
     random: [],
     billiards: [
         //big wall
