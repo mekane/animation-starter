@@ -5,10 +5,11 @@ export class Vector {
     constructor(x = 0, y = 0) {
         this.x = _number(x)
         this.y = _number(y)
+        Object.freeze(this)
     }
 
     /**
-     * @param v2 Vector
+     * @param v2 {Vector}
      * @returns {Vector}
      */
     add(v2) {
@@ -16,7 +17,7 @@ export class Vector {
     }
 
     /**
-     * @param v2 Vector
+     * @param v2 {Vector}
      * @returns {Number}
      */
     dot(v2) {
@@ -31,7 +32,7 @@ export class Vector {
     }
 
     /**
-     * @param v2 Vector
+     * @param v2 {Vector}
      * @returns {Vector}
      */
     subtract(v2) {

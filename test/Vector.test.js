@@ -3,7 +3,7 @@ import deepFreeze from "deep-freeze";
 
 const expect = chai.expect;
 
-import {Vector} from '../src/vector.js';
+import {Vector} from '../src/Vector.js';
 
 describe('Vector Class', () => {
     it('defaults to zeros for x and y', () => {
@@ -19,6 +19,12 @@ describe('Vector Class', () => {
         expect(new Vector('')).to.deep.equal(zeroVector)
         expect(new Vector([])).to.deep.equal(zeroVector)
         expect(new Vector({})).to.deep.equal(zeroVector)
+    })
+
+    it('has read-only x and y properties', () => {
+        const test = new Vector(1, 2)
+        const modifyProperty = () => test.x = 2;
+        expect(modifyProperty).to.throw();
     })
 })
 
