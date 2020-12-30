@@ -37,12 +37,8 @@ export function step(oldState, controls = {}, timeStep = .1) {
     nextState.entities = [];
     if (oldState.entities) {
         oldState.entities.forEach(e => {
-            const entity = Object.assign({}, e);
-            entity.hit = false;
-
-            entity.x += (entity.vx * time);
-            entity.y += (entity.vy * time);
-
+            const entity = copyEntity(e)
+            updateEntityPosition(entity, time)
             nextState.entities.push(entity);
         })
     }
@@ -72,6 +68,16 @@ export function step(oldState, controls = {}, timeStep = .1) {
     }
 
     return nextState;
+}
+
+function copyEntity(e) {
+    return Object.assign({}, e, {hit: false});
+}
+
+function updateEntityPosition(entity, timeStep) {
+    entity.x += (entity.vx * timeStep);
+    entity.y += (entity.vy * timeStep);
+    return entity;
 }
 
 function checkForCollision(e1, e2) {
