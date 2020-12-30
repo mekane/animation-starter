@@ -9,7 +9,7 @@ export class Vector {
 
     /**
      * @param v2 Vector
-     * return Vector
+     * @returns {Vector}
      */
     add(v2) {
         return new Vector(this.x + v2.x, this.y + v2.y)
@@ -17,14 +17,14 @@ export class Vector {
 
     /**
      * @param v2 Vector
-     * return Number
+     * @returns {Number}
      */
     dot(v2) {
         return this.x * v2.x + this.y * v2.y
     }
 
     /**
-     * return Vector
+     * @returns {Vector}
      */
     reverse() {
         return new Vector(-this.x, -this.y)
@@ -32,15 +32,11 @@ export class Vector {
 
     /**
      * @param v2 Vector
-     * return Vector
+     * @returns {Vector}
      */
     subtract(v2) {
         return new Vector(this.x - v2.x, this.y - v2.y)
     }
-}
-
-export function dot(v1 = {x: 0, y: 0}, v2 = {x: 0, y: 0}) {
-    return (v1.x || 0) * (v2.x || 0) + (v1.y || 0) * (v2.y || 0)
 }
 
 function _number(n) {

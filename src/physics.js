@@ -1,7 +1,4 @@
-import {
-    dot,
-    Vector
-} from './Vector.js'
+import {Vector} from './Vector.js'
 
 const rectangleEdgeToNormal = {
     '': new Vector(0, 0),
@@ -29,12 +26,9 @@ export function circleIntersectsCircle(c1 = {}, c2 = {}) {
     if (hit) {
         const d = Math.sqrt(dSquared);
 
-        const normal = {
-            x: dx / d,
-            y: dy / d
-        };
+        const normal = new Vector(dx / d, dy / d)
         const relativeVelocity = getRelativeVelocity(c1, c2);
-        const speed = dot(normal, relativeVelocity);
+        const speed = normal.dot(relativeVelocity);
 
         return {
             normal,
@@ -61,13 +55,9 @@ export function rectangleIntersectsRectangle(r1 = {}, r2 = {}) {
         const dy = c2.y - c1.y;
         const dSquared = (dx * dx) + (dy * dy);
         const d = Math.sqrt(dSquared);
-        const normal = {
-            x: dx / d,
-            y: dy / d
-        };
-
+        const normal = new Vector(dx / d, dy / d);
         const relativeVelocity = getRelativeVelocity(r1, r2);
-        const speed = dot(normal, relativeVelocity);
+        const speed = normal.dot(relativeVelocity);
 
         return {
             normal,
@@ -134,7 +124,7 @@ export function circleIntersectsRectangle(e1 = {}, e2 = {}) {
     if (hit) {
         const normal = rectNormal[hitEdge];
         const relativeVelocity = getRelativeVelocity(e1, e2);
-        const speed = dot(normal, relativeVelocity);
+        const speed = normal.dot(relativeVelocity);
 
         return {
             edge: hitEdge,
@@ -164,12 +154,17 @@ function getCenter(entity = {}) {
     }
 }
 
+/**
+ *
+ * @param e1
+ * @param e2
+ * @returns {Vector}
+ */
 function getRelativeVelocity(e1 = {}, e2 = {}) {
+    const v1 = new Vector(e1.vx, e1.vy);
+    const v2 = new Vector(e2.vx, e2.vy);
 
-    return {
-        x: (e1.vx || 0) - (e2.vx || 0),
-        y: (e1.vy || 0) - (e2.vy || 0)
-    };
+    return v1.subtract(v2)
 }
 
 function collide(e1 = {}, e2 = {}, normal, speed) {
@@ -204,11 +199,4 @@ function getArea(entity = {}) {
 
 function roundTo(number, decimalPlaces) {
     return Number(Math.round(number + 'e' + decimalPlaces) + "e-" + decimalPlaces)
-}
-
-export default {
-    circleIntersectsCircle,
-    circleIntersectsRectangle,
-    collide,
-    rectangleIntersectsRectangle
 }
