@@ -7,13 +7,8 @@ let h2 = height / 2;
 export function draw(g, time, state) {
     g.clearRect(0, 0, width, height);
 
-    if (state.paused) {
-        showPaused();
-        return;
-    } else {
-        const fps = Math.round(1 / time);
-        showFPS(g, fps)
-    }
+    const fps = Math.round(1 / time);
+    showFPS(g, fps)
 
     state.entities.forEach(e => {
         if (e.size) {
@@ -37,7 +32,7 @@ function showFPS(g, fps) {
     g.fillRect(0, 0, 110, 40);
     g.font = '25px Arial';
     g.fillStyle = 'black';
-    g.fillText(fps, 10, height - 30);
+    g.fillText(fps, 10, 30);
 }
 
 function showPosition(g, x, y) {

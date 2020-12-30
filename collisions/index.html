@@ -1,0 +1,19 @@
+<!doctype html>
+<html>
+<head>
+    <title>Generic Graphics Game</title>
+    <link rel="stylesheet" href="../main.css"/>
+</head>
+<body>
+<canvas id="main"></canvas>
+<script type="module">
+    import {Game} from '../src/main.js';
+    import {getOptionsSelect} from './arrangements.js';
+
+    const game = Game();
+
+    const select = getOptionsSelect(game.setState);
+    document.body.appendChild(select);
+</script>
+</body>
+</html>

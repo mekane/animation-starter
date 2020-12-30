@@ -1,35 +1,26 @@
 import {getControlState, initializeControls} from './controls.js';
 import {setPhysics, step} from './gameState.js';
 import {draw, setSize} from './view.js';
-import {getArrangement, getOptionsSelect} from './arrangements.js';
 import physics from './physics.js';
-
-const select = getOptionsSelect(reset);
-document.body.appendChild(select);
 
 setPhysics(physics);
 
 let graphicsContext;
 
 let gameState = {
-    x: 0,
-    y: 0,
-    vx: 0,
-    vy: 0,
-    entities: getArrangement('default')
+    entities: []
+}
+
+export function Game() {
+    return {
+        setState: reset
+    }
 }
 
 let controls = getControlState();
 
-function reset(newEntities) {
-    console.log(newEntities)
-    gameState = {
-        x: 0,
-        y: 0,
-        vx: 0,
-        vy: 0,
-        entities: newEntities
-    }
+function reset(newState) {
+    gameState = newState;
     showOneFrame(0);
 }
 

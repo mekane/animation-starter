@@ -70,11 +70,8 @@ const multipleRectangles = [
     {x: 1050, y: 380, width: 40, height: 40, vx: -8, vy: 0}
 ]
 
-const defaultArrangement = multipleRectangles;
-
 
 const arrangements = {
-    default: defaultArrangement,
     random: [],
     billiards: [
         //big wall
@@ -102,7 +99,20 @@ const arrangements = {
 
         {x: 820, y: 490, vx: -95, vy: 0, size: 20},
     ],
-    convergeToCenter: []
+    convergeToCenter: [],
+    twoBalls,
+    ballAndRectangleDirect,
+    ballAndRectangleDirect2,
+    ballAndRectangleAtAngleOk,
+    ballAndRectangleAtAngleWonky,
+    ballAndRectangleAtAngleWithBadCollision,
+    ballChasingOtherBallToTheRight,
+    ballChasingOtherBallToTheLeft,
+    twoRectangles,
+    twoRectanglesAtAngle,
+    rectChasingOtherRectLeft,
+    circleOverlapCircle,
+    multipleRectangles,
 }
 
 function getRandomInt(rangeMin, rangeMax) {
@@ -155,7 +165,7 @@ export function getOptionsSelect(onChangeCallback) {
     })
 
     select.addEventListener('change', e => {
-        onChangeCallback(getArrangement(e.target.value));
+        onChangeCallback({entities: getArrangement(e.target.value)});
     });
 
     return select;
@@ -187,22 +197,23 @@ function getConvergeToCenterArrangement() {
     return entities;
 }
 
+function randomArrangement() {
+    const entities = [];
+
+    for (let i = 0; i < 80; i++)
+        entities.push(coinFlip() ? getRandomCircle() : getRandomRectangle());
+
+    return entities;
+}
+
 export function getArrangement(name) {
     if (name === 'convergeToCenter') {
         return getConvergeToCenterArrangement();
-    } else if (name === 'random') {
-        const entities = [];
-
-        for (let i = 0; i < 80; i++)
-            entities.push(coinFlip() ? getRandomCircle() : getRandomRectangle());
-
-        return entities;
     } else {
         const entities = arrangements[name] || [];
-        console.log('get ' + name, entities);
         if (entities.length)
             return entities;
     }
 
-    return defaultArrangement;
+    return randomArrangement();
 }
