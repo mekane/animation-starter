@@ -1,27 +1,26 @@
 import {getControlState, initializeControls} from './controls.js';
-import {setPhysics, step} from './gameState.js';
 import {draw, setSize} from './view.js';
-import physics from './physics.js';
-
-setPhysics(physics);
-
-let graphicsContext;
-
-let gameState = {
-    entities: []
-}
-
-export function Game() {
-    return {
-        setState: reset
-    }
-}
 
 let controls = getControlState();
+let graphicsContext = null;
+let gameState = {};
+let step = _ => _;
 
-function reset(newState) {
-    gameState = newState;
+export function Game(stepFunction, initialState) {
+    step = stepFunction;
+    gameState = initialState;
+
+    initializeControls();
+    resizeGraphics();
     showOneFrame(0);
+    animationLoop();
+
+    return {
+        setState: function (newState) {
+            gameState = newState;
+            showOneFrame(0);
+        }
+    }
 }
 
 function resizeGraphics() {
@@ -57,11 +56,6 @@ function showOneFrame(secondsSinceLastUpdate) {
     gameState = step(gameState, getControlState());
     draw(graphicsContext, secondsSinceLastUpdate, gameState);
 }
-
-initializeControls();
-resizeGraphics();
-showOneFrame(0);
-animationLoop();
 
 function showPaused(g) {
     g.fillStyle = 'white';

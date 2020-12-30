@@ -9,8 +9,9 @@
 <script type="module">
     import {Game} from '../src/main.js';
     import {getOptionsSelect} from './arrangements.js';
+    import {step} from './gameState.js';
 
-    const game = Game();
+    const game = Game(step, {entities: []});
 
     const select = getOptionsSelect(game.setState);
     document.body.appendChild(select);
