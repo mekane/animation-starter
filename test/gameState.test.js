@@ -1,27 +1,8 @@
 import chai from 'chai';
 import deepFreeze from 'deep-freeze';
-import {getInitialState, setPhysics, step} from '../src/gameState.js';
+import {step} from '../bounceHouse/gameState.js';
 
 const expect = chai.expect;
-
-describe('Getting initial state', () => {
-    it('exports a function that returns an initial game state', () => {
-        expect(getInitialState()).to.deep.equal({
-            x: 0,
-            y: 0,
-            vx: 0,
-            vy: 0,
-            entities: []
-        })
-    })
-
-    it('always returns a new object', () => {
-        const s1 = getInitialState();
-        const s2 = getInitialState();
-        expect(s1).to.deep.equal(s2);
-        expect(s1).to.not.equal(s2);
-    })
-})
 
 describe('The step function', () => {
     it('exports a function that takes the previous game state and returns the next state', () => {
@@ -34,14 +15,6 @@ describe('The step function', () => {
         const newState = step(oldState, {})
 
         expect(oldState).to.not.equal(newState)
-    })
-
-    it('returns default values if old state is missing any', () => {
-        const newState = step({})
-        expect(newState.x).to.equal(0)
-        expect(newState.y).to.equal(0)
-        expect(newState.vx).to.equal(0)
-        expect(newState.vy).to.equal(0)
     })
 })
 
@@ -101,10 +74,10 @@ describe('Changing next state based on controls', () => {
     })
 
     it('accelerates the velocities if controls indicate', () => {
-        expect(step({}, {up: true})).to.have.property('vy', -1)
-        expect(step({}, {down: true})).to.have.property('vy', 1)
-        expect(step({}, {left: true})).to.have.property('vx', -1)
-        expect(step({}, {right: true})).to.have.property('vx', 1)
+        expect(step({vy: 0}, {up: true})).to.have.property('vy', -1)
+        expect(step({vy: 0}, {down: true})).to.have.property('vy', 1)
+        expect(step({vx: 0}, {left: true})).to.have.property('vx', -1)
+        expect(step({vx: 0}, {right: true})).to.have.property('vx', 1)
     })
 
     it('caps velocities at 20', () => {
@@ -192,80 +165,5 @@ describe('Entities', () => {
 
         const newState = step(oldState);
         expect(newState.entities[0].hit).to.equal(false);
-    })
-
-    it('checks for collisions between circles using the physics provided', () => {
-        const oldState = {
-            x: 0,
-            y: 0,
-            vx: 0,
-            vy: 0,
-            entities: [
-                {x: 230, y: 255, size: 10, vx: -4, vy: 14},
-                {x: 300, y: 355, size: 10, vx: 12, vy: -4},
-            ]
-        };
-
-        let circlesIntersectCalled = 0;
-        const physicsSpy = {
-            circleIntersectsCircle: function (c1, c2) {
-                circlesIntersectCalled += 1
-            },
-            collide: _ => _
-        }
-        setPhysics(physicsSpy)
-
-        step(oldState);
-        expect(circlesIntersectCalled).to.equal(1);
-    })
-
-    it('checks for collisions between rectangles using the physics provided', () => {
-        const oldState = {
-            x: 0,
-            y: 0,
-            vx: 0,
-            vy: 0,
-            entities: [
-                {x: 230, y: 255, width: 100, height: 120, vx: -4, vy: 14},
-                {x: 300, y: 355, width: 120, height: 100, vx: 12, vy: -4},
-            ]
-        };
-
-        let rectanglesIntersectCalled = 0;
-        const physicsSpy = {
-            rectangleIntersectsRectangle: function (r1, r2) {
-                rectanglesIntersectCalled += 1
-            },
-            collide: _ => _
-        }
-        setPhysics(physicsSpy)
-
-        step(oldState);
-        expect(rectanglesIntersectCalled).to.equal(1);
-    })
-
-    it('checks for collisions between different shapes using the physics provided', () => {
-        const oldState = {
-            x: 0,
-            y: 0,
-            vx: 0,
-            vy: 0,
-            entities: [
-                {x: 230, y: 255, size: 10, vx: -4, vy: 14},
-                {x: 300, y: 355, width: 120, height: 100, vx: 12, vy: -4},
-            ]
-        };
-
-        let mixedIntersectCalled = 0;
-        const physicsSpy = {
-            circleIntersectsRectangle: function (r1, r2) {
-                mixedIntersectCalled += 1
-            },
-            collide: _ => _
-        }
-        setPhysics(physicsSpy)
-
-        step(oldState);
-        expect(mixedIntersectCalled).to.equal(1);
     })
 })

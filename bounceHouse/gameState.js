@@ -1,24 +1,12 @@
-const defaults = {
-    x: 0,
-    y: 0,
-    vx: 0,
-    vy: 0,
-    entities: []
-};
+/**
+ * This game state just checks for and applies collisions on the list of entities in the scene
+ */
 
-let physics = {
-    circleIntersectsCircle: _ => _,
-    rectangleIntersectsRectangle: _ => _,
-    circleIntersectsRectangle: _ => _
-}
-
-export function setPhysics(newPhysics) {
-    physics = newPhysics;
-}
-
-export function getInitialState() {
-    return Object.assign({}, defaults);
-}
+import {
+    circleIntersectsCircle,
+    rectangleIntersectsRectangle,
+    circleIntersectsRectangle
+} from '../src/physics.js';
 
 /**
  * Apply Forces
@@ -29,7 +17,7 @@ export function getInitialState() {
 export function step(oldState, controls = {}, timeStep = .1) {
     const time = Math.min(timeStep, 0.1);
 
-    const nextState = Object.assign({}, defaults, oldState);
+    const nextState = Object.assign({}, oldState);
 
     if (controls.up)
         nextState.vy--;
@@ -43,8 +31,8 @@ export function step(oldState, controls = {}, timeStep = .1) {
     nextState.vx = Math.min(Math.max(-20, nextState.vx), 20);
     nextState.vy = Math.min(Math.max(-20, nextState.vy), 20);
 
-    nextState.x += (nextState.vx * time);
-    nextState.y += (nextState.vy * time);
+    nextState.x += ((nextState.vx || 0) * time);
+    nextState.y += ((nextState.vy || 0) * time);
 
     nextState.entities = [];
     if (oldState.entities) {
@@ -78,6 +66,8 @@ export function step(oldState, controls = {}, timeStep = .1) {
                 e2.vx += de2.vx;
                 e2.vy += de2.vy;
             }
+
+            //check for wall bounces
         }
     }
 
@@ -86,9 +76,9 @@ export function step(oldState, controls = {}, timeStep = .1) {
 
 function checkForCollision(e1, e2) {
     if (e1.size && e2.size)
-        return physics.circleIntersectsCircle(e1, e2)
+        return circleIntersectsCircle(e1, e2)
     else if (!e1.size && !e2.size)
-        return physics.rectangleIntersectsRectangle(e1, e2)
+        return rectangleIntersectsRectangle(e1, e2)
     else
-        return physics.circleIntersectsRectangle(e1, e2)
+        return circleIntersectsRectangle(e1, e2)
 }

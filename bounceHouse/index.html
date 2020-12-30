@@ -8,13 +8,14 @@
 <canvas id="main"></canvas>
 <script type="module">
     import {Game} from '../src/main.js';
-    import {getOptionsSelect} from './arrangements.js';
     import {step} from './gameState.js';
 
-    const game = Game(step, {entities: []});
-
-    const select = getOptionsSelect(game.setState);
-    document.body.appendChild(select);
+    Game(step, {
+        entities: [
+            {x: 200, y: 200, size: 20, vx: 1, vy: 1},
+            {x: 800, y: 500, size: 20, vx: 1, vy: 1}
+        ]
+    });
 </script>
 </body>
 </html>
