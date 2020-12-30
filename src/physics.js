@@ -1,19 +1,19 @@
 import {
     dot,
-    reverse
-} from './vector.js'
+    Vector
+} from './Vector.js'
 
 const rectangleEdgeToNormal = {
-    '': {x: 0, y: 0},
-    'top': {x: 0, y: 1},
-    'right': {x: 1, y: 0},
-    'bottom': {x: 0, y: -1},
-    'left': {x: -1, y: 0}
+    '': new Vector(0, 0),
+    'top': new Vector(0, 1),
+    'right': new Vector(1, 0),
+    'bottom': new Vector(0, -1),
+    'left': new Vector(-1, 0)
 }
 
 const rectangleNormalReversed = {};
 Object.keys(rectangleEdgeToNormal).forEach(name => {
-    rectangleNormalReversed[name] = reverse(rectangleEdgeToNormal[name])
+    rectangleNormalReversed[name] = rectangleEdgeToNormal[name].reverse()
 })
 
 export function circleIntersectsCircle(c1 = {}, c2 = {}) {
