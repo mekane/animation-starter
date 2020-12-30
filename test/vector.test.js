@@ -4,13 +4,56 @@ import deepFreeze from "deep-freeze";
 const expect = chai.expect;
 
 import {
+    add,
     dot,
     reverse
 } from '../src/vector.js';
 
 const zeroVector = {x: 0, y: 0}
 
-describe('Reversing Vectors', () => {
+describe('Adding two Vectors', () => {
+    it(`returns {x: 0, y: 0} for bad inputs`, () => {
+        expect(add()).to.deep.equal(zeroVector)
+        expect(add(true)).to.deep.equal(zeroVector)
+        expect(add(1)).to.deep.equal(zeroVector)
+        expect(add('')).to.deep.equal(zeroVector)
+        expect(add([])).to.deep.equal(zeroVector)
+    })
+
+    it(`fills missing or bad values with zeros`, () => {
+        expect(add({})).to.deep.equal(zeroVector)
+        expect(add({x: 'bad'})).to.deep.equal(zeroVector)
+        expect(add({x: 0})).to.deep.equal(zeroVector)
+        expect(add({x: 0, y: 'bad'})).to.deep.equal(zeroVector)
+
+        const onesVector = {x: 1, y: 1};
+        expect(add(onesVector)).to.deep.equal(onesVector)
+        expect(add(onesVector, 0)).to.deep.equal(onesVector)
+        expect(add(onesVector, true)).to.deep.equal(onesVector)
+        expect(add(onesVector, '')).to.deep.equal(onesVector)
+        expect(add(onesVector, [])).to.deep.equal(onesVector)
+    })
+
+    it(`does not modify the arguments and returns a new vector`, () => {
+        const input1 = {x: 1, y: 1}
+        const input2 = {x: 2, y: 2}
+        deepFreeze(input1);
+        deepFreeze(input2);
+
+        expect(_ => add(input1, input2)).to.not.throw();
+        expect(add(input1, input2)).to.not.equal(input1);
+        expect(add(input1, input2)).to.not.equal(input2);
+    })
+
+    it(`adds the corresponding values`, () => {
+        expect(add({x: 0, y: 0}, {x: 1, y: 1})).to.deep.equal({x: 1, y: 1})
+        expect(add({x: 1, y: 1}, {x: 2, y: 3})).to.deep.equal({x: 3, y: 4})
+        expect(add({x: -5, y: -5}, {x: 10, y: 15})).to.deep.equal({x: 5, y: 10})
+        expect(add({x: 1, y: 1}, {x: 9, y: 9})).to.deep.equal({x: 10, y: 10})
+    })
+})
+
+describe('Reversing a Vector', () => {
     it(`returns {x: 0, y: 0} for bad inputs`, () => {
         expect(reverse()).to.deep.equal(zeroVector)
         expect(reverse(true)).to.deep.equal(zeroVector)
