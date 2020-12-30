@@ -1,3 +1,7 @@
+import {
+    reverse
+} from './vector.js'
+
 const rectangleEdgeToNormal = {
     '': {x: 0, y: 0},
     'top': {x: 0, y: 1},
@@ -169,13 +173,6 @@ function getRelativeVelocity(e1 = {}, e2 = {}) {
 
 function dot(v1, v2) {
     return v1.x * v2.x + v1.y * v2.y;
-}
-
-function reverse({x, y}) {
-    return {
-        x: x * -1,
-        y: y * -1
-    }
 }
 
 function collide(e1 = {}, e2 = {}, normal, speed) {
