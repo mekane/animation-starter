@@ -1,4 +1,5 @@
 import {
+    dot,
     reverse
 } from './vector.js'
 
@@ -169,10 +170,6 @@ function getRelativeVelocity(e1 = {}, e2 = {}) {
         x: (e1.vx || 0) - (e2.vx || 0),
         y: (e1.vy || 0) - (e2.vy || 0)
     };
-}
-
-function dot(v1, v2) {
-    return v1.x * v2.x + v1.y * v2.y;
 }
 
 function collide(e1 = {}, e2 = {}, normal, speed) {
