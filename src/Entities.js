@@ -55,6 +55,9 @@ export class Entity {
     }
 }
 
+/**
+ *
+ */
 export class Circle extends Entity {
     _size = 1
 
@@ -73,6 +76,40 @@ export class Circle extends Entity {
 
     get area() {
         return roundTo(3.14 * this._size * this._size, 2);
+    }
+}
+
+/**
+ *
+ */
+export class Rectangle extends Entity {
+    _width = 1
+    _height = 1
+
+    constructor(x, y, velocity, width, height) {
+        super(x, y, velocity)
+        this._width = width;
+        this._height = height
+    }
+
+    get height() {
+        return this._height
+    }
+
+    set height(val) {
+        return false
+    }
+
+    get width() {
+        return this._width
+    }
+
+    set width(val) {
+        return false
+    }
+
+    get area() {
+        return roundTo(this._width * this._height, 2);
     }
 }
 
