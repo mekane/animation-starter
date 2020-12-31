@@ -1,5 +1,4 @@
 import chai from 'chai';
-import deepFreeze from "deep-freeze";
 import {
     circleIntersectsCircle,
     circleIntersectsRectangle,

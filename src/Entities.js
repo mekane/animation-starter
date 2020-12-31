@@ -53,6 +53,10 @@ export class Entity {
     /** @abstract */
     get area() {
     }
+
+    /** @abstract */
+    hit(otherEntity) {
+    }
 }
 
 /**
@@ -76,6 +80,32 @@ export class Circle extends Entity {
 
     get area() {
         return roundTo(3.14 * this._size * this._size, 2);
+    }
+
+    hit(c2) {
+        const dx = c2.x - this.x;
+        const dy = c2.y - this.y;
+        const dSquared = (dx * dx) + (dy * dy);
+
+        const dr = (this.size + c2.size);
+        const rSquared = dr * dr;
+
+        const hit = (dSquared <= rSquared);
+
+        if (hit) {
+            const d = Math.sqrt(dSquared);
+
+            const normal = new Vector(roundTo(dx / d, 2), roundTo(dy / d, 2))
+            const relativeVelocity = this.velocity.subtract(c2.velocity)
+            const speed = roundTo(normal.dot(relativeVelocity), 2)
+
+            return {
+                normal,
+                relativeVelocity,
+                speed
+            }
+        }
+        return false;
     }
 }
 
