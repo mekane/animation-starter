@@ -1,5 +1,10 @@
 import {Vector} from "./Vector.js";
+import {roundTo} from './math.js'
 
+/**
+ * Base class for objects within games. Should not be used directly.
+ * @abstract
+ */
 export class Entity {
     _xPosition
     _yPosition
@@ -43,6 +48,31 @@ export class Entity {
 
     set velocity(val) {
         return false
+    }
+
+    /** @abstract */
+    get area() {
+    }
+}
+
+export class Circle extends Entity {
+    _size = 1
+
+    constructor(x, y, velocity, size = 1) {
+        super(x, y, velocity)
+        this._size = size
+    }
+
+    get size() {
+        return this._size
+    }
+
+    set size(val) {
+        return false
+    }
+
+    get area() {
+        return roundTo(3.14 * this._size * this._size, 2);
     }
 }
 

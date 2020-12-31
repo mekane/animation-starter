@@ -1,4 +1,5 @@
 import {Vector} from './Vector.js'
+import {roundTo} from './math.js'
 
 const rectangleEdgeToNormal = {
     '': new Vector(0, 0),
@@ -195,8 +196,4 @@ function getArea(entity = {}) {
         return 3.14 * entity.size * entity.size;
     else
         return entity.width * entity.height;
-}
-
-function roundTo(number, decimalPlaces) {
-    return Number(Math.round(number + 'e' + decimalPlaces) + "e-" + decimalPlaces)
 }
