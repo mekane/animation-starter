@@ -388,3 +388,24 @@ describe('Rectangle class', () => {
         })
     })
 })
+
+describe('Computing collision effects for Entities', () => {
+    it('returns acceleration values for two circles', () => {
+        const c1 = new Circle(0, 0, 10, new Vector(1, 0))
+        const c2 = new Circle(19, 0, 10, new Vector(-1, 0))
+        const normal = new Vector(1, 0)
+
+        const acceleration = c1.collisionEffects(c2, normal)
+        expect(acceleration).to.deep.equal([
+            new Vector(-2, 0),
+            new Vector(2, 0)
+        ])
+    })
+
+    it('returns acceleration values for two rectangles')
+
+    it('returns acceleration values for circles and rectangles')
+})
+
+//TODO: tests for static Entity, Entity collision
+//TODO: move values that can be computed from the hit code to the collision code (relativeV and speed)
