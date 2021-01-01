@@ -82,7 +82,14 @@ export class Circle extends Entity {
         return roundTo(3.14 * this._size * this._size, 2);
     }
 
-    hit(c2) {
+    hit(e) {
+        return this.hitsCircle(e)
+    }
+
+    /**
+     * @param c2 {Circle}
+     */
+    hitsCircle(c2) {
         const dx = c2.x - this.x;
         const dy = c2.y - this.y;
         const dSquared = (dx * dx) + (dy * dy);
@@ -107,6 +114,22 @@ export class Circle extends Entity {
         }
         return false;
     }
+
+    /**
+     *
+     * @param r {Rectangle}
+     */
+    hitsRectangle(r) {
+    }
+}
+
+
+const rectangleEdgeToNormal = {
+    '': new Vector(0, 0),
+    'top': new Vector(0, 1),
+    'right': new Vector(1, 0),
+    'bottom': new Vector(0, -1),
+    'left': new Vector(-1, 0)
 }
 
 /**
@@ -140,6 +163,68 @@ export class Rectangle extends Entity {
 
     get area() {
         return roundTo(this._width * this._height, 2);
+    }
+
+    /**
+     * @param e {Entity}
+     */
+    hit(e) {
+        return this.hitsCircle(e)
+    }
+
+    /**
+     * @param c {Circle}
+     */
+    hitsCircle(c) {
+        const leftEdge = this.x;
+        const rightEdge = (this.x + this.width);
+        let horizontalEdge = c.x;
+        let hitEdge = '';
+
+        if (c.x < leftEdge) {
+            horizontalEdge = leftEdge;
+            hitEdge = 'left';
+        } else if (c.x > rightEdge) {
+            horizontalEdge = rightEdge;
+            hitEdge = 'right'
+        }
+
+        const bottomEdge = this.y;
+        const topEdge = this.y + this.height;
+        let verticalEdge = c.y;
+
+        if (c.y > topEdge) {
+            verticalEdge = topEdge;
+            hitEdge = 'top'
+        } else if (c.y <= bottomEdge) {
+            verticalEdge = bottomEdge;
+            hitEdge = 'bottom'
+        }
+
+        const dx = c.x - horizontalEdge;
+        const dy = c.y - verticalEdge;
+        const dSquared = (dx * dx) + (dy * dy);
+
+        const rSquared = c.size * c.size;
+
+        const hit = (dSquared < rSquared);
+
+        if (hit) {
+            const normal = rectangleEdgeToNormal[hitEdge];
+            const relativeVelocity = this.velocity.subtract(c.velocity);
+            const speed = normal.dot(relativeVelocity);
+
+            return {
+                edge: hitEdge,
+                normal,
+                relativeVelocity,
+                speed,
+                x: horizontalEdge,
+                y: verticalEdge
+            }
+        }
+
+        return false;
     }
 }
 

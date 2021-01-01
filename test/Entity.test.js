@@ -139,6 +139,75 @@ describe('Circle class', () => {
             expect(circleMovingRight.hit(circleAtAngleMoving)).to.deep.equal(expectedHitDataAtAngle)
         })
     })
+
+    describe('detecting collisions with rectangles', () => {
+        const circle = new Circle(0, 0, new Vector(0, 0), 10)
+
+        it('returns false for no hit', () => {
+            const rectFarAwayUp = new Rectangle(0, 99)
+            const rectFarAwayRight = new Rectangle(99, 0)
+            const rectFarAwayDown = new Rectangle(0, -99)
+            const rectFarAwayLeft = new Rectangle(-99, 0)
+            expect(circle.hit(rectFarAwayUp)).to.equal(false)
+            expect(circle.hit(rectFarAwayRight)).to.equal(false)
+            expect(circle.hit(rectFarAwayDown)).to.equal(false)
+            expect(circle.hit(rectFarAwayLeft)).to.equal(false)
+        })
+
+        it.skip('returns a hit for rectangles that overlap', () => {
+            const rectHitUp = new Rectangle(0, 9)
+            const rectHitTopRight = new Rectangle(7, 7, new Vector(-1, -1))
+            const rectHitRight = new Rectangle(9, 0)
+            const rectHitDown = new Rectangle(0, -9)
+            const rectHitLeft = new Rectangle(-9, 0)
+
+            const expectedHitUp = {
+                edge: 'bottom',
+                normal: new Vector(-0, 1),
+                relativeVelocity: new Vector(0, 0),
+                speed: 0,
+                x: 0,
+                y: 9
+            }
+            const expectedHitTopRight = {
+                edge: 'bottom',
+                normal: new Vector(-0, 1),
+                relativeVelocity: new Vector(-1, -1),
+                speed: -1,
+                x: 7,
+                y: 7
+            }
+            const expectedHitRight = {
+                edge: 'bottom',
+                normal: new Vector(-0, 1),
+                relativeVelocity: new Vector(0, 0),
+                speed: 0,
+                x: 9,
+                y: 0
+            }
+            const expectedHitDown = {
+                edge: 'top',
+                normal: new Vector(-0, -1),
+                relativeVelocity: new Vector(0, 0),
+                speed: -0,
+                x: 0,
+                y: -8
+            }
+            const expectedHitLeft = {
+                edge: 'bottom',
+                normal: new Vector(-0, 1),
+                relativeVelocity: new Vector(0, 0),
+                speed: 0,
+                x: -8,
+                y: 0
+            }
+
+            expect(circle.hit(rectHitUp)).to.deep.equal(expectedHitUp)
+            expect(circle.hit(rectHitRight)).to.deep.equal(expectedHitRight)
+            expect(circle.hit(rectHitDown)).to.deep.equal(expectedHitDown)
+            expect(circle.hit(rectHitLeft)).to.deep.equal(expectedHitLeft)
+        })
+    })
 })
 
 describe('Rectangle class', () => {
@@ -202,6 +271,79 @@ describe('Rectangle class', () => {
         expect(r3.area).to.equal(12)
         expect(r4.area).to.equal(20)
         expect(r5.area).to.equal(30)
+    })
+
+    describe('detecting collisions with other rectangles', () => {
+        const rect = new Rectangle(0, 0, new Vector(0, 0), 10, 10)
+
+        it('returns false for no hit', () => {
+            expect(rect.hit(new Rectangle(0, 99))).to.equal(false)
+            expect(rect.hit(new Rectangle(99, 0))).to.equal(false)
+            expect(rect.hit(new Rectangle(0, -99))).to.equal(false)
+            expect(rect.hit(new Rectangle(-99, 0))).to.equal(false)
+        })
+
+        it('returns a hit for rectangles that overlap', () => {
+            //const rect = new Rectangle(0, 0, 10, )
+        })
+
+        it('calculates relative velocities and speeds')
+    })
+
+    describe('detecting collisions with circles', () => {
+        const rect = new Rectangle(-5, -5, new Vector(0, 0), 10, 10)
+
+        it('returns false for no hit', () => {
+            expect(rect.hit(new Circle(0, 99))).to.equal(false)
+            expect(rect.hit(new Circle(99, 0))).to.equal(false)
+            expect(rect.hit(new Circle(0, -99))).to.equal(false)
+            expect(rect.hit(new Circle(-99, 0))).to.equal(false)
+        })
+
+        it('returns a hit for circles that overlap', () => {
+            const circleHitUp = new Circle(0, 6, new Vector(-1, -1), 2);
+            const circleHitRight = new Circle(6, 0, new Vector(-2, 1), 2)
+            const circleHitDown = new Circle(0, -6, new Vector(1, 2), 2)
+            const circleHitLeft = new Circle(-6, 0, new Vector(0, 0), 2)
+
+            const expectedHitUp = {
+                edge: 'top',
+                normal: new Vector(0, 1),
+                relativeVelocity: new Vector(1, 1),
+                speed: 1,
+                x: 0,
+                y: 5
+            }
+            const expectedHitRight = {
+                edge: 'right',
+                normal: new Vector(1, 0),
+                relativeVelocity: new Vector(2, -1),
+                speed: 2,
+                x: 5,
+                y: 0
+            }
+            const expectedHitDown = {
+                edge: 'bottom',
+                normal: new Vector(0, -1),
+                relativeVelocity: new Vector(-1, -2),
+                speed: 2,
+                x: 0,
+                y: -5
+            }
+            const expectedHitLeft = {
+                edge: 'left',
+                normal: new Vector(-1, 0),
+                relativeVelocity: new Vector(0, 0),
+                speed: 0,
+                x: -5,
+                y: 0
+            }
+
+            expect(rect.hit(circleHitUp)).to.deep.equal(expectedHitUp)
+            expect(rect.hit(circleHitRight)).to.deep.equal(expectedHitRight)
+            expect(rect.hit(circleHitDown)).to.deep.equal(expectedHitDown)
+            expect(rect.hit(circleHitLeft)).to.deep.equal(expectedHitLeft)
+        })
     })
 })
 
