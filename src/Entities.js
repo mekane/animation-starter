@@ -65,7 +65,7 @@ export class Entity {
 export class Circle extends Entity {
     _size = 1
 
-    constructor(x, y, velocity, size = 1) {
+    constructor(x, y, size = 1, velocity) {
         super(x, y, velocity)
         this._size = size
     }
@@ -139,7 +139,7 @@ export class Rectangle extends Entity {
     _width = 1
     _height = 1
 
-    constructor(x, y, velocity, width, height) {
+    constructor(x, y, width, height, velocity) {
         super(x, y, velocity)
         this._width = width;
         this._height = height

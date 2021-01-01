@@ -38,30 +38,30 @@ describe('Circle class', () => {
         expect(c.velocity.y).to.equal(0)
     })
 
-    it('can be constructed with a velocity Vector object', () => {
-        const c = new Circle(0, 0, new Vector(3, 4))
+    it('has a read-only size property', () => {
+        const c = new Circle(1, 2, 5)
+        c.size = 9
+        expect(c.size).to.equal(5)
+    })
+
+    it('can be constructed with a size and velocity Vector object', () => {
+        const c = new Circle(0, 0, 10, new Vector(3, 4))
         expect(c.velocity).to.be.an('object')
         expect(c.velocity.x).to.equal(3)
         expect(c.velocity.y).to.equal(4)
     })
 
     it('can be constructed with a velocity Vector-like object', () => {
-        const c = new Circle(0, 0, {x: 3, y: 4})
+        const c = new Circle(0, 0, 10, {x: 3, y: 4})
         expect(c.velocity).to.be.an('object')
         expect(c.velocity.x).to.equal(3)
         expect(c.velocity.y).to.equal(4)
     })
 
-    it('has a read-only size property', () => {
-        const c = new Circle(1, 2, new Vector(3, 4), 5)
-        c.size = 9
-        expect(c.size).to.equal(5)
-    })
-
     it('has a computed area property', () => {
-        const c3 = new Circle(0, 0, new Vector(0, 0), 3)
-        const c4 = new Circle(0, 0, new Vector(0, 0), 4)
-        const c5 = new Circle(0, 0, new Vector(0, 0), 5)
+        const c3 = new Circle(0, 0, 3)
+        const c4 = new Circle(0, 0, 4)
+        const c5 = new Circle(0, 0, 5)
 
         expect(c3.area).to.equal(28.26)
         expect(c4.area).to.equal(50.24)
@@ -69,7 +69,7 @@ describe('Circle class', () => {
     })
 
     describe('detecting collisions with other circles', () => {
-        const circle = new Circle(0, 0, new Vector(0, 0), 10)
+        const circle = new Circle(0, 0, 10)
 
         it('returns false for no hit', () => {
             const farAwayCircle = new Circle(99, 99)
@@ -77,7 +77,7 @@ describe('Circle class', () => {
         })
 
         it('returns a hit for circles at a distance equal to their radii', () => {
-            const circleRight = new Circle(19, 0, new Vector(0, 0), 10)
+            const circleRight = new Circle(19, 0, 10)
             const expectedHitData = {
                 normal: new Vector(1, 0),
                 relativeVelocity: new Vector(0, 0),
@@ -88,7 +88,7 @@ describe('Circle class', () => {
         })
 
         it('returns a hit for a circle at a distance less than their radii', () => {
-            const circleUp = new Circle(0, 19, new Vector(0, 0), 10)
+            const circleUp = new Circle(0, 19, 10)
             const expectedHitDataUp = {
                 normal: new Vector(0, 1),
                 relativeVelocity: new Vector(0, 0),
@@ -96,7 +96,7 @@ describe('Circle class', () => {
             }
             expect(circle.hit(circleUp)).to.deep.equal(expectedHitDataUp)
 
-            const circleLeft = new Circle(-19, 0, new Vector(0, 0), 10)
+            const circleLeft = new Circle(-19, 0, 10)
             const expectedHitDataLeft = {
                 normal: new Vector(-1, 0),
                 relativeVelocity: new Vector(0, 0),
@@ -104,7 +104,7 @@ describe('Circle class', () => {
             }
             expect(circle.hit(circleLeft)).to.deep.equal(expectedHitDataLeft)
 
-            const circleAtAngle = new Circle(15, 15, new Vector(0, 0), 15)
+            const circleAtAngle = new Circle(15, 15, 15)
             const expectedHitDataAtAngle = {
                 normal: new Vector(0.71, 0.71),
                 relativeVelocity: new Vector(0, 0),
@@ -114,7 +114,7 @@ describe('Circle class', () => {
         })
 
         it('calculates relative velocities and speeds', () => {
-            const circleRightMovingLeft = new Circle(19, 0, new Vector(-10, 0), 10)
+            const circleRightMovingLeft = new Circle(19, 0, 10, new Vector(-10, 0))
             const expectedHitDataMovingLeft = {
                 normal: new Vector(1, 0),
                 relativeVelocity: new Vector(10, 0),
@@ -122,7 +122,7 @@ describe('Circle class', () => {
             }
             expect(circle.hit(circleRightMovingLeft)).to.deep.equal(expectedHitDataMovingLeft)
 
-            const circleMovingRight = new Circle(0, 0, new Vector(10, 0), 10)
+            const circleMovingRight = new Circle(0, 0, 10, new Vector(10, 0))
             const expectedHitData = {
                 normal: new Vector(1, 0),
                 relativeVelocity: new Vector(20, 0),
@@ -130,7 +130,7 @@ describe('Circle class', () => {
             }
             expect(circleMovingRight.hit(circleRightMovingLeft)).to.deep.equal(expectedHitData)
 
-            const circleAtAngleMoving = new Circle(12, 12, new Vector(-10, -10), 10)
+            const circleAtAngleMoving = new Circle(12, 12, 10, new Vector(-10, -10))
             const expectedHitDataAtAngle = {
                 normal: new Vector(0.71, 0.71),
                 relativeVelocity: new Vector(20, 10),
@@ -141,7 +141,7 @@ describe('Circle class', () => {
     })
 
     describe('detecting collisions with rectangles', () => {
-        const circle = new Circle(0, 0, new Vector(0, 0), 10)
+        const circle = new Circle(0, 0, 10, new Vector(0, 0))
 
         it('returns false for no hit', () => {
             const rectFarAwayUp = new Rectangle(0, 99)
@@ -156,7 +156,7 @@ describe('Circle class', () => {
 
         it.skip('returns a hit for rectangles that overlap', () => {
             const rectHitUp = new Rectangle(0, 9)
-            const rectHitTopRight = new Rectangle(7, 7, new Vector(-1, -1))
+            const rectHitTopRight = new Rectangle(7, 7, 5, 5, new Vector(-1, -1))
             const rectHitRight = new Rectangle(9, 0)
             const rectHitDown = new Rectangle(0, -9)
             const rectHitLeft = new Rectangle(-9, 0)
@@ -232,6 +232,14 @@ describe('Rectangle class', () => {
         expect(r.y).to.equal(3)
     })
 
+    it('has read-only width and height properties', () => {
+        const r = new Rectangle(1, 2, 5, 6)
+        r.width = 9
+        r.height = 9
+        expect(r.width).to.equal(5)
+        expect(r.height).to.equal(6)
+    })
+
     it('has a read-only velocity Vector that defaults to zero', () => {
         const r = new Rectangle(0, 0)
         expect(r.velocity).to.deep.equal(new Vector(0, 0))
@@ -242,31 +250,23 @@ describe('Rectangle class', () => {
     })
 
     it('can be constructed with a velocity Vector object', () => {
-        const r = new Rectangle(0, 0, new Vector(3, 4))
+        const r = new Rectangle(0, 0, 1, 2, new Vector(3, 4))
         expect(r.velocity).to.be.an('object')
         expect(r.velocity.x).to.equal(3)
         expect(r.velocity.y).to.equal(4)
     })
 
     it('can be constructed with a velocity Vector-like object', () => {
-        const r = new Rectangle(0, 0, {x: 3, y: 4})
+        const r = new Rectangle(0, 0, 1, 2, {x: 3, y: 4})
         expect(r.velocity).to.be.an('object')
         expect(r.velocity.x).to.equal(3)
         expect(r.velocity.y).to.equal(4)
     })
 
-    it('has read-only width and height property', () => {
-        const r = new Rectangle(1, 2, new Vector(3, 4), 5, 6)
-        r.width = 9
-        r.height = 9
-        expect(r.width).to.equal(5)
-        expect(r.height).to.equal(6)
-    })
-
     it('has a computed area property', () => {
-        const r3 = new Rectangle(0, 0, new Vector(0, 0), 3, 4)
-        const r4 = new Rectangle(0, 0, new Vector(0, 0), 4, 5)
-        const r5 = new Rectangle(0, 0, new Vector(0, 0), 5, 6)
+        const r3 = new Rectangle(0, 0, 3, 4)
+        const r4 = new Rectangle(0, 0, 4, 5)
+        const r5 = new Rectangle(0, 0, 5, 6)
 
         expect(r3.area).to.equal(12)
         expect(r4.area).to.equal(20)
@@ -274,7 +274,7 @@ describe('Rectangle class', () => {
     })
 
     describe('detecting collisions with other rectangles', () => {
-        const rect = new Rectangle(0, 0, new Vector(0, 0), 10, 10)
+        const rect = new Rectangle(0, 0, 10, 10)
 
         it('returns false for no hit', () => {
             expect(rect.hit(new Rectangle(0, 99))).to.equal(false)
@@ -291,7 +291,7 @@ describe('Rectangle class', () => {
     })
 
     describe('detecting collisions with circles', () => {
-        const rect = new Rectangle(-5, -5, new Vector(0, 0), 10, 10)
+        const rect = new Rectangle(-5, -5, 10, 10)
 
         it('returns false for no hit', () => {
             expect(rect.hit(new Circle(0, 99))).to.equal(false)
@@ -301,10 +301,10 @@ describe('Rectangle class', () => {
         })
 
         it('returns a hit for circles that overlap', () => {
-            const circleHitUp = new Circle(0, 6, new Vector(-1, -1), 2);
-            const circleHitRight = new Circle(6, 0, new Vector(-2, 1), 2)
-            const circleHitDown = new Circle(0, -6, new Vector(1, 2), 2)
-            const circleHitLeft = new Circle(-6, 0, new Vector(0, 0), 2)
+            const circleHitUp = new Circle(0, 6, 2, new Vector(-1, -1));
+            const circleHitRight = new Circle(6, 0, 2, new Vector(-2, 1))
+            const circleHitDown = new Circle(0, -6, 2, new Vector(1, 2))
+            const circleHitLeft = new Circle(-6, 0, 2, new Vector(0, 0))
 
             const expectedHitUp = {
                 edge: 'top',
