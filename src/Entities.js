@@ -82,8 +82,15 @@ export class Circle extends Entity {
         return roundTo(3.14 * this._size * this._size, 2);
     }
 
+    /**
+     * @param e {Entity}
+     */
     hit(e) {
-        return this.hitsCircle(e)
+        if (e instanceof Circle)
+            return this.hitsCircle(e)
+        if (e instanceof Rectangle)
+            return this.hitsRectangle(e)
+        return false
     }
 
     /**
@@ -120,6 +127,12 @@ export class Circle extends Entity {
      * @param r {Rectangle}
      */
     hitsRectangle(r) {
+        const hit = r.hit(this);
+        if (hit) {
+            hit.normal = hit.normal.reverse()
+            hit.relativeVelocity = hit.relativeVelocity.reverse()
+        }
+        return hit
     }
 }
 
@@ -139,7 +152,7 @@ export class Rectangle extends Entity {
     _width = 1
     _height = 1
 
-    constructor(x, y, width, height, velocity) {
+    constructor(x, y, width = 1, height = 1, velocity) {
         super(x, y, velocity)
         this._width = width;
         this._height = height
@@ -264,6 +277,7 @@ export class Rectangle extends Entity {
     }
 }
 
+//TODO: put abstract on Entity and add tests for Circle and Rect
 function getCenter(entity = {}) {
     if (entity.size)
         return {
