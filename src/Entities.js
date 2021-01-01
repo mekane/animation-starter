@@ -55,6 +55,10 @@ export class Entity {
     }
 
     /** @abstract */
+    get centerPoint() {
+    }
+
+    /** @abstract */
     hit(otherEntity) {
     }
 }
@@ -80,6 +84,13 @@ export class Circle extends Entity {
 
     get area() {
         return roundTo(3.14 * this._size * this._size, 2);
+    }
+
+    get centerPoint() {
+        return {
+            x: this._xPosition,
+            y: this._yPosition
+        }
     }
 
     /**
@@ -178,6 +189,13 @@ export class Rectangle extends Entity {
         return roundTo(this._width * this._height, 2);
     }
 
+    get centerPoint() {
+        return {
+            x: this._xPosition + this._width / 2,
+            y: this._yPosition + this._height / 2
+        }
+    }
+
     /**
      * @param e {Entity}
      */
@@ -245,7 +263,7 @@ export class Rectangle extends Entity {
     }
 
     /**
-     * @param r {Rectangle}
+     * @param r2 {Rectangle}
      */
     hitsRectangle(r2) {
         const rightEdge = (this.x + this.width) >= r2.x;
@@ -256,8 +274,8 @@ export class Rectangle extends Entity {
         const hit = rightEdge && leftEdge && topEdge && bottomEdge;
 
         if (hit) {
-            const c1 = getCenter(this);
-            const c2 = getCenter(r2);
+            const c1 = this.centerPoint;
+            const c2 = r2.centerPoint;
             const dx = c2.x - c1.x;
             const dy = c2.y - c1.y;
             const dSquared = (dx * dx) + (dy * dy);
@@ -274,21 +292,6 @@ export class Rectangle extends Entity {
         }
 
         return false;
-    }
-}
-
-//TODO: put abstract on Entity and add tests for Circle and Rect
-function getCenter(entity = {}) {
-    if (entity.size)
-        return {
-            x: entity.x,
-            y: entity.y
-        }
-    else {
-        return {
-            x: entity.x + entity.width / 2,
-            y: entity.y + entity.height / 2
-        }
     }
 }
 

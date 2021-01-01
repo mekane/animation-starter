@@ -68,6 +68,11 @@ describe('Circle class', () => {
         expect(c5.area).to.equal(78.5)
     })
 
+    it('has a read-only centerPoint property which is the position', () => {
+        const c = new Circle(77, 52, 3)
+        expect(c.centerPoint).to.deep.equal({x: 77, y: 52})
+    })
+
     describe('detecting collisions with other circles', () => {
         const circle = new Circle(0, 0, 10)
 
@@ -271,6 +276,14 @@ describe('Rectangle class', () => {
         expect(r3.area).to.equal(12)
         expect(r4.area).to.equal(20)
         expect(r5.area).to.equal(30)
+    })
+
+    it('has a computed centerPoint property', () => {
+        const r1 = new Rectangle(0, 0, 10, 10)
+        expect(r1.centerPoint).to.deep.equal({x: 5, y: 5})
+
+        const r2 = new Rectangle(-10, -10, 20, 20)
+        expect(r2.centerPoint).to.deep.equal({x: 0, y: 0})
     })
 
     describe('detecting collisions with other rectangles', () => {
