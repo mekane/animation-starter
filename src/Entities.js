@@ -169,7 +169,11 @@ export class Rectangle extends Entity {
      * @param e {Entity}
      */
     hit(e) {
-        return this.hitsCircle(e)
+        if (e instanceof Circle)
+            return this.hitsCircle(e)
+        if (e instanceof Rectangle)
+            return this.hitsRectangle(e)
+        return false
     }
 
     /**
@@ -225,6 +229,52 @@ export class Rectangle extends Entity {
         }
 
         return false;
+    }
+
+    /**
+     * @param r {Rectangle}
+     */
+    hitsRectangle(r2) {
+        const rightEdge = (this.x + this.width) >= r2.x;
+        const leftEdge = this.x <= (r2.x + r2.width);
+        const topEdge = (this.y + this.height) >= r2.y;
+        const bottomEdge = this.y <= (r2.y + r2.height);
+
+        const hit = rightEdge && leftEdge && topEdge && bottomEdge;
+
+        if (hit) {
+            const c1 = getCenter(this);
+            const c2 = getCenter(r2);
+            const dx = c2.x - c1.x;
+            const dy = c2.y - c1.y;
+            const dSquared = (dx * dx) + (dy * dy);
+            const d = Math.sqrt(dSquared);
+            const normal = new Vector(roundTo(dx / d, 2), roundTo(dy / d, 2));
+            const relativeVelocity = this.velocity.subtract(r2.velocity);
+            const speed = normal.dot(relativeVelocity);
+
+            return {
+                normal,
+                relativeVelocity,
+                speed
+            }
+        }
+
+        return false;
+    }
+}
+
+function getCenter(entity = {}) {
+    if (entity.size)
+        return {
+            x: entity.x,
+            y: entity.y
+        }
+    else {
+        return {
+            x: entity.x + entity.width / 2,
+            y: entity.y + entity.height / 2
+        }
     }
 }
 

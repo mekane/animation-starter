@@ -284,7 +284,38 @@ describe('Rectangle class', () => {
         })
 
         it('returns a hit for rectangles that overlap', () => {
-            //const rect = new Rectangle(0, 0, 10, )
+            const rect = new Rectangle(-5, -5, 10, 10)
+
+            const rectOverlapTop = new Rectangle(0, 4, 1, 1, new Vector(1, -1))
+            const rectOverlapRight = new Rectangle(4, 0, 1, 1, new Vector(-1, -1))
+            const rectOverlapBottom = new Rectangle(0, -4, 1, 1, new Vector(1, 1))
+            const rectOverlapLeft = new Rectangle(-4, 0, 1, 1, new Vector(1, -1))
+
+            const expectedHitTop = {
+                normal: new Vector(.11, .99),
+                relativeVelocity: new Vector(-1, 1),
+                speed: .88
+            }
+            const expectedHitRight = {
+                normal: new Vector(.99, .11),
+                relativeVelocity: new Vector(1, 1),
+                speed: 1.1
+            }
+            const expectedHitBottom = {
+                normal: new Vector(.14, -0.99),
+                relativeVelocity: new Vector(-1, -1),
+                speed: .85
+            }
+            const expectedHitLeft = {
+                normal: new Vector(-.99, .14),
+                relativeVelocity: new Vector(-1, 1),
+                speed: 1.13
+            }
+
+            expect(rect.hit(rectOverlapTop)).to.deep.equal(expectedHitTop)
+            expect(rect.hit(rectOverlapRight)).to.deep.equal(expectedHitRight)
+            expect(rect.hit(rectOverlapBottom)).to.deep.equal(expectedHitBottom)
+            expect(rect.hit(rectOverlapLeft)).to.deep.equal(expectedHitLeft)
         })
 
         it('calculates relative velocities and speeds')
