@@ -93,6 +93,12 @@ export class Entity {
             )
         ]
     }
+
+    updatePosition() {
+        this.lastHit = null
+        this._xPosition += this.velocity.x
+        this._yPosition += this.velocity.y
+    }
 }
 
 /**

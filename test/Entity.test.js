@@ -73,6 +73,22 @@ describe('Circle class', () => {
         expect(c.centerPoint).to.deep.equal({x: 77, y: 52})
     })
 
+    it('has an updatePosition method that applies its velocity and clears lastHit property', () => {
+        const c1 = new Circle(0, 0, 1, new Vector(1, 1))
+        c1.lastHit = 'test'
+        c1.updatePosition()
+        expect(c1.lastHit).to.be.a('null')
+        expect(c1.x).to.equal(1)
+        expect(c1.y).to.equal(1)
+
+        const c2 = new Circle(0, 0, 1, new Vector(-1, -1))
+        c2.lastHit = 'test'
+        c2.updatePosition()
+        expect(c2.lastHit).to.be.a('null')
+        expect(c2.x).to.equal(-1)
+        expect(c2.y).to.equal(-1)
+    })
+
     describe('detecting collisions with other circles', () => {
         const circle = new Circle(0, 0, 10)
 
@@ -261,6 +277,22 @@ describe('Rectangle class', () => {
         expect(r2.centerPoint).to.deep.equal({x: 0, y: 0})
     })
 
+    it('has an updatePosition method that applies its velocity and clears lastHit property', () => {
+        const r1 = new Rectangle(1, 1, 1, 1, new Vector(3, 8))
+        r1.lastHit = 'test'
+        r1.updatePosition()
+        expect(r1.lastHit).to.be.a('null')
+        expect(r1.x).to.equal(4)
+        expect(r1.y).to.equal(9)
+
+        const r2 = new Rectangle(3, 2, 1, 1, new Vector(-7, -2))
+        r2.lastHit = 'test'
+        r2.updatePosition()
+        expect(r2.lastHit).to.be.a('null')
+        expect(r2.x).to.equal(-4)
+        expect(r2.y).to.equal(-0)
+    })
+
     describe('detecting collisions with other rectangles', () => {
         const rect = new Rectangle(0, 0, 10, 10)
 
@@ -391,6 +423,3 @@ describe('Computing collision effects for Entities', () => {
         ])
     })
 })
-
-//TODO: tests for static Entity, Entity collision
-//TODO: move values that can be computed from the hit code to the collision code (relativeV and speed)
