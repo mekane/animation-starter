@@ -61,6 +61,45 @@ export class Entity {
     /** @abstract */
     hit(otherEntity) {
     }
+
+    /**
+     * Returns the acceleration that the Circle and other Entity would
+     * experience if they collided.
+     * @param e {Entity}
+     * @param normal {Vector} - the normalized direction of the collision (from hit)
+     * @abstract
+     */
+    collisionEffects(e, normal) {
+        console.log('this', this)
+        console.log('e', e)
+        const relativeVelocity = this._velocity.subtract(e.velocity)
+        const speed = normal.dot(relativeVelocity);
+
+        if (speed < 0 || isNaN(speed))
+            return [
+                new Vector(0, 0),
+                new Vector(0, 0)
+            ];
+
+        const mass1 = this.area;
+        const mass2 = e.area;
+        const impulse = 2 * speed / (mass1 + mass2);
+
+        console.log('this area', mass1)
+        console.log('e area', mass2)
+
+
+        return [
+            new Vector(
+                roundTo(-impulse * mass2 * normal.x, 3),
+                roundTo(-impulse * mass2 * normal.y, 3)
+            ),
+            new Vector(
+                roundTo(impulse * mass1 * normal.x, 3),
+                roundTo(impulse * mass1 * normal.y, 3)
+            )
+        ]
+    }
 }
 
 /**
@@ -146,36 +185,8 @@ export class Circle extends Entity {
         return hit
     }
 
-    /**
-     * Returns the acceleration that the Circle and other Entity would
-     * experience if they collided.
-     * @param e {Entity}
-     * @param normal {Vector} - the normalized direction of the collision (from hit)
-     */
     collisionEffects(e, normal) {
-        const relativeVelocity = this.velocity.subtract(e.velocity)
-        const speed = normal.dot(relativeVelocity);
-
-        if (speed < 0 || isNaN(speed))
-            return [
-                new Vector(0, 0),
-                new Vector(0, 0)
-            ];
-
-        const mass1 = this.area;
-        const mass2 = e.area;
-        const impulse = 2 * speed / (mass1 + mass2);
-
-        return [
-            new Vector(
-                roundTo(-impulse * mass2 * normal.x, 3),
-                roundTo(-impulse * mass2 * normal.y, 3)
-            ),
-            new Vector(
-                roundTo(impulse * mass1 * normal.x, 3),
-                roundTo(impulse * mass1 * normal.y, 3)
-            )
-        ]
+        return super.collisionEffects(e, normal)
     }
 }
 
@@ -324,6 +335,10 @@ export class Rectangle extends Entity {
         }
 
         return false;
+    }
+
+    collisionEffects(e, normal) {
+        return super.collisionEffects(e, normal)
     }
 }
 

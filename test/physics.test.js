@@ -283,5 +283,4 @@ describe('Intersecting Entities - a rectangle and a circle', () => {
 describe('Test Scenarios', () => {
     const r = {x: -5, y: -5, vx: 0, vy: 0, width: 10, height: 10}
     const hit = circleIntersectsRectangle(r, {x: 0, y: 6, size: 2, vx: 0, vy: 0})
-    console.log('**** HIT ****', hit)
 })
