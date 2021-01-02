@@ -67,11 +67,8 @@ export class Entity {
      * experience if they collided.
      * @param e {Entity}
      * @param normal {Vector} - the normalized direction of the collision (from hit)
-     * @abstract
      */
     collisionEffects(e, normal) {
-        console.log('this', this)
-        console.log('e', e)
         const relativeVelocity = this._velocity.subtract(e.velocity)
         const speed = normal.dot(relativeVelocity);
 
@@ -84,10 +81,6 @@ export class Entity {
         const mass1 = this.area;
         const mass2 = e.area;
         const impulse = 2 * speed / (mass1 + mass2);
-
-        console.log('this area', mass1)
-        console.log('e area', mass2)
-
 
         return [
             new Vector(
@@ -158,15 +151,10 @@ export class Circle extends Entity {
 
         if (hit) {
             const d = Math.sqrt(dSquared);
-
             const normal = new Vector(roundTo(dx / d, 2), roundTo(dy / d, 2))
-            const relativeVelocity = this.velocity.subtract(c2.velocity)
-            const speed = roundTo(normal.dot(relativeVelocity), 2)
 
             return {
-                normal,
-                relativeVelocity,
-                speed
+                normal
             }
         }
         return false;
@@ -180,13 +168,8 @@ export class Circle extends Entity {
         const hit = r.hit(this);
         if (hit) {
             hit.normal = hit.normal.reverse()
-            hit.relativeVelocity = hit.relativeVelocity.reverse()
         }
         return hit
-    }
-
-    collisionEffects(e, normal) {
-        return super.collisionEffects(e, normal)
     }
 }
 
@@ -289,14 +272,10 @@ export class Rectangle extends Entity {
 
         if (hit) {
             const normal = rectangleEdgeToNormal[hitEdge];
-            const relativeVelocity = this.velocity.subtract(c.velocity);
-            const speed = normal.dot(relativeVelocity);
 
             return {
                 edge: hitEdge,
                 normal,
-                relativeVelocity,
-                speed,
                 x: horizontalEdge,
                 y: verticalEdge
             }
@@ -324,21 +303,13 @@ export class Rectangle extends Entity {
             const dSquared = (dx * dx) + (dy * dy);
             const d = Math.sqrt(dSquared);
             const normal = new Vector(roundTo(dx / d, 2), roundTo(dy / d, 2));
-            const relativeVelocity = this.velocity.subtract(r2.velocity);
-            const speed = normal.dot(relativeVelocity);
 
             return {
-                normal,
-                relativeVelocity,
-                speed
+                normal
             }
         }
 
         return false;
-    }
-
-    collisionEffects(e, normal) {
-        return super.collisionEffects(e, normal)
     }
 }
 

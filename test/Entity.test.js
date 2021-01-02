@@ -84,10 +84,7 @@ describe('Circle class', () => {
         it('returns a hit for circles at a distance equal to their radii', () => {
             const circleRight = new Circle(19, 0, 10)
             const expectedHitData = {
-                normal: new Vector(1, 0),
-                relativeVelocity: new Vector(0, 0),
-                speed: 0
-                //result: [{vx: 0, vy: 0}, {vx: 0, vy: 0}]
+                normal: new Vector(1, 0)
             }
             expect(circle.hit(circleRight)).to.deep.equal(expectedHitData)
         })
@@ -95,25 +92,19 @@ describe('Circle class', () => {
         it('returns a hit for a circle at a distance less than their radii', () => {
             const circleUp = new Circle(0, 19, 10)
             const expectedHitDataUp = {
-                normal: new Vector(0, 1),
-                relativeVelocity: new Vector(0, 0),
-                speed: 0
+                normal: new Vector(0, 1)
             }
             expect(circle.hit(circleUp)).to.deep.equal(expectedHitDataUp)
 
             const circleLeft = new Circle(-19, 0, 10)
             const expectedHitDataLeft = {
-                normal: new Vector(-1, 0),
-                relativeVelocity: new Vector(0, 0),
-                speed: 0
+                normal: new Vector(-1, 0)
             }
             expect(circle.hit(circleLeft)).to.deep.equal(expectedHitDataLeft)
 
             const circleAtAngle = new Circle(15, 15, 15)
             const expectedHitDataAtAngle = {
-                normal: new Vector(0.71, 0.71),
-                relativeVelocity: new Vector(0, 0),
-                speed: 0
+                normal: new Vector(0.71, 0.71)
             }
             expect(circle.hit(circleAtAngle)).to.deep.equal(expectedHitDataAtAngle)
         })
@@ -121,25 +112,19 @@ describe('Circle class', () => {
         it('calculates relative velocities and speeds', () => {
             const circleRightMovingLeft = new Circle(19, 0, 10, new Vector(-10, 0))
             const expectedHitDataMovingLeft = {
-                normal: new Vector(1, 0),
-                relativeVelocity: new Vector(10, 0),
-                speed: 10
+                normal: new Vector(1, 0)
             }
             expect(circle.hit(circleRightMovingLeft)).to.deep.equal(expectedHitDataMovingLeft)
 
             const circleMovingRight = new Circle(0, 0, 10, new Vector(10, 0))
             const expectedHitData = {
-                normal: new Vector(1, 0),
-                relativeVelocity: new Vector(20, 0),
-                speed: 20
+                normal: new Vector(1, 0)
             }
             expect(circleMovingRight.hit(circleRightMovingLeft)).to.deep.equal(expectedHitData)
 
             const circleAtAngleMoving = new Circle(12, 12, 10, new Vector(-10, -10))
             const expectedHitDataAtAngle = {
-                normal: new Vector(0.71, 0.71),
-                relativeVelocity: new Vector(20, 10),
-                speed: 21.3
+                normal: new Vector(0.71, 0.71)
             }
             expect(circleMovingRight.hit(circleAtAngleMoving)).to.deep.equal(expectedHitDataAtAngle)
         })
@@ -169,40 +154,30 @@ describe('Circle class', () => {
             const expectedHitUp = {
                 edge: 'bottom',
                 normal: new Vector(-0, 1),
-                relativeVelocity: new Vector(-0, -0),
-                speed: 0,
                 x: 0,
                 y: 9
             }
             const expectedHitTopRight = {
                 edge: 'bottom',
                 normal: new Vector(-0, 1),
-                relativeVelocity: new Vector(-1, -1),
-                speed: -1,
                 x: 7,
                 y: 7
             }
             const expectedHitRight = {
                 edge: 'bottom',
                 normal: new Vector(-0, 1),
-                relativeVelocity: new Vector(-0, -0),
-                speed: 0,
                 x: 9,
                 y: 0
             }
             const expectedHitDown = {
                 edge: 'top',
                 normal: new Vector(-0, -1),
-                relativeVelocity: new Vector(-0, -0),
-                speed: 0,
                 x: 0,
                 y: -8
             }
             const expectedHitLeft = {
                 edge: 'bottom',
                 normal: new Vector(-0, 1),
-                relativeVelocity: new Vector(-0, -0),
-                speed: 0,
                 x: -8,
                 y: 0
             }
@@ -305,24 +280,16 @@ describe('Rectangle class', () => {
             const rectOverlapLeft = new Rectangle(-4, 0, 1, 1, new Vector(1, -1))
 
             const expectedHitTop = {
-                normal: new Vector(.11, .99),
-                relativeVelocity: new Vector(-1, 1),
-                speed: .88
+                normal: new Vector(.11, .99)
             }
             const expectedHitRight = {
-                normal: new Vector(.99, .11),
-                relativeVelocity: new Vector(1, 1),
-                speed: 1.1
+                normal: new Vector(.99, .11)
             }
             const expectedHitBottom = {
-                normal: new Vector(.14, -0.99),
-                relativeVelocity: new Vector(-1, -1),
-                speed: .85
+                normal: new Vector(.14, -0.99)
             }
             const expectedHitLeft = {
-                normal: new Vector(-.99, .14),
-                relativeVelocity: new Vector(-1, 1),
-                speed: 1.13
+                normal: new Vector(-.99, .14)
             }
 
             expect(rect.hit(rectOverlapTop)).to.deep.equal(expectedHitTop)
@@ -351,32 +318,24 @@ describe('Rectangle class', () => {
             const expectedHitUp = {
                 edge: 'top',
                 normal: new Vector(0, 1),
-                relativeVelocity: new Vector(1, 1),
-                speed: 1,
                 x: 0,
                 y: 5
             }
             const expectedHitRight = {
                 edge: 'right',
                 normal: new Vector(1, 0),
-                relativeVelocity: new Vector(2, -1),
-                speed: 2,
                 x: 5,
                 y: 0
             }
             const expectedHitDown = {
                 edge: 'bottom',
                 normal: new Vector(0, -1),
-                relativeVelocity: new Vector(-1, -2),
-                speed: 2,
                 x: 0,
                 y: -5
             }
             const expectedHitLeft = {
                 edge: 'left',
                 normal: new Vector(-1, 0),
-                relativeVelocity: new Vector(0, 0),
-                speed: 0,
                 x: -5,
                 y: 0
             }
