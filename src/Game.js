@@ -30,6 +30,8 @@ function resizeGraphics() {
     graphicsContext = main.getContext('2d');
 
     setSize(main.clientWidth, main.clientHeight);
+    gameState.maxX = main.clientWidth;
+    gameState.maxY = main.clientHeight;
 }
 
 window.addEventListener('resize', resizeGraphics);

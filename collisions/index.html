@@ -13,10 +13,20 @@
 
     const game = Game(step, {entities: []});
 
-    const select = getOptionsSelect(game.setState);
+    function updateArrangement(newState) {
+        const maxX = window.innerWidth || 1280;
+        const maxY = window.innerHeight || 950;
+
+        newState.maxX = maxX;
+        newState.maxY = maxY;
+
+        game.setState(newState);
+    }
+
+    const select = getOptionsSelect(updateArrangement);
     document.body.appendChild(select);
 
-    game.setState({entities: getArrangement('default')})
+    updateArrangement({entities: getArrangement('default')})
 </script>
 </body>
 </html>

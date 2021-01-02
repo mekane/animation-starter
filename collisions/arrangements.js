@@ -23,7 +23,7 @@ const billiards = [
 
     new Circle(318, 490, 10, new Vector(0, 0)),
 
-    new Circle(820, 490, 10, new Vector(-90, 0))
+    new Circle(820, 490, 25, new Vector(-90, 0))
 ]
 
 function convergeToCenterCircle() {
@@ -89,10 +89,10 @@ function random() {
 }
 
 const arrangements = {
+    random,
     billiards,
     convergeToCenterCircle,
-    convergeToCenterTwoLines,
-    random
+    convergeToCenterTwoLines
 }
 
 
