@@ -2,12 +2,6 @@
  * This game state just checks for and applies collisions on the list of entities in the scene
  */
 
-import {
-    circleIntersectsCircle,
-    rectangleIntersectsRectangle,
-    circleIntersectsRectangle
-} from '../src/physics.js';
-
 /**
  * Apply Forces
  * Update Positions and Velocities

@@ -1,119 +1,67 @@
-const twoBalls = [
-    {x: 320, y: 480, vx: 16, vy: 0, size: 20},
-    {x: 960, y: 480, vx: -16, vy: 0, size: 20}
+import {Circle, Rectangle} from "../src/Entities.js";
+import {Vector} from "../src/Vector.js";
+
+const billiards = [
+    new Circle(200, 431, 10, new Vector(0, 0)),
+    new Circle(201, 460, 10, new Vector(0, 0)),
+    new Circle(200, 492, 10, new Vector(0, 0)),
+    new Circle(199, 520, 10, new Vector(0, 0)),
+    new Circle(202, 550, 10, new Vector(0, 0)),
+
+    new Circle(231, 445, 10, new Vector(0, 0)),
+    new Circle(229, 475, 10, new Vector(0, 0)),
+    new Circle(230, 505, 10, new Vector(0, 0)),
+    new Circle(230, 535, 10, new Vector(0, 0)),
+
+    new Circle(260, 460, 10, new Vector(0, 0)),
+    new Circle(260, 490, 10, new Vector(0, 0)),
+    new Circle(260, 520, 10, new Vector(0, 0)),
+
+    new Circle(290, 475, 10, new Vector(0, 0)),
+    new Circle(292, 505, 10, new Vector(0, 0)),
+
+    new Circle(318, 490, 10, new Vector(0, 0)),
+
+    new Circle(820, 490, 10, new Vector(-90, 0))
 ]
 
-const ballAndRectangleDirect = [
-    {x: 100, y: 380, vx: 10, vy: 0, width: 200, height: 200},
-    {x: 960, y: 480, vx: -20, vy: 0, size: 20}
-]
+function convergeToCenter() {
+    const entities = [];
+    const maxX = window.innerWidth || 1280;
+    const maxY = window.innerHeight || 950;
 
-const ballAndRectangleDirect2 = [
-    {x: 960, y: 480, vx: -20, vy: 0, size: 20},
-    {x: 100, y: 380, vx: 10, vy: 0, width: 200, height: 200}
-]
+    for (let x = 20; x < maxX; x += 30) {
+        const y1 = getRandomInt(5, 35);
+        const size = getRandomInt(8, 12);
+        const vx1 = (600 - x) / getRandomInt(20, 25);
+        const vy1 = getRandomInt(20, 35);
+        entities.push(new Circle(x, y1, size, new Vector(vx1, vy1)))
 
-// illustrates weird rectangle normal for collision
-const ballAndRectangleAtAngleOk = [
-    {x: 100, y: 180, vx: 0, vy: 0, width: 300, height: 500},
-    {x: 800, y: 80, vx: -30, vy: 30, size: 20}
-]
+        const y2 = getRandomInt(maxY - 5, maxY + 25);
+        const vx2 = (600 - x) / getRandomInt(20, 25);
+        const vy2 = getRandomInt(-25, -40);
+        const size2 = getRandomInt(8, 12)
+        entities.push(new Circle(x, y2, size2, new Vector(vx2, vy2)))
+    }
 
-// illustrates weird rectangle normal for collision that's not quite right
-const ballAndRectangleAtAngleWonky = [
-    {x: 100, y: 180, vx: 0, vy: 0, width: 300, height: 450},
-    {x: 700, y: 185, vx: -30, vy: 30, size: 20}
-]
+    return entities;
+}
 
-// illustrates weird rectangle normal for collision that's wrong
-const ballAndRectangleAtAngleWithBadCollision = [
-    {x: 800, y: 80, vx: -30, vy: 30, size: 20},
-    {x: 100, y: 380, vx: 0, vy: 0, width: 200, height: 200}
-]
+function random() {
+    const entities = [];
 
-const ballChasingOtherBallToTheRight = [
-    {x: 200, y: 480, vx: 30, vy: 0, size: 20},
-    {x: 500, y: 480, vx: 10, vy: 0, size: 20}
-]
+    for (let i = 0; i < 80; i++)
+        entities.push(coinFlip() ? getRandomCircle() : getRandomRectangle());
 
-const ballChasingOtherBallToTheLeft = [
-    {x: 900, y: 480, vx: -10, vy: 0, size: 20},
-    {x: 1200, y: 480, vx: -30, vy: 0, size: 20}
-]
-
-const twoRectangles = [
-    {x: 200, y: 380, vx: 20, vy: 0, width: 200, height: 200},
-    {x: 900, y: 380, vx: -20, vy: 0, width: 200, height: 200}
-]
-
-const twoRectanglesAtAngle = [
-    {x: 200, y: 40, vx: 20, vy: 20, width: 200, height: 200},
-    {x: 900, y: 380, vx: -20, vy: 0, width: 200, height: 200}
-]
-
-const rectChasingOtherRectLeft = [
-    {x: 400, y: 380, vx: -10, vy: 0, width: 200, height: 200},
-    {x: 800, y: 380, vx: -30, vy: 0, width: 200, height: 200}
-]
-
-const circleOverlapCircle = [
-    {x: 500, y: 380, vx: 0, vy: 0, size: 80},
-    {x: 620, y: 380, vx: 0, vy: 0, size: 80}
-]
-
-const multipleRectangles = [
-    {x: 50, y: 380, width: 40, height: 40, vx: 8, vy: 0},
-    {x: 250, y: 380, width: 40, height: 40, vx: 6, vy: 0},
-    {x: 500, y: 380, width: 40, height: 40, vx: 4, vy: 0},
-    {x: 600, y: 380, width: 40, height: 40, vx: -4, vy: 0},
-    {x: 850, y: 380, width: 40, height: 40, vx: -6, vy: 0},
-    {x: 1050, y: 380, width: 40, height: 40, vx: -8, vy: 0}
-]
-
+    return entities;
+}
 
 const arrangements = {
-    random: [],
-    billiards: [
-        //big wall
-        // {x: -1000, y: 0, width: 1020, height: 900, vx: 0, vy: 0},
-
-        {x: 200, y: 431, vx: 0, vy: 0, size: 10},
-        {x: 201, y: 460, vx: 0, vy: 0, size: 10},
-        {x: 200, y: 492, vx: 0, vy: 0, size: 10},
-        {x: 199, y: 520, vx: 0, vy: 0, size: 10},
-        {x: 202, y: 550, vx: 0, vy: 0, size: 10},
-
-        {x: 231, y: 445, vx: 0, vy: 0, size: 10},
-        {x: 229, y: 475, vx: 0, vy: 0, size: 10},
-        {x: 230, y: 505, vx: 0, vy: 0, size: 10},
-        {x: 230, y: 535, vx: 0, vy: 0, size: 10},
-
-        {x: 260, y: 460, vx: 0, vy: 0, size: 10},
-        {x: 260, y: 490, vx: 0, vy: 0, size: 10},
-        {x: 260, y: 520, vx: 0, vy: 0, size: 10},
-
-        {x: 290, y: 475, vx: 0, vy: 0, size: 10},
-        {x: 292, y: 505, vx: 0, vy: 0, size: 10},
-
-        {x: 318, y: 490, vx: 0, vy: 0, size: 10},
-
-        {x: 820, y: 490, vx: -95, vy: 0, size: 20},
-    ],
-    convergeToCenter: [],
-    twoBalls,
-    ballAndRectangleDirect,
-    ballAndRectangleDirect2,
-    ballAndRectangleAtAngleOk,
-    ballAndRectangleAtAngleWonky,
-    ballAndRectangleAtAngleWithBadCollision,
-    ballChasingOtherBallToTheRight,
-    ballChasingOtherBallToTheLeft,
-    twoRectangles,
-    twoRectanglesAtAngle,
-    rectChasingOtherRectLeft,
-    circleOverlapCircle,
-    multipleRectangles,
+    billiards,
+    convergeToCenter,
+    random
 }
+
 
 function getRandomInt(rangeMin, rangeMax) {
     const min = Math.ceil(rangeMin);
@@ -130,24 +78,21 @@ function evenOrOdd(number) {
 }
 
 function getRandomCircle() {
-    return {
-        size: getRandomInt(8, 16),
-        x: getRandomInt(100, 1200),
-        y: getRandomInt(100, 800),
-        vx: getRandomInt(-7, 7),
-        vy: getRandomInt(-7, 7)
-    }
+    return new Circle(getRandomInt(100, 1200),
+        getRandomInt(100, 800),
+        getRandomInt(8, 16),
+        new Vector(getRandomInt(-7, 7), getRandomInt(-7, 7))
+    );
 }
 
 function getRandomRectangle() {
-    return {
-        x: getRandomInt(100, 1200),
-        y: getRandomInt(100, 800),
-        vx: getRandomInt(-7, 7),
-        vy: getRandomInt(-7, 7),
-        width: getRandomInt(30, 60),
-        height: getRandomInt(30, 60)
-    }
+    return new Rectangle(
+        getRandomInt(100, 1200),
+        getRandomInt(100, 800),
+        getRandomInt(25, 75),
+        getRandomInt(25, 75),
+        new Vector(getRandomInt(-7, 7), getRandomInt(-7, 7))
+    )
 }
 
 function newEntity() {
@@ -171,49 +116,14 @@ export function getOptionsSelect(onChangeCallback) {
     return select;
 }
 
-function getConvergeToCenterArrangement() {
-    const entities = [];
-    const maxX = window.innerWidth || 1280;
-    const maxY = window.innerHeight || 950;
-
-    for (let x = 20; x < maxX; x += 30) {
-        entities.push({
-            x,
-            y: getRandomInt(15, 25),
-            vx: (600 - x) / getRandomInt(20, 25),
-            vy: getRandomInt(20, 35),
-            size: getRandomInt(8, 12)
-        })
-
-        entities.push({
-            x,
-            y: getRandomInt(maxY - 5, maxY + 5),
-            vx: (600 - x) / getRandomInt(20, 25),
-            vy: getRandomInt(-25, -40),
-            size: getRandomInt(8, 12)
-        })
-    }
-
-    return entities;
-}
-
-function randomArrangement() {
-    const entities = [];
-
-    for (let i = 0; i < 80; i++)
-        entities.push(coinFlip() ? getRandomCircle() : getRandomRectangle());
-
-    return entities;
-}
-
 export function getArrangement(name) {
-    if (name === 'convergeToCenter') {
-        return getConvergeToCenterArrangement();
-    } else {
-        const entities = arrangements[name] || [];
-        if (entities.length)
-            return entities;
-    }
+    console.log(`getArrangement(${name})`)
+    const arrangement = arrangements[name];
 
-    return randomArrangement();
+    if (typeof arrangement === 'function')
+        return arrangement();
+    else if (Array.isArray(arrangement))
+        return arrangement
+    else
+        return random();
 }
