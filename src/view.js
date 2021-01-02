@@ -45,7 +45,7 @@ function drawCircle(g, c) {
     g.lineWidth = 2;
     g.fillStyle = '#333';
 
-    if (c.hit)
+    if (c.lastHit)
         g.strokeStyle = '#c66';
     else
         g.strokeStyle = '#666';
@@ -65,15 +65,15 @@ function drawRectangle(g, r) {
     g.fillRect(r.x, height - (r.y + r.height), r.width, r.height);
     g.strokeRect(r.x, height - (r.y + r.height), r.width, r.height);
 
-    if (r.hit) {
+    if (r.lastHit) {
         g.strokeStyle = '#c66';
-        if (r.hit.edge === 'top')
+        if (r.lastHit.edge === 'top')
             g.strokeRect(r.x, height - (r.y + r.height), r.width, 2);
-        else if (r.hit.edge === 'right')
+        else if (r.lastHit.edge === 'right')
             g.strokeRect(r.x + r.width, height - (r.y + r.height), 2, r.height);
-        else if (r.hit.edge === 'bottom')
+        else if (r.lastHit.edge === 'bottom')
             g.strokeRect(r.x, height - r.y, r.width, 2);
-        else if (r.hit.edge === 'left')
+        else if (r.lastHit.edge === 'left')
             g.strokeRect(r.x, height - (r.y + r.height), 2, r.height);
         else
             g.strokeRect(r.x, height - (r.y + r.height), r.width, r.height);

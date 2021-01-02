@@ -94,10 +94,22 @@ export class Entity {
         ]
     }
 
-    updatePosition() {
+    /**
+     * Updates this Entity's position according to its current velocity, scaled
+     * according to a time parameter.
+     * @param time {Number}
+     */
+    updatePosition(time) {
         this.lastHit = null
-        this._xPosition += this.velocity.x
-        this._yPosition += this.velocity.y
+        this._xPosition += roundTo(this.velocity.x * time, 2)
+        this._yPosition += roundTo(this.velocity.y * time, 2)
+    }
+
+    /**
+     * @param v {Vector}
+     */
+    accelerate(v) {
+        this._velocity = this._velocity.add(v)
     }
 }
 

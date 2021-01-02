@@ -74,19 +74,29 @@ describe('Circle class', () => {
     })
 
     it('has an updatePosition method that applies its velocity and clears lastHit property', () => {
-        const c1 = new Circle(0, 0, 1, new Vector(1, 1))
+        const c1 = new Circle(0, 0, 1, new Vector(2, 2))
         c1.lastHit = 'test'
-        c1.updatePosition()
+        c1.updatePosition(.5)
         expect(c1.lastHit).to.be.a('null')
         expect(c1.x).to.equal(1)
         expect(c1.y).to.equal(1)
 
-        const c2 = new Circle(0, 0, 1, new Vector(-1, -1))
+        const c2 = new Circle(0, 0, 1, new Vector(-2, -2))
         c2.lastHit = 'test'
-        c2.updatePosition()
+        c2.updatePosition(.5)
         expect(c2.lastHit).to.be.a('null')
         expect(c2.x).to.equal(-1)
         expect(c2.y).to.equal(-1)
+    })
+
+    it('has an accelerate method that applies a vector to the current velocity', () => {
+        const c1 = new Circle(0, 0, 1, new Vector(1, 1))
+        c1.accelerate(new Vector(-7, 7))
+        expect(c1.velocity).to.deep.equal(new Vector(-6, 8))
+
+        const c2 = new Circle(0, 0, 1, new Vector(-1, -1))
+        c2.accelerate(new Vector(3, 5))
+        expect(c2.velocity).to.deep.equal(new Vector(2, 4))
     })
 
     describe('detecting collisions with other circles', () => {
@@ -277,20 +287,30 @@ describe('Rectangle class', () => {
         expect(r2.centerPoint).to.deep.equal({x: 0, y: 0})
     })
 
-    it('has an updatePosition method that applies its velocity and clears lastHit property', () => {
-        const r1 = new Rectangle(1, 1, 1, 1, new Vector(3, 8))
+    it('has an updatePosition method that applies its velocity with a time parameter and clears lastHit property', () => {
+        const r1 = new Rectangle(1, 1, 1, 1, new Vector(6, 16))
         r1.lastHit = 'test'
-        r1.updatePosition()
+        r1.updatePosition(.5)
         expect(r1.lastHit).to.be.a('null')
         expect(r1.x).to.equal(4)
         expect(r1.y).to.equal(9)
 
-        const r2 = new Rectangle(3, 2, 1, 1, new Vector(-7, -2))
+        const r2 = new Rectangle(3, 2, 1, 1, new Vector(-14, -4))
         r2.lastHit = 'test'
-        r2.updatePosition()
+        r2.updatePosition(.5)
         expect(r2.lastHit).to.be.a('null')
         expect(r2.x).to.equal(-4)
         expect(r2.y).to.equal(-0)
+    })
+
+    it('has an accelerate method that applies a vector to the current velocity', () => {
+        const r1 = new Rectangle(0, 0, 1, 1, new Vector(9, 6))
+        r1.accelerate(new Vector(-4, 1))
+        expect(r1.velocity).to.deep.equal(new Vector(5, 7))
+
+        const r2 = new Rectangle(0, 0, 1, 1, new Vector(1, 1))
+        r2.accelerate(new Vector(4, 5))
+        expect(r2.velocity).to.deep.equal(new Vector(5, 6))
     })
 
     describe('detecting collisions with other rectangles', () => {
