@@ -1,5 +1,6 @@
 import {Circle, Rectangle} from "../src/Entities.js";
 import {Vector} from "../src/Vector.js";
+import {roundTo} from "../src/math.js";
 
 const billiards = [
     new Circle(200, 431, 10, new Vector(0, 0)),
@@ -25,7 +26,38 @@ const billiards = [
     new Circle(820, 490, 10, new Vector(-90, 0))
 ]
 
-function convergeToCenter() {
+function convergeToCenterCircle() {
+    const entities = [];
+    const maxX = window.innerWidth || 1280;
+    const maxY = window.innerHeight || 950;
+
+    const x2 = maxX / 2;
+    const y2 = maxY / 2;
+
+    for (let a = 0; a < 6.28; a += .08) {
+        const x = roundTo(Math.cos(a) * y2, 2);
+        const y = roundTo(Math.sin(a) * y2, 2);
+
+        const cx = x + x2 + getRandomInt(-12, 12);
+        const cy = y + y2 + getRandomInt(-12, 12);
+        const size = getRandomInt(7, 12);
+        entities.push(new Circle(cx, cy, size, new Vector(-x / 15, -y / 15)))
+    }
+
+    for (let a = 0; a < 6.28; a += .15) {
+        const x = roundTo(Math.cos(a) * maxY, 2);
+        const y = roundTo(Math.sin(a) * maxY, 2);
+
+        const cx = x + x2 + getRandomInt(-12, 12);
+        const cy = y + y2 + getRandomInt(-12, 12);
+        const size = getRandomInt(16, 22);
+        entities.push(new Circle(cx, cy, size, new Vector(-x / 40, -y / 40)))
+    }
+
+    return entities;
+}
+
+function convergeToCenterTwoLines() {
     const entities = [];
     const maxX = window.innerWidth || 1280;
     const maxY = window.innerHeight || 950;
@@ -37,7 +69,7 @@ function convergeToCenter() {
         const vy1 = getRandomInt(20, 35);
         entities.push(new Circle(x, y1, size, new Vector(vx1, vy1)))
 
-        const y2 = getRandomInt(maxY - 5, maxY + 25);
+        const y2 = getRandomInt(maxY - 5, maxY - 25);
         const vx2 = (600 - x) / getRandomInt(20, 25);
         const vy2 = getRandomInt(-25, -40);
         const size2 = getRandomInt(8, 12)
@@ -58,7 +90,8 @@ function random() {
 
 const arrangements = {
     billiards,
-    convergeToCenter,
+    convergeToCenterCircle,
+    convergeToCenterTwoLines,
     random
 }
 
