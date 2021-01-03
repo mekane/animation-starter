@@ -99,6 +99,14 @@ describe('Circle class', () => {
         expect(c2.velocity).to.deep.equal(new Vector(2, 4))
     })
 
+    it('has a collision method used to apply collision effects', () => {
+        const circle = new Circle(0, 0, 1, new Vector(1, 2))
+        const collisionEffect = new Vector(2, 4)
+
+        circle.collision(collisionEffect)
+        expect(circle.velocity).to.deep.equal(new Vector(3, 6))
+    })
+
     describe('detecting collisions with other circles', () => {
         const circle = new Circle(0, 0, 10)
 
@@ -311,6 +319,14 @@ describe('Rectangle class', () => {
         const r2 = new Rectangle(0, 0, 1, 1, new Vector(1, 1))
         r2.accelerate(new Vector(4, 5))
         expect(r2.velocity).to.deep.equal(new Vector(5, 6))
+    })
+
+    it('has a collision method used to apply collision effects', () => {
+        const rectangle = new Rectangle(0, 0, 1, 1, new Vector(2, 3))
+        const collisionEffect = new Vector(2, 4)
+
+        rectangle.collision(collisionEffect)
+        expect(rectangle.velocity).to.deep.equal(new Vector(4, 7))
     })
 
     describe('detecting collisions with other rectangles', () => {

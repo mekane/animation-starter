@@ -66,6 +66,13 @@ export class Entity {
     }
 
     /**
+     * @param acceleration {Vector}
+     */
+    collision(acceleration) {
+        this.accelerate(acceleration)
+    }
+
+    /**
      * Returns the acceleration that the Circle and other Entity would
      * experience if they collided.
      * @param e {Entity}

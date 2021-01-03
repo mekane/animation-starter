@@ -30,8 +30,8 @@ export function step(oldState, controls = {}, timeStep = .1) {
                 e2.lastHit = hit;
 
                 const a = e1.collisionEffects(e2, hit.normal)
-                e1.accelerate(a[0])
-                e2.accelerate(a[1])
+                e1.collision(a[0])
+                e2.collision(a[1])
             }
         }
 
