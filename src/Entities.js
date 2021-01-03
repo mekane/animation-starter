@@ -50,16 +50,19 @@ export class Entity {
         return false
     }
 
+    /**
+     * @param v {Vector}
+     */
+    accelerate(v) {
+        this._velocity = this._velocity.add(v)
+    }
+
     /** @abstract */
     get area() {
     }
 
     /** @abstract */
     get centerPoint() {
-    }
-
-    /** @abstract */
-    hit(otherEntity) {
     }
 
     /**
@@ -94,6 +97,10 @@ export class Entity {
         ]
     }
 
+    /** @abstract */
+    hit(otherEntity) {
+    }
+
     /**
      * Updates this Entity's position according to its current velocity, scaled
      * according to a time parameter.
@@ -105,12 +112,6 @@ export class Entity {
         this._yPosition += roundTo(this.velocity.y * time, 2)
     }
 
-    /**
-     * @param v {Vector}
-     */
-    accelerate(v) {
-        this._velocity = this._velocity.add(v)
-    }
 }
 
 /**
