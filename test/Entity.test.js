@@ -44,6 +44,11 @@ describe('Circle class', () => {
         expect(c.size).to.equal(5)
     })
 
+    it('has a read-only destroyed property that defaults to false', () => {
+        const c = new Circle(1, 1, 5)
+        expect(c.destroyed).to.equal(false)
+    })
+
     it('can be constructed with a size and velocity Vector object', () => {
         const c = new Circle(0, 0, 10, new Vector(3, 4))
         expect(c.velocity).to.be.an('object')
@@ -252,6 +257,11 @@ describe('Rectangle class', () => {
         r.height = 9
         expect(r.width).to.equal(5)
         expect(r.height).to.equal(6)
+    })
+
+    it('has a read-only destroyed property that defaults to false', () => {
+        const c = new Circle(1, 1, 5)
+        expect(c.destroyed).to.equal(false)
     })
 
     it('has a read-only velocity Vector that defaults to zero', () => {

@@ -16,6 +16,8 @@ describe('The step function', () => {
 
         expect(oldState).to.not.equal(newState)
     })
+
+    it('removes Entities marked destroyed')
 })
 
 describe('Changing next state based on controls', () => {

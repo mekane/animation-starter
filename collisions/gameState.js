@@ -38,6 +38,8 @@ export function step(oldState, controls = {}, timeStep = .1) {
         checkForHitWithWalls(nextState.maxX, nextState.maxY, e1)
     }
 
+    nextState.entities = nextState.entities.filter(e => !e.destroyed)
+
     return nextState;
 }
 
@@ -55,20 +57,20 @@ function checkForHitWithWalls(maxX, maxY, e) {
     const leftWall = new Rectangle(-wallSize, 0, wallSize, height)
     const hitLeft = e.hit(leftWall)
     if (hitLeft)
-        e.accelerate(e.collisionEffects(leftWall, hitLeft.normal)[0])
+        e.collision(e.collisionEffects(leftWall, hitLeft.normal)[0])
 
     const rightWall = new Rectangle(maxX, 0, wallSize, height)
     const hitRight = e.hit(rightWall)
     if (hitRight)
-        e.accelerate(e.collisionEffects(rightWall, hitRight.normal)[0])
+        e.collision(e.collisionEffects(rightWall, hitRight.normal)[0])
 
     const topWall = new Rectangle(0, maxY, maxX, wallSize)
     const hitTop = e.hit(topWall)
     if (hitTop)
-        e.accelerate(e.collisionEffects(topWall, hitTop.normal)[0])
+        e.collision(e.collisionEffects(topWall, hitTop.normal)[0])
 
     const bottomWall = new Rectangle(0, -wallSize, width, wallSize)
     const hitBottom = e.hit(bottomWall)
     if (hitBottom)
-        e.accelerate(e.collisionEffects(bottomWall, hitBottom.normal)[0])
+        e.collision(e.collisionEffects(bottomWall, hitBottom.normal)[0])
 }

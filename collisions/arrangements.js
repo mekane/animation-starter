@@ -1,6 +1,7 @@
 import {Circle, Rectangle} from "../src/Entities.js";
 import {Vector} from "../src/Vector.js";
 import {roundTo} from "../src/math.js";
+import {Projectile} from "../src/Projectile.js";
 
 const billiards = [
     new Circle(200, 431, 10, new Vector(0, 0)),
@@ -24,6 +25,17 @@ const billiards = [
     new Circle(318, 490, 10, new Vector(0, 0)),
 
     new Circle(820, 490, 25, new Vector(-90, 0))
+]
+
+const bullets = [
+    new Rectangle(900, 540, 400, 300),
+    new Projectile(20, 525, 6, new Vector(44, 6)),
+    new Projectile(20, 500, 6, new Vector(43, 4)),
+    new Projectile(20, 475, 6, new Vector(41, 2)),
+    new Projectile(20, 450, 6, new Vector(40, 0)),
+    new Projectile(20, 425, 6, new Vector(42, -2)),
+    new Projectile(20, 400, 6, new Vector(45, -4)),
+    new Projectile(20, 375, 6, new Vector(48, -6)),
 ]
 
 function convergeToCenterCircle() {
@@ -91,6 +103,7 @@ function random() {
 const arrangements = {
     random,
     billiards,
+    bullets,
     convergeToCenterCircle,
     convergeToCenterTwoLines
 }

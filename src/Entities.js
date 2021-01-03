@@ -6,6 +6,7 @@ import {roundTo} from './math.js'
  * @abstract
  */
 export class Entity {
+    _destroyed = false
     _xPosition
     _yPosition
     _velocity
@@ -21,6 +22,14 @@ export class Entity {
         this._yPosition = _number(y)
 
         this._velocity = new Vector(v.x, v.y)
+    }
+
+    get destroyed() {
+        return this._destroyed
+    }
+
+    set destroyed(val) {
+        return false
     }
 
     get x() {
