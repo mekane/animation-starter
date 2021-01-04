@@ -100,6 +100,9 @@ function random() {
     return entities;
 }
 
+/**
+ * ==> Add new arrangements here <==
+ */
 const arrangements = {
     random,
     billiards,
