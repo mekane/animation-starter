@@ -5,7 +5,8 @@ import {Rectangle} from "./Entities.js";
  * What in here is HTML-specific and should be injected? */
 /**
  *
- * @param view
+ * @param view {View}
+ * @param timer {Timer}
  * @param plugin {Plugin}
  *     - getInitialState
  *     - preUpdate
@@ -14,8 +15,8 @@ import {Rectangle} from "./Entities.js";
  * @returns {{setState: function}}
  * @constructor
  */
-export function Game(view) {
-    /** Something here could be injected? */
+export function Game(view, timer) {
+    /** Should probably inject this to separate out the BrowserControls (and a separate Controller stream one) */
     initializeControls();
     let controls = getControlState();
 
@@ -56,7 +57,7 @@ export function Game(view) {
         } else {
             showOneFrame(secondsSinceLastUpdate);
         }
-        requestAnimationFrame(mainLoop);
+        timer.tick(mainLoop);
     }
 
     function showOneFrame(secondsSinceLastUpdate) {

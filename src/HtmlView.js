@@ -1,8 +1,28 @@
 /**
- *
+ * This basically serves the purpose of documenting the interface
+ * The IDE picks up this definition and connects it to the JSDocs
+ */
+class View {
+    draw() {
+
+    }
+
+    /**
+     * returns {{width: {Number}, height: {Number}}}
+     */
+    getBounds() {
+
+    }
+
+    showPaused() {
+    }
+}
+
+/**
+ * This is the implementation of a View for use in a browser.
+ * It does _not_ actually use the class above, but must match it
  * @param win {Window}
  * @param canvasElement {HTMLCanvasElement}
- * @constructor
  */
 export function HtmlView(win, canvasElement) {
     let width = 300;

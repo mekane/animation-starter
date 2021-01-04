@@ -9,10 +9,12 @@
 <script type="module">
     import {Game} from '../src/Game.js';
     import {HtmlView} from "../src/HtmlView.js";
+    import {BrowserTimer} from "../src/Timer.js";
     import {getArrangement, getOptionsSelect} from './arrangements.js';
 
-    const view = new HtmlView(window, document.getElementById('main'))
-    const game = Game(view);
+    const view = HtmlView(window, document.getElementById('main'))
+    const timer = BrowserTimer();
+    const game = Game(view, timer);
 
     const select = getOptionsSelect(game.setState);
     document.body.appendChild(select);
