@@ -8,25 +8,16 @@
 <canvas id="main"></canvas>
 <script type="module">
     import {Game} from '../src/Game.js';
+    import {HtmlView} from "../src/HtmlView.js";
     import {getArrangement, getOptionsSelect} from './arrangements.js';
-    import {step} from './gameState.js';
 
-    const game = Game(step, {entities: []});
+    const view = new HtmlView(window, document.getElementById('main'))
+    const game = Game(view);
 
-    function updateArrangement(newState) {
-        const maxX = window.innerWidth || 1280;
-        const maxY = window.innerHeight || 950;
-
-        newState.maxX = maxX;
-        newState.maxY = maxY;
-
-        game.setState(newState);
-    }
-
-    const select = getOptionsSelect(updateArrangement);
+    const select = getOptionsSelect(game.setState);
     document.body.appendChild(select);
 
-    updateArrangement({entities: getArrangement('default')})
+    game.setState({entities: getArrangement('default')})
 </script>
 </body>
 </html>

@@ -1,74 +1,141 @@
 import {getControlState, initializeControls} from './controls.js';
-import {draw, setSize} from './view.js';
+import {Rectangle} from "./Entities.js";
 
-let controls = getControlState();
-let graphicsContext = null;
-let gameState = {};
-let step = _ => _;
-
-export function Game(stepFunction, initialState) {
-    step = stepFunction;
-    gameState = initialState;
-
+/** What if I wanted to build a non-html version?
+ * What in here is HTML-specific and should be injected? */
+/**
+ *
+ * @param view
+ * @param plugin {Plugin}
+ *     - getInitialState
+ *     - preUpdate
+ *     - postUpdate
+ *     - postCollision
+ * @returns {{setState: function}}
+ * @constructor
+ */
+export function Game(view) {
+    /** Something here could be injected? */
     initializeControls();
-    resizeGraphics();
-    showOneFrame(0);
-    animationLoop();
+    let controls = getControlState();
 
+    let secondsSinceLastUpdate = 0;
+    let previousTime = 0;
+
+    let gameState = {};
+
+    showOneFrame(0);
+
+    /** this is debugging, but how to properly integrate it? */
+    window.addEventListener('keypress', e => {
+        if (e.key === ' ' || e.key === 'n' || e.key === 's') {
+            showOneFrame(.016);
+        }
+    })
+
+    mainLoop();
+
+    /** Needs to also export the 'step' function (but might not need to be tied to instance) */
     return {
+        /** rename to reset **/
         setState: function (newState) {
             gameState = newState;
             showOneFrame(0);
         }
     }
-}
-
-function resizeGraphics() {
-    const main = document.getElementById('main');
-    main.width = main.clientWidth;
-    main.height = main.clientHeight;
-    graphicsContext = main.getContext('2d');
-
-    setSize(main.clientWidth, main.clientHeight);
-    gameState.maxX = main.clientWidth;
-    gameState.maxY = main.clientHeight;
-}
-
-window.addEventListener('resize', resizeGraphics);
 
 
-let secondsSinceLastUpdate = 0;
-let previousTime = 0;
+    function mainLoop(time) {
+        secondsSinceLastUpdate = (time - previousTime) / 1000;
+        previousTime = time;
 
-function animationLoop(time) {
-    secondsSinceLastUpdate = (time - previousTime) / 1000;
-    previousTime = time;
+        controls = getControlState();
 
-    controls = getControlState();
-
-    if (controls.pause) {
-        showPaused(graphicsContext);
-    } else {
-        showOneFrame(secondsSinceLastUpdate);
+        if (controls.pause) {
+            view.showPaused();
+        } else {
+            showOneFrame(secondsSinceLastUpdate);
+        }
+        requestAnimationFrame(mainLoop);
     }
-    requestAnimationFrame(animationLoop);
-}
 
-function showOneFrame(secondsSinceLastUpdate) {
-    gameState = step(gameState, getControlState());
-    draw(graphicsContext, secondsSinceLastUpdate, gameState);
-}
+    function showOneFrame(secondsSinceLastUpdate) {
+        const {width, height} = view.getBounds();
+        gameState.maxX = width;
+        gameState.maxY = height;
 
-function showPaused(g) {
-    g.fillStyle = 'white';
-    g.fillRect(0, 0, 110, 40);
-    g.font = '25px Arial';
-    g.fillStyle = 'black';
-    g.fillText("Paused", 10, 30);
-}
-
-window.addEventListener('keypress', e => {
-    if (e.key === ' ' || e.key === 'n' || e.key === 's') {
-        showOneFrame(.016);
+        gameState = step(gameState, getControlState());
+        view.draw(gameState, secondsSinceLastUpdate);
     }
-})
+}
+
+/**
+ * Apply Forces
+ * Update Positions and Velocities
+ * Detect Collisions
+ * Solve Constraints
+ */
+export function step(oldState, controls = {}, timeStep = .1) {
+    const time = Math.min(timeStep, 0.1);
+
+    const nextState = Object.assign({entities: []}, oldState);
+
+    nextState.entities.forEach(e => {
+        e.updatePosition(timeStep)
+    })
+
+    for (let i = 0; i < nextState.entities.length; i++) {
+        const e1 = nextState.entities[i]
+
+        for (let j = i + 1; j < nextState.entities.length; j++) {
+            const e2 = nextState.entities[j];
+            const hit = e1.hit(e2)
+            if (hit) {
+                e1.lastHit = hit;
+                e2.lastHit = hit;
+
+                const a = e1.collisionEffects(e2, hit.normal)
+                e1.collision(a[0])
+                e2.collision(a[1])
+            }
+        }
+
+        checkForHitWithWalls(nextState.maxX, nextState.maxY, e1)
+    }
+
+    nextState.entities = nextState.entities.filter(e => !e.destroyed)
+
+    return nextState;
+}
+
+/**
+ * Sets up temporary rectangles to function as walls
+ * @param maxX {Number}
+ * @param maxY {Number}
+ * @param e {Entity}
+ */
+function checkForHitWithWalls(maxX, maxY, e) {
+    const width = maxX;
+    const height = maxY;
+    const wallSize = 200;
+
+    const leftWall = new Rectangle(-wallSize, 0, wallSize, height)
+    const hitLeft = e.hit(leftWall)
+    if (hitLeft)
+        e.collision(e.collisionEffects(leftWall, hitLeft.normal)[0])
+
+    const rightWall = new Rectangle(maxX, 0, wallSize, height)
+    const hitRight = e.hit(rightWall)
+    if (hitRight)
+        e.collision(e.collisionEffects(rightWall, hitRight.normal)[0])
+
+    const topWall = new Rectangle(0, maxY, maxX, wallSize)
+    const hitTop = e.hit(topWall)
+    if (hitTop)
+        e.collision(e.collisionEffects(topWall, hitTop.normal)[0])
+
+    const bottomWall = new Rectangle(0, -wallSize, width, wallSize)
+    const hitBottom = e.hit(bottomWall)
+    if (hitBottom)
+        e.collision(e.collisionEffects(bottomWall, hitBottom.normal)[0])
+}
