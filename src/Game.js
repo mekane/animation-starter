@@ -1,38 +1,34 @@
-import {getControlState, initializeControls} from './controls.js';
 import {Rectangle} from "./Entities.js";
 
 /** What if I wanted to build a non-html version?
  * What in here is HTML-specific and should be injected? */
 /**
  *
+ * @param controls {Controls}
  * @param view {View}
  * @param timer {Timer}
  * @param plugin {Plugin}
- *     - getInitialState
- *     - preUpdate
- *     - postUpdate
- *     - postCollision
  * @returns {{setState: function}}
  * @constructor
  */
-export function Game(view, timer) {
+export function Game(controls, view, timer, plugin) {
     /** Should probably inject this to separate out the BrowserControls (and a separate Controller stream one) */
-    initializeControls();
-    let controls = getControlState();
+    controls.initialize();
+    let controlState = {};
 
     let secondsSinceLastUpdate = 0;
     let previousTime = 0;
 
-    let gameState = {};
-
-    showOneFrame(0);
+    let gameState = plugin.getInitialState();
 
     /** this is debugging, but how to properly integrate it? */
+    /*
     window.addEventListener('keypress', e => {
         if (e.key === ' ' || e.key === 'n' || e.key === 's') {
             showOneFrame(.016);
         }
     })
+    */
 
     mainLoop();
 
@@ -50,9 +46,9 @@ export function Game(view, timer) {
         secondsSinceLastUpdate = (time - previousTime) / 1000;
         previousTime = time;
 
-        controls = getControlState();
+        controlState = controls.getControlState();
 
-        if (controls.pause) {
+        if (controlState.pause) {
             view.showPaused();
         } else {
             showOneFrame(secondsSinceLastUpdate);
@@ -65,7 +61,7 @@ export function Game(view, timer) {
         gameState.maxX = width;
         gameState.maxY = height;
 
-        gameState = step(gameState, getControlState());
+        gameState = step(gameState, controlState);
         view.draw(gameState, secondsSinceLastUpdate);
     }
 }

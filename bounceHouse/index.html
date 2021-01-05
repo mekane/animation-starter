@@ -11,15 +11,20 @@
     import {HtmlView} from "../src/View.js";
     import {BrowserTimer} from "../src/Timer.js";
     import {getArrangement, getOptionsSelect} from './arrangements.js';
+    import {BrowserControls} from "../src/Controls.js";
 
+    const controls = new BrowserControls()
     const view = HtmlView(window, document.getElementById('main'))
     const timer = BrowserTimer();
-    const game = Game(view, timer);
+    const plugin = {
+        getInitialState: () => ({entities: getArrangement('default')})
+    }
+    const game = Game(controls, view, timer, plugin);
 
     const select = getOptionsSelect(game.setState);
     document.body.appendChild(select);
 
-    game.setState({entities: getArrangement('default')})
+    game.setState(plugin.getInitialState())
 </script>
 </body>
 </html>

@@ -86,7 +86,7 @@ export function HtmlView(win, canvasElement) {
         g.fillRect(0, 0, 110, 40);
         g.font = '25px Arial';
         g.fillStyle = 'black';
-        g.fillText(fps, 10, 30);
+        g.fillText(`${fps} fps`, 10, 30);
     }
 
     function showPosition(x, y) {
