@@ -2,7 +2,7 @@
  * This basically serves the purpose of documenting the interface
  * The IDE picks up this definition and connects it to the JSDocs
  */
-class View {
+export class View {
     draw() {
 
     }
@@ -11,7 +11,7 @@ class View {
      * returns {{width: {Number}, height: {Number}}}
      */
     getBounds() {
-
+        return {}
     }
 
     showPaused() {

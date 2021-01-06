@@ -1,8 +1,9 @@
 /**
  * This basically serves the purpose of documenting the interface
  * The IDE picks up this definition and connects it to the JSDocs
+ * We use this default "no-op" one as a test stub
  */
-class Timer {
+export class Timer {
     /**
      * Request that the callback be executed at the next possible time
      * according to the Timer. Must pass a timestamp to the callback
@@ -28,13 +29,9 @@ class Timer {
  * to make sure the ticks happen smoothly and as fast as possible without
  * hampering the browser's performance.
  */
-export function BrowserTimer() {
-    function tick(callback) {
+export class BrowserTimer extends Timer {
+    tick(callback) {
         requestAnimationFrame(callback)
-    }
-
-    return {
-        tick
     }
 }
 
@@ -43,14 +40,16 @@ export function BrowserTimer() {
  * the tick callback on a defined interval.
  * @param msInterval
  */
-export function IntervalTimer(msDelay) {
-    let timeoutRef;
+export class IntervalTimer extends Timer {
+    msDelay = 1000
+    timeoutRef;
 
-    function tick(callback) {
-        timeoutRef = setTimeout(() => callback(performance.now()), msDelay)
+    constructor(delay) {
+        super()
+        this.msDelay = delay
     }
 
-    return {
-        tick
+    tick(callback) {
+        this.timeoutRef = setTimeout(() => callback(performance.now()), msDelay)
     }
 }

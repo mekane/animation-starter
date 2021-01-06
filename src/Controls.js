@@ -11,13 +11,7 @@ export class Controls {
     }
 
     /**
-     * @returns {{
-        up: number,
-        right: number,
-        down: number,
-        left: number,
-        pause: boolean
-     * }}
+     * @returns {object}
      */
     getControlState() {
         return {
@@ -25,7 +19,8 @@ export class Controls {
             right: 0,
             down: 0,
             left: 0,
-            pause: false
+            pause: false,
+            key: {}
         }
     }
 }
@@ -36,6 +31,8 @@ export function BrowserControls() {
     let down = 0;
     let left = 0;
     let pause = true;
+    let fire = false;
+    const key = {};
 
     function initialize() {
         window.addEventListener('keydown', keyDown);
@@ -55,6 +52,9 @@ export function BrowserControls() {
                 break;
             case 'ArrowLeft':
                 left = true;
+                break;
+            default:
+                key[e.key] = true;
                 break;
         }
     }
@@ -76,17 +76,27 @@ export function BrowserControls() {
             case 'p':
                 pause = !pause;
                 break;
+            case 'f':
+                fire = true;
+                break;
+            default:
+                key[e.key] = false;
+                break;
         }
     }
 
     function getControlState() {
-        return {
+        const state = Object.assign({}, {
             up,
             right,
             down,
             left,
-            pause
-        }
+            pause,
+            fire,
+            key
+        })
+        fire = false
+        return state
     }
 
     return {

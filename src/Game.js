@@ -38,7 +38,8 @@ export function Game(controls, view, timer, plugin) {
         setState: function (newState) {
             gameState = newState;
             showOneFrame(0);
-        }
+        },
+        step
     }
 
 
@@ -61,48 +62,51 @@ export function Game(controls, view, timer, plugin) {
         gameState.maxX = width;
         gameState.maxY = height;
 
-        gameState = step(gameState, controlState);
+        gameState = step(gameState, secondsSinceLastUpdate);
         view.draw(gameState, secondsSinceLastUpdate);
     }
-}
 
-/**
- * Apply Forces
- * Update Positions and Velocities
- * Detect Collisions
- * Solve Constraints
- */
-export function step(oldState, controls = {}, timeStep = .1) {
-    const time = Math.min(timeStep, 0.1);
 
-    const nextState = Object.assign({entities: []}, oldState);
+    /**
+     * Apply Forces
+     * Update Positions and Velocities
+     * Detect Collisions
+     * Solve Constraints
+     */
+    function step(oldState, timeStep = .1) {
+        const time = Math.min(timeStep, 0.1);
 
-    nextState.entities.forEach(e => {
-        e.updatePosition(timeStep)
-    })
+        const nextState = Object.assign({entities: []}, oldState);
 
-    for (let i = 0; i < nextState.entities.length; i++) {
-        const e1 = nextState.entities[i]
+        plugin.preUpdate(nextState, controlState)
 
-        for (let j = i + 1; j < nextState.entities.length; j++) {
-            const e2 = nextState.entities[j];
-            const hit = e1.hit(e2)
-            if (hit) {
-                e1.lastHit = hit;
-                e2.lastHit = hit;
+        nextState.entities.forEach(e => {
+            e.updatePosition(timeStep)
+        })
 
-                const a = e1.collisionEffects(e2, hit.normal)
-                e1.collision(a[0])
-                e2.collision(a[1])
+        for (let i = 0; i < nextState.entities.length; i++) {
+            const e1 = nextState.entities[i]
+
+            for (let j = i + 1; j < nextState.entities.length; j++) {
+                const e2 = nextState.entities[j];
+                const hit = e1.hit(e2)
+                if (hit) {
+                    e1.lastHit = hit;
+                    e2.lastHit = hit;
+
+                    const a = e1.collisionEffects(e2, hit.normal)
+                    e1.collision(a[0])
+                    e2.collision(a[1])
+                }
             }
+
+            checkForHitWithWalls(nextState.maxX, nextState.maxY, e1)
         }
 
-        checkForHitWithWalls(nextState.maxX, nextState.maxY, e1)
+        nextState.entities = nextState.entities.filter(e => !e.destroyed)
+
+        return nextState;
     }
-
-    nextState.entities = nextState.entities.filter(e => !e.destroyed)
-
-    return nextState;
 }
 
 /**

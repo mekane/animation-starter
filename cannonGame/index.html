@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 <head>
-    <title>Play With Collisions of Objects in Various Arrangements</title>
+    <title>Cannon Game</title>
     <link rel="stylesheet" href="../main.css"/>
 </head>
 <body>
@@ -10,22 +10,13 @@
     import {Game} from '../src/Game.js';
     import {HtmlView} from "../src/View.js";
     import {BrowserTimer} from "../src/Timer.js";
-    import {getArrangement, getOptionsSelect} from './arrangements.js';
     import {BrowserControls} from "../src/Controls.js";
+    import {CannonGamePlugin} from "./CannonGame.js";
 
     const controls = new BrowserControls()
     const view = HtmlView(window, document.getElementById('main'))
     const timer = new BrowserTimer();
-    const plugin = {
-        getInitialState: () => ({entities: getArrangement('default')}),
-        preUpdate: _ => _
-    }
-    const game = Game(controls, view, timer, plugin);
-
-    const select = getOptionsSelect(game.setState);
-    document.body.appendChild(select);
-
-    game.setState(plugin.getInitialState())
+    const game = Game(controls, view, timer, new CannonGamePlugin());
 </script>
 </body>
 </html>
