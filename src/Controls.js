@@ -1,6 +1,6 @@
 /**
- * This basically serves the purpose of documenting the interface
- * The IDE picks up this definition and connects it to the JSDocs
+ * Module for defining and customizing game behavior, gets injected into the main Game module
+ * This base class is intentionally a no-op and gets used as a stub for testing
  */
 export class Controls {
     /**
@@ -25,82 +25,81 @@ export class Controls {
     }
 }
 
-export function BrowserControls() {
-    let up = 0;
-    let right = 0;
-    let down = 0;
-    let left = 0;
-    let pause = true;
-    let fire = false;
-    const key = {};
+/**
+ * Uses browser window key up and down event listeners to figure out controls
+ */
+export class BrowserControls extends Controls {
+    up = 0;
+    right = 0;
+    down = 0;
+    left = 0;
+    pause = true;
+    fire = false;
+    key = {};
 
-    function initialize() {
-        window.addEventListener('keydown', keyDown);
-        window.addEventListener('keyup', keyUp);
+    constructor() {
+        super()
+        window.addEventListener('keydown', e => this.keyDown(e));
+        window.addEventListener('keyup', e => this.keyUp(e));
     }
 
-    function keyDown(e) {
+    keyDown(e) {
         switch (e.key) {
             case 'ArrowUp':
-                up = true;
+                this.up = true;
                 break;
             case 'ArrowDown':
-                down = true;
+                this.down = true;
                 break;
             case 'ArrowRight':
-                right = true;
+                this.right = true;
                 break;
             case 'ArrowLeft':
-                left = true;
+                this.left = true;
                 break;
             default:
-                key[e.key] = true;
+                this.key[e.key] = true;
                 break;
         }
     }
 
-    function keyUp(e) {
+    keyUp(e) {
         switch (e.key) {
             case 'ArrowUp':
-                up = 100;
+                this.up = 100;
                 break;
             case 'ArrowDown':
-                down = 100;
+                this.down = 100;
                 break;
             case 'ArrowRight':
-                right = 100;
+                this.right = 100;
                 break;
             case 'ArrowLeft':
-                left = 100;
+                this.left = 100;
                 break;
             case 'p':
-                pause = !pause;
+                this.pause = !this.pause;
                 break;
             case 'f':
-                fire = true;
+                this.fire = true;
                 break;
             default:
-                key[e.key] = false;
+                this.key[e.key] = false;
                 break;
         }
     }
 
-    function getControlState() {
+    getControlState() {
         const state = Object.assign({}, {
-            up,
-            right,
-            down,
-            left,
-            pause,
-            fire,
-            key
+            up: this.up,
+            right: this.right,
+            down: this.down,
+            left: this.left,
+            pause: this.pause,
+            fire: this.fire,
+            key: this.key
         })
-        fire = false
+        this.fire = false
         return state
-    }
-
-    return {
-        initialize,
-        getControlState
     }
 }
