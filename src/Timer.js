@@ -1,7 +1,8 @@
 /**
- * This basically serves the purpose of documenting the interface
- * The IDE picks up this definition and connects it to the JSDocs
- * We use this default "no-op" one as a test stub
+ * Module for defining how the animation loop gets triggered (repeated).
+ * Implementations need to actually invoke the callback in the tick method
+ * according to their timing mechanism.
+ * This base class provides default "no-op" and is used by the unit tests as a stub
  */
 export class Timer {
     /**
@@ -38,7 +39,8 @@ export class BrowserTimer extends Timer {
 /**
  * This Timer implementation uses a plain setTimeout to call
  * the tick callback on a defined interval.
- * @param msInterval
+ * Use 16.6 (1000/60) to lock it in at 60 animation loops per second (fps)
+ * @param msInterval how many ms to wait before invoking the callback
  */
 export class IntervalTimer extends Timer {
     msDelay = 1000
@@ -50,6 +52,6 @@ export class IntervalTimer extends Timer {
     }
 
     tick(callback) {
-        this.timeoutRef = setTimeout(() => callback(performance.now()), msDelay)
+        this.timeoutRef = setTimeout(() => callback(performance.now()), this.msDelay)
     }
 }

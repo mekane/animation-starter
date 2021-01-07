@@ -1,3 +1,9 @@
+/**
+ * Other games can extend this and provide them to the main Game module
+ * during setup to override and extend parts of the animation loop and
+ * to implement their custom logic.
+ * This base class returns stub values and is used in unit tests.
+ */
 export class Plugin {
     /**
      * This is how the plugin sets up the initial game state including Entities
