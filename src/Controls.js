@@ -46,26 +46,6 @@ export class BrowserControls extends Controls {
     keyDown(e) {
         switch (e.key) {
             case 'ArrowUp':
-                this.up = true;
-                break;
-            case 'ArrowDown':
-                this.down = true;
-                break;
-            case 'ArrowRight':
-                this.right = true;
-                break;
-            case 'ArrowLeft':
-                this.left = true;
-                break;
-            default:
-                this.key[e.key] = true;
-                break;
-        }
-    }
-
-    keyUp(e) {
-        switch (e.key) {
-            case 'ArrowUp':
                 this.up = 100;
                 break;
             case 'ArrowDown':
@@ -76,6 +56,26 @@ export class BrowserControls extends Controls {
                 break;
             case 'ArrowLeft':
                 this.left = 100;
+                break;
+            default:
+                this.key[e.key] = true;
+                break;
+        }
+    }
+
+    keyUp(e) {
+        switch (e.key) {
+            case 'ArrowUp':
+                this.up = 0;
+                break;
+            case 'ArrowDown':
+                this.down = 0;
+                break;
+            case 'ArrowRight':
+                this.right = 0;
+                break;
+            case 'ArrowLeft':
+                this.left = 0;
                 break;
             case 'p':
                 this.pause = !this.pause;

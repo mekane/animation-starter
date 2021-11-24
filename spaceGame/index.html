@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 <head>
-    <title>Cannon Game</title>
+    <title>Black Hole Space Game</title>
     <link rel="stylesheet" href="../main.css"/>
 </head>
 <body>
@@ -11,12 +11,12 @@
     import {HtmlView} from "../src/View.js";
     import {BrowserTimer} from "../src/Timer.js";
     import {BrowserControls} from "../src/Controls.js";
-    import {CannonGamePlugin} from "./CannonGame.js";
+    import {SpaceGamePlugin} from "./SpaceGame.js";
 
     const controls = new BrowserControls()
     const view = HtmlView(window, document.getElementById('main'))
     const timer = new BrowserTimer();
-    const game = Game(controls, view, timer, new CannonGamePlugin());
+    const game = Game(controls, view, timer, new SpaceGamePlugin(), {walls: false});
 </script>
 </body>
 </html>
