@@ -100,8 +100,16 @@ describe('The step function', () => {
         expect(newEntity.velocity.y).to.equal(5)
     })
 
-    it('checks for hits between each entity') // use spies
-    //TODO: use spy with stubbed hit() to check for collisionEffects() and collision()
+    it.skip('checks for hits between each entity', () => {
+        const spy1 = new entitySpy(2, 2, 1, new Vector(1, 1))
+        const spy2 = new entitySpy(3, 3, 1, new Vector(0, 0))
+        const oldState = { entities: [spy1, spy2] }
+
+        game.step(oldState);
+        console.log(spy1.entitiesChecked.length)
+        expect(spy1.entitiesChecked[0]).to.equal(spy2)
+        expect(spy2.entitiesChecked[0]).to.equal(spy1)
+    })
 
     it('checks for hits with walls', () => {
         const spy = new entitySpy(2, 2, 1, new Vector(4, 5))
@@ -181,7 +189,18 @@ class ViewSpy extends View {
 }
 
 class entitySpy extends Circle {
+    accelerateCalled = 0;
+    collisionCalled = 0;
+    updatePositionCalled = 0;
     entitiesChecked = [];
+
+    accelerate(v) {
+        this.accelerateCalled++;
+    }
+
+    collision(v) {
+        this.collisionCalled++;
+    }
 
     hit(e) {
         this.entitiesChecked.push(e)
