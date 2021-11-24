@@ -26,7 +26,7 @@ export function Game(controls, view, timer, plugin, options = defaultGameOptions
     let secondsSinceLastUpdate = 0;
     let previousTime = 0;
 
-    let gameState = plugin.getInitialState();
+    let gameState = plugin.getInitialState(view.getBounds());
 
     /** this is debugging, but how to properly integrate it? */
     /*
@@ -37,6 +37,7 @@ export function Game(controls, view, timer, plugin, options = defaultGameOptions
     })
     */
 
+    showOneFrame(0);
     mainLoop();
 
     return { //game instance
@@ -67,14 +68,18 @@ export function Game(controls, view, timer, plugin, options = defaultGameOptions
     }
 
     function showOneFrame(secondsSinceLastUpdate) {
-        const {width, height} = view.getBounds();
-        gameState.maxX = width;
-        gameState.maxY = height;
+        updateBoundsOnState();
 
         gameState = step(gameState, secondsSinceLastUpdate);
         view.draw(gameState, secondsSinceLastUpdate);
     }
 
+
+    function updateBoundsOnState() {
+        const { width, height } = view.getBounds();
+        gameState.maxX = width;
+        gameState.maxY = height;
+    }
 
     /**
      * Apply Forces

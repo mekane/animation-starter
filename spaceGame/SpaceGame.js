@@ -5,10 +5,11 @@ import { Vector } from "../src/Vector.js";
 const adjust = 100;
 
 export class SpaceGamePlugin extends Plugin {
-    blackHole = new Circle(500, 500, 100)
+    blackHole;
 
-    getInitialState() {
+    getInitialState({ width, height }) {
         //add black hole
+        this.blackHole = new Circle(width / 2, height / 2, 100)
         const planet1 = new Circle(100, 100, 10, new Vector(1, 1))
         const planet2 = new Circle(600, 100, 10, new Vector(1, 5))
 
@@ -35,6 +36,9 @@ export class SpaceGamePlugin extends Plugin {
         if (controls.right)
             this.blackHole.accelerate(new Vector(controls.right / adjust, 0));
 
-console.log(this.blackHole.velocity)
+        console.log(this.blackHole.velocity)
+
+        if (controls.reset)
+            state.entities = this.getInitialState({width: state.maxX, height: state.maxY})['entities']
     }
 }

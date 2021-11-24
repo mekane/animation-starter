@@ -35,6 +35,7 @@ export class BrowserControls extends Controls {
     left = 0;
     pause = true;
     fire = false;
+    reset = false;    
     key = {};
 
     constructor() {
@@ -77,11 +78,14 @@ export class BrowserControls extends Controls {
             case 'ArrowLeft':
                 this.left = 0;
                 break;
+            case 'f':
+                this.fire = true;
+                break;
             case 'p':
                 this.pause = !this.pause;
                 break;
-            case 'f':
-                this.fire = true;
+            case 'r':
+                this.reset = true;
                 break;
             default:
                 this.key[e.key] = false;
@@ -97,9 +101,11 @@ export class BrowserControls extends Controls {
             left: this.left,
             pause: this.pause,
             fire: this.fire,
+            reset: this.reset,
             key: this.key
         })
         this.fire = false
+        this.reset = false
         return state
     }
 }
