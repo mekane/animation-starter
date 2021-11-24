@@ -8,7 +8,8 @@
     "test": "test"
   },
   "scripts": {
-    "test": "mocha -b --experimental-modules test/*.test.js"
+    "test": "mocha -b --experimental-modules test/*.test.js",
+    "serve": "serve ."
   },
   "author": "",
   "license": "ISC",
@@ -16,5 +17,8 @@
     "chai": "^4.2.0",
     "deep-freeze": "0.0.1",
     "mocha": "^8.2.1"
+  },
+  "dependencies": {
+    "serve": "~13.0.2"
   }
 }
