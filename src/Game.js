@@ -109,7 +109,8 @@ export function Game(controls, view, timer, plugin, options = defaultGameOptions
                 }
             }
 
-            checkForHitWithWalls(nextState.maxX, nextState.maxY, e1)
+            if (gameOptions.walls)
+                checkForHitWithWalls(nextState.maxX, nextState.maxY, e1)
         }
 
         nextState.entities = nextState.entities.filter(e => !e.destroyed)

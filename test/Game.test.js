@@ -103,8 +103,23 @@ describe('The step function', () => {
     it('checks for hits between each entity') // use spies
     //TODO: use spy with stubbed hit() to check for collisionEffects() and collision()
 
-    it('checks for hits with walls') //use spies
-    //TODO: provide options within the state to enable wall checks
+    it('checks for hits with walls', () => {
+        const spy = new entitySpy(2, 2, 1, new Vector(4, 5))
+        const oldState = { entities: [spy] }
+
+        game.step(oldState);
+        expect(spy.entitiesChecked.length).to.equal(4)
+    })
+
+    it('skips checking for hits with walls if disabled in game options', () => {
+        const spy = new entitySpy(2, 2, 1, new Vector(4, 5))
+        const oldState = { entities: [spy] }
+
+        const gameNoWalls = new Game(controlsStub, viewStub, timerStub, pluginStub, {walls: false})
+        gameNoWalls.step(oldState);
+        expect(spy.entitiesChecked.length).to.equal(0)
+    })
+
     //TODO: provide coefficient of friction in state options
 
     it('removes Entities marked destroyed')
@@ -162,5 +177,13 @@ class ViewSpy extends View {
 
     draw() {
         this.drawCalled++
+    }
+}
+
+class entitySpy extends Circle {
+    entitiesChecked = [];
+
+    hit(e) {
+        this.entitiesChecked.push(e)
     }
 }

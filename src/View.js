@@ -11,7 +11,10 @@ export class View {
      * returns {{width: {Number}, height: {Number}}}
      */
     getBounds() {
-        return {}
+        return {
+            height: 10,
+            width: 10
+        }
     }
 
     showPaused() {
