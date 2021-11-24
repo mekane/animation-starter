@@ -41,6 +41,21 @@ describe('Game class', () => {
     })
 })
 
+describe('Game configuration options', () => {
+    it('returns default options', () => {
+        const game = Game(controlsStub, viewStub, timerStub, pluginStub)
+        expect(game.getOptions()).to.deep.equal({walls: true})
+    })
+
+    it('takes an options object and copies it', () => {
+        const options = {walls: false};
+        const game = Game(controlsStub, viewStub, timerStub, pluginStub, options)
+        expect(game.getOptions()).to.not.equal(options)
+        expect(game.getOptions()).to.deep.equal(options)
+    })
+
+})
+
 
 describe('The step function', () => {
     const game = new Game(controlsStub, viewStub, timerStub, pluginStub)
@@ -98,7 +113,7 @@ describe('The step function', () => {
 
 
 describe('Plugins', () => {
-    it('takes a Plugin and uses it to get initial state', () => {
+    it('takes a Plugin and gives it a chance to act before each update loop', () => {
         const pluginSpy = new PluginSpy()
         const game = Game(controlsStub, viewStub, timerStub, pluginSpy)
         expect(pluginSpy.preUpdateCalled).to.equal(1)

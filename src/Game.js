@@ -1,5 +1,9 @@
 import {Rectangle} from "./Entities.js";
 
+const defaultGameOptions = {
+    walls: true
+}
+
 /** What if I wanted to build a non-html version?
  * What in here is HTML-specific and should be injected? */
 /**
@@ -8,10 +12,13 @@ import {Rectangle} from "./Entities.js";
  * @param view {View}
  * @param timer {Timer}
  * @param plugin {Plugin}
+ * @param options {{ walls: boolean }}
  * @returns {{setState: function}}
  * @constructor
  */
-export function Game(controls, view, timer, plugin) {
+export function Game(controls, view, timer, plugin, options = defaultGameOptions) {
+    let gameOptions = Object.assign({}, options);
+
     /** Should probably inject this to separate out the BrowserControls (and a separate Controller stream one) */
     controls.initialize();
     let controlState = {};
@@ -32,9 +39,11 @@ export function Game(controls, view, timer, plugin) {
 
     mainLoop();
 
-    /** Needs to also export the 'step' function (but might not need to be tied to instance) */
-    return {
-        /** rename to reset **/
+    return { //game instance
+        getOptions() {
+            return gameOptions;
+        },
+        /** TODO: rename to reset **/
         setState: function (newState) {
             gameState = newState;
             showOneFrame(0);
