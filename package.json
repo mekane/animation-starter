@@ -8,7 +8,7 @@
     "test": "test"
   },
   "scripts": {
-    "test": "mocha -b --experimental-modules test/*.test.js",
+    "test": "mocha -b --experimental-modules */*.test.js",
     "serve": "serve ."
   },
   "author": "",

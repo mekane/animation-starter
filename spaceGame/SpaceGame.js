@@ -2,26 +2,56 @@ import { Plugin } from "../src/Plugin.js";
 import { Circle } from "../src/Entities.js";
 import { Vector } from "../src/Vector.js";
 import { Planet } from "./Planet.js";
+import { BlackHole } from "./BlackHole.js";
 
-const adjust = 100;
+const adjust = 80;
 
 export class SpaceGamePlugin extends Plugin {
     blackHole;
 
-    getInitialState(initialView = {width: 300, height: 150}) {
+    getInitialState(initialView = { width: 300, height: 150 }) {
         const { width, height } = initialView;
         //add black hole
-        this.blackHole = new Circle(width / 2, height / 2, 100)
+        this.blackHole = new BlackHole(width / 2, height / 2, 25)
         this.blackHole.isBlackHole = true
 
         const state = super.getInitialState();
         state.entities = [
-            getRandomPlanet(width, height),
-            getRandomPlanet(width, height),
+            getRandomPlanet(width, height, 10),
+            getRandomPlanet(width, height, 10),
+            getRandomPlanet(width, height, 10),
+            getRandomPlanet(width, height, 10),
+            getRandomPlanet(width, height, 15),
+            getRandomPlanet(width, height, 15),
+            getRandomPlanet(width, height, 15),
+            getRandomPlanet(width, height, 15),
+            getRandomPlanet(width, height, 15),
+            getRandomPlanet(width, height, 20),
+            getRandomPlanet(width, height, 20),
+            getRandomPlanet(width, height, 20),
+            getRandomPlanet(width, height, 20),
+            getRandomPlanet(width, height, 25),
+            getRandomPlanet(width, height, 25),
+            getRandomPlanet(width, height, 25),
             this.blackHole,
-            getRandomPlanet(width, height),
-            getRandomPlanet(width, height),
-            getRandomPlanet(width, height)
+            getRandomPlanet(width, height, 30),
+            getRandomPlanet(width, height, 30),
+            getRandomPlanet(width, height, 30),
+            getRandomPlanet(width, height, 30),
+            getRandomPlanet(width, height, 40),
+            getRandomPlanet(width, height, 40),
+            getRandomPlanet(width, height, 40),
+            getRandomPlanet(width, height, 40),
+            getRandomPlanet(width, height, 50),
+            getRandomPlanet(width, height, 50),
+            getRandomPlanet(width, height, 50),
+            getRandomPlanet(width, height, 50),
+            getRandomPlanet(width, height, 50),
+            getRandomPlanet(width, height, 60),
+            getRandomPlanet(width, height, 60),
+            getRandomPlanet(width, height, 60),
+            getRandomPlanet(width, height, 60),
+            getRandomPlanet(width, height, 100)
         ]
 
         return state;
@@ -53,10 +83,10 @@ function getRandomInt(rangeMin, rangeMax) {
     return Math.floor(Math.random() * Math.floor(max - min + 1)) + min;
 }
 
-function getRandomPlanet(w, h) {
+function getRandomPlanet(w, h, maxSize = 25) {
     return new Planet(getRandomInt(50, w),
         getRandomInt(50, h),
-        getRandomInt(2, 5) * 5,
-        new Vector(getRandomInt(-10, 10), getRandomInt(-10, 10))
+        getRandomInt(10, maxSize),
+        new Vector(getRandomInt(-15, 15), getRandomInt(-15, 15))
     );
 }

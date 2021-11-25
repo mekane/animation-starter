@@ -139,20 +139,20 @@ function checkForHitWithWalls(maxX, maxY, e) {
     const leftWall = new Rectangle(-wallSize, 0, wallSize, height)
     const hitLeft = e.hit(leftWall)
     if (hitLeft)
-        e.collision(e.accelerationFromCollision(leftWall, hitLeft.normal)[0])
+        e.collision(e.accelerationFromCollision(leftWall, hitLeft.normal)[0], leftWall)
 
     const rightWall = new Rectangle(maxX, 0, wallSize, height)
     const hitRight = e.hit(rightWall)
     if (hitRight)
-        e.collision(e.accelerationFromCollision(rightWall, hitRight.normal)[0])
+        e.collision(e.accelerationFromCollision(rightWall, hitRight.normal)[0], rightWall)
 
     const topWall = new Rectangle(0, maxY, maxX, wallSize)
     const hitTop = e.hit(topWall)
     if (hitTop)
-        e.collision(e.accelerationFromCollision(topWall, hitTop.normal)[0])
+        e.collision(e.accelerationFromCollision(topWall, hitTop.normal)[0], topWall)
 
     const bottomWall = new Rectangle(0, -wallSize, width, wallSize)
     const hitBottom = e.hit(bottomWall)
     if (hitBottom)
-        e.collision(e.accelerationFromCollision(bottomWall, hitBottom.normal)[0])
+        e.collision(e.accelerationFromCollision(bottomWall, hitBottom.normal)[0], bottomWall)
 }
