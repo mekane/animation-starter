@@ -1,11 +1,11 @@
 import chai from 'chai';
-import {Circle} from "../src/Entities.js";
-import {Controls} from "../src/Controls.js";
-import {Game} from '../src/Game.js';
-import {Plugin} from "../src/Plugin.js";
-import {Timer} from "../src/Timer.js";
-import {Vector} from "../src/Vector.js";
-import {View} from "../src/View.js";
+import { Circle, Entity } from "../src/Entities.js";
+import { Controls } from "../src/Controls.js";
+import { Game } from '../src/Game.js';
+import { Plugin } from "../src/Plugin.js";
+import { Timer } from "../src/Timer.js";
+import { Vector } from "../src/Vector.js";
+import { View } from "../src/View.js";
 
 const expect = chai.expect;
 
@@ -25,7 +25,7 @@ describe('Game class', () => {
     it('takes a View and draws a frame', () => {
         const viewSpy = new ViewSpy()
         const game = Game(controlsStub, viewSpy, timerStub, pluginStub)
-        expect(viewSpy.drawCalled).to.equal(1)
+        expect(viewSpy.drawCalled).to.be.greaterThan(0)
     })
 
     it('takes a Timer and uses it to tick the main Loop', () => {
@@ -44,11 +44,11 @@ describe('Game class', () => {
 describe('Game configuration options', () => {
     it('returns default options', () => {
         const game = Game(controlsStub, viewStub, timerStub, pluginStub)
-        expect(game.getOptions()).to.deep.equal({walls: true})
+        expect(game.getOptions()).to.deep.equal({ walls: true })
     })
 
     it('takes an options object and copies it', () => {
-        const options = {walls: false};
+        const options = { walls: false };
         const game = Game(controlsStub, viewStub, timerStub, pluginStub, options)
         expect(game.getOptions()).to.not.equal(options)
         expect(game.getOptions()).to.deep.equal(options)
@@ -83,7 +83,15 @@ describe('The step function', () => {
         expect(newState.y).to.equal(1)
     })
 
-    it('calls updatePosition on each entity') //use spies
+    it('calls updatePosition on each entity', () => {
+        const spy1 = new entitySpy(2, 2, 1, new Vector(1, 1))
+        const spy2 = new entitySpy(3, 3, 1, new Vector(0, 0))
+        const oldState = { entities: [spy1, spy2] }
+
+        game.step(oldState);
+        expect(spy1.updatePositionCalled).to.equal(1)
+        expect(spy2.updatePositionCalled).to.equal(1)
+    })
 
     it('updates entity positions according to their velocities on step', () => {
         const oldState = {
@@ -100,15 +108,13 @@ describe('The step function', () => {
         expect(newEntity.velocity.y).to.equal(5)
     })
 
-    it.skip('checks for hits between each entity', () => {
+    it('checks for hits between each entity', () => {
         const spy1 = new entitySpy(2, 2, 1, new Vector(1, 1))
         const spy2 = new entitySpy(3, 3, 1, new Vector(0, 0))
         const oldState = { entities: [spy1, spy2] }
 
         game.step(oldState);
-        console.log(spy1.entitiesChecked.length)
         expect(spy1.entitiesChecked[0]).to.equal(spy2)
-        expect(spy2.entitiesChecked[0]).to.equal(spy1)
     })
 
     it('checks for hits with walls', () => {
@@ -123,23 +129,41 @@ describe('The step function', () => {
         const spy = new entitySpy(2, 2, 1, new Vector(4, 5))
         const oldState = { entities: [spy] }
 
-        const gameNoWalls = new Game(controlsStub, viewStub, timerStub, pluginStub, {walls: false})
+        const gameNoWalls = new Game(controlsStub, viewStub, timerStub, pluginStub, { walls: false })
         gameNoWalls.step(oldState);
         expect(spy.entitiesChecked.length).to.equal(0)
     })
 
-    //TODO: provide coefficient of friction in state options
+    it('applies the collision method after a hit', () => {
+        const hitSpy = new entityHitSpy()
+        const circle = new Circle(1, 1)
 
-    it('removes Entities marked destroyed')
+        const oldState = {
+            entities: [hitSpy, circle]
+        }
 
+        game.step(oldState)
+
+        expect(hitSpy.collisionAcceleration[0]).to.equal('AccelForE1')
+        expect(hitSpy.collisionEntity[0]).to.equal(circle)
+    })
+
+    it('removes Entities marked destroyed', () => {
+        const c1 = new Circle(1, 1, 1, new Vector(4, 5))
+        c1._destroyed = true;
+        const oldState = { entities: [c1] }
+
+        const newState = game.step(oldState);
+        expect(newState.entities.length).to.equal(0)
+    })
 })
 
 
-describe('Plugins', () => {
-    it('takes a Plugin and gives it a chance to act before each update loop', () => {
+describe('Plugin hooks', () => {
+    it(`calls the Plugin's preUpdate method each loop`, () => {
         const pluginSpy = new PluginSpy()
         const game = Game(controlsStub, viewStub, timerStub, pluginSpy)
-        expect(pluginSpy.preUpdateCalled).to.equal(1)
+        expect(pluginSpy.preUpdateCalled).to.be.greaterThan(0)
     })
 })
 
@@ -163,7 +187,7 @@ class PluginSpy extends Plugin {
 
     getInitialState() {
         this.getInitialStateCalled++;
-        return {entities: []}
+        return { entities: [] }
     }
 
     preUpdate(state, controls) {
@@ -188,21 +212,43 @@ class ViewSpy extends View {
     }
 }
 
-class entitySpy extends Circle {
+class entitySpy extends Entity {
     accelerateCalled = 0;
     collisionCalled = 0;
-    updatePositionCalled = 0;
     entitiesChecked = [];
+    updatePositionCalled = 0;
 
     accelerate(v) {
         this.accelerateCalled++;
     }
 
-    collision(v) {
+    collision(v, e) {
         this.collisionCalled++;
     }
 
     hit(e) {
         this.entitiesChecked.push(e)
+    }
+
+    updatePosition(t) {
+        this.updatePositionCalled++;
+    }
+}
+
+class entityHitSpy extends Entity {
+    collisionAcceleration = [];
+    collisionEntity = [];
+
+    hit(e) {
+        return { normal: 'normal' };
+    }
+
+    accelerationFromCollision(e, n) {
+        return ['AccelForE1', 'AccelForE2`']
+    }
+
+    collision(v, e) {
+        this.collisionAcceleration.push(v);
+        this.collisionEntity.push(e);
     }
 }

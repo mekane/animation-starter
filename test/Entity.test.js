@@ -432,7 +432,7 @@ describe('Computing collision effects for Entities', () => {
         const c2 = new Circle(19, 0, 10, new Vector(-1, 0))
         const normal = new Vector(1, 0)
 
-        const acceleration = c1.collisionEffects(c2, normal)
+        const acceleration = c1.accelerationFromCollision(c2, normal)
         expect(acceleration).to.deep.equal([
             new Vector(-2, 0),
             new Vector(2, 0)
@@ -444,7 +444,7 @@ describe('Computing collision effects for Entities', () => {
         const r2 = new Rectangle(9, 0, 10, 10, new Vector(-1, 0))
         const normal = new Vector(1, 0)
 
-        const acceleration = r1.collisionEffects(r2, normal)
+        const acceleration = r1.accelerationFromCollision(r2, normal)
         expect(acceleration).to.deep.equal([
             new Vector(-2, 0),
             new Vector(2, 0)
@@ -455,14 +455,14 @@ describe('Computing collision effects for Entities', () => {
         const rect = new Rectangle(-10, -10, 20, 20, new Vector(1, 0))
         const circle = new Circle(19, 0, 10, new Vector(-1, 0,))
 
-        const a1 = rect.collisionEffects(circle, new Vector(1, 0))
+        const a1 = rect.accelerationFromCollision(circle, new Vector(1, 0))
         expect(a1).to.deep.equal([
             new Vector(-1.759, 0),
             new Vector(2.241, 0)
         ])
 
         /* Order just switches the order of the acceleration Vectors */
-        const a2 = circle.collisionEffects(rect, new Vector(-1, 0))
+        const a2 = circle.accelerationFromCollision(rect, new Vector(-1, 0))
         expect(a2).to.deep.equal([
             new Vector(2.241, 0),
             new Vector(-1.759, 0)

@@ -1,6 +1,7 @@
 import { Plugin } from "../src/Plugin.js";
 import { Circle } from "../src/Entities.js";
 import { Vector } from "../src/Vector.js";
+import { Planet } from "./Planet.js";
 
 const adjust = 100;
 
@@ -10,12 +11,13 @@ export class SpaceGamePlugin extends Plugin {
     getInitialState({ width, height }) {
         //add black hole
         this.blackHole = new Circle(width / 2, height / 2, 100)
+        this.blackHole.isBlackHole = true
 
         const state = super.getInitialState();
         state.entities = [
+            getRandomPlanet(width, height),
+            getRandomPlanet(width, height),
             this.blackHole,
-            getRandomPlanet(width, height),
-            getRandomPlanet(width, height),
             getRandomPlanet(width, height),
             getRandomPlanet(width, height),
             getRandomPlanet(width, height)
@@ -37,7 +39,7 @@ export class SpaceGamePlugin extends Plugin {
         if (controls.right)
             this.blackHole.accelerate(new Vector(controls.right / adjust, 0));
 
-        console.log(this.blackHole.velocity)
+        //console.log(this.blackHole.velocity)
 
         if (controls.reset)
             state.entities = this.getInitialState({ width: state.maxX, height: state.maxY })['entities']
@@ -51,7 +53,7 @@ function getRandomInt(rangeMin, rangeMax) {
 }
 
 function getRandomPlanet(w, h) {
-    return new Circle(getRandomInt(50, w),
+    return new Planet(getRandomInt(50, w),
         getRandomInt(50, h),
         getRandomInt(2, 5) * 5,
         new Vector(getRandomInt(-10, 10), getRandomInt(-10, 10))

@@ -17,6 +17,6 @@ describe('Plugin class', () => {
         expect(p.preUpdate(state, controls)).to.equal(state)
     })
 
-    it('has a postUpdate method that gets the state and the controls')
-    it('has a postCollision method that gets the state after collisions are calculated')
+    //it('has a postUpdate method that gets the state and the controls')
+    //it('has a postCollision method that gets the state after collisions are calculated')
 })

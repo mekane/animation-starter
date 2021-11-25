@@ -76,18 +76,21 @@ export class Entity {
 
     /**
      * @param acceleration {Vector}
+     * @param otherEntity {Entity}
      */
-    collision(acceleration) {
+    collision(acceleration, otherEntity) {
         this.accelerate(acceleration)
     }
 
     /**
      * Returns the acceleration that the Circle and other Entity would
      * experience if they collided.
+     * Note that this does not get called for both entities, so don't use it
+     * for anything other than determining the resulting acceleration.
      * @param e {Entity}
      * @param normal {Vector} - the normalized direction of the collision (from hit)
      */
-    collisionEffects(e, normal) {
+    accelerationFromCollision(e, normal) {
         const relativeVelocity = this._velocity.subtract(e.velocity)
         const speed = normal.dot(relativeVelocity);
 

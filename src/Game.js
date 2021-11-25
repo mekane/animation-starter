@@ -104,13 +104,14 @@ export function Game(controls, view, timer, plugin, options = defaultGameOptions
             for (let j = i + 1; j < nextState.entities.length; j++) {
                 const e2 = nextState.entities[j];
                 const hit = e1.hit(e2)
+
                 if (hit) {
                     e1.lastHit = hit;
                     e2.lastHit = hit;
 
-                    const a = e1.collisionEffects(e2, hit.normal)
-                    e1.collision(a[0])
-                    e2.collision(a[1])
+                    const a = e1.accelerationFromCollision(e2, hit.normal)
+                    e1.collision(a[0], e2)
+                    e2.collision(a[1], e1)
                 }
             }
 
@@ -138,20 +139,20 @@ function checkForHitWithWalls(maxX, maxY, e) {
     const leftWall = new Rectangle(-wallSize, 0, wallSize, height)
     const hitLeft = e.hit(leftWall)
     if (hitLeft)
-        e.collision(e.collisionEffects(leftWall, hitLeft.normal)[0])
+        e.collision(e.accelerationFromCollision(leftWall, hitLeft.normal)[0])
 
     const rightWall = new Rectangle(maxX, 0, wallSize, height)
     const hitRight = e.hit(rightWall)
     if (hitRight)
-        e.collision(e.collisionEffects(rightWall, hitRight.normal)[0])
+        e.collision(e.accelerationFromCollision(rightWall, hitRight.normal)[0])
 
     const topWall = new Rectangle(0, maxY, maxX, wallSize)
     const hitTop = e.hit(topWall)
     if (hitTop)
-        e.collision(e.collisionEffects(topWall, hitTop.normal)[0])
+        e.collision(e.accelerationFromCollision(topWall, hitTop.normal)[0])
 
     const bottomWall = new Rectangle(0, -wallSize, width, wallSize)
     const hitBottom = e.hit(bottomWall)
     if (hitBottom)
-        e.collision(e.collisionEffects(bottomWall, hitBottom.normal)[0])
+        e.collision(e.accelerationFromCollision(bottomWall, hitBottom.normal)[0])
 }
