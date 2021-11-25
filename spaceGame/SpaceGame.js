@@ -8,7 +8,8 @@ const adjust = 100;
 export class SpaceGamePlugin extends Plugin {
     blackHole;
 
-    getInitialState({ width, height }) {
+    getInitialState(initialView = {width: 300, height: 150}) {
+        const { width, height } = initialView;
         //add black hole
         this.blackHole = new Circle(width / 2, height / 2, 100)
         this.blackHole.isBlackHole = true

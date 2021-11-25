@@ -160,6 +160,13 @@ describe('The step function', () => {
 
 
 describe('Plugin hooks', () => {
+    it(`calls the Plugin's getInitialState method with the initial view size`, () => {
+        const pluginSpy = new PluginSpy()
+        const game = Game(controlsStub, viewStub, timerStub, pluginSpy)
+        expect(pluginSpy.getInitialStateCalled).to.be.greaterThan(0)
+        expect(pluginSpy.initialStateArgs).to.deep.equal(viewStub.getBounds())
+    })
+
     it(`calls the Plugin's preUpdate method each loop`, () => {
         const pluginSpy = new PluginSpy()
         const game = Game(controlsStub, viewStub, timerStub, pluginSpy)
@@ -183,10 +190,12 @@ class ControlsSpy extends Controls {
 
 class PluginSpy extends Plugin {
     getInitialStateCalled = 0
+    initialStateArgs
     preUpdateCalled = 0
 
-    getInitialState() {
-        this.getInitialStateCalled++;
+    getInitialState(size) {
+        this.getInitialStateCalled++
+        this.initialStateArgs = size
         return { entities: [] }
     }
 

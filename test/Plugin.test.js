@@ -5,7 +5,7 @@ const expect = chai.expect;
 import {Plugin} from "../src/Plugin.js";
 
 describe('Plugin class', () => {
-    it('has a getInitialState method that includes an array of Entities', () => {
+    it('has a getInitialState method that should include an array of Entities', () => {
         const p = new Plugin();
         expect(p.getInitialState()).to.deep.equal({entities: []})
     })
