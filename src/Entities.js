@@ -1,5 +1,5 @@
-import {Vector} from "./Vector.js";
-import {roundTo} from './math.js'
+import { Vector } from "./Vector.js";
+import { roundTo } from './math.js'
 
 /**
  * Base class for objects within games. Should not be used directly.
@@ -132,6 +132,16 @@ export class Entity {
     }
 
     /**
+     * @typedef Styles
+     * @type {object}
+     * @property {string} background - fill color
+     * @property {string} borderColor - border color
+     * @property {string} borderWidth - border thickness
+     * @property {string} borderColorHit - border color when colliding
+     * @property {string} borderWidthHit - border thickness when colliding
+     */
+
+    /**
      * Gets styles for the entity. These are the baseline defaults for everything
      * @return {Styles}
      */
@@ -140,8 +150,7 @@ export class Entity {
             background: '#333',
             borderColor: '#666',
             borderWidth: 2,
-            borderColorHit: '#c66',
-            borderWitdthHit: 2
+            borderColorHit: '#c66'
         }
     }
 }

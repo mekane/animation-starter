@@ -55,4 +55,14 @@ describe('BlackHole class', () => {
 
         expect(blackHole.area).to.equal(gainedHalfPlanetsArea)
     })
+
+    it('overrides base styles', () => {
+        const blackHole = new BlackHole(1, 1, 1);
+        expect(blackHole.style).to.deep.equal({
+            background: '#111',
+            borderColor: '#333',
+            borderWidth: 2,
+            borderColorHit: '#66c'
+        })
+    })
 })

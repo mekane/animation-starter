@@ -235,8 +235,7 @@ describe('Circle class', () => {
                 background: '#333',
                 borderColor: '#666',
                 borderWidth: 2,
-                borderColorHit: '#c66',
-                borderWitdthHit: 2
+                borderColorHit: '#c66'
             })
         })
     })

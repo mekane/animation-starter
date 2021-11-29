@@ -98,14 +98,19 @@ export function HtmlView(win, canvasElement) {
         g.fillText(`(${x}, ${height - y})`, 10, window.innerHeight - 10);
     }
 
+    /**
+     * @param {Circle} c 
+     */
     function drawCircle(c) {
-        g.lineWidth = 2;
-        g.fillStyle = '#333';
+        const style = c.style
 
-        if (c.lastHit)
-            g.strokeStyle = '#c66';
-        else
-            g.strokeStyle = '#666';
+        g.fillStyle = style.background
+        g.lineWidth = style.borderWidth
+
+        if (c.lastHit) 
+            g.strokeStyle = style.borderColorHit
+        else 
+            g.strokeStyle = style.borderColor
 
         g.beginPath();
         g.arc(c.x, height - c.y, c.size, 0, 2 * Math.PI);
@@ -113,17 +118,21 @@ export function HtmlView(win, canvasElement) {
         g.stroke();
     }
 
+    /**
+     * @param {Rectangle} r 
+     */
     function drawRectangle(r) {
-        g.lineWidth = 2;
-        g.fillStyle = '#333';
+        const style = c.style
 
-        g.strokeStyle = '#666';
+        g.lineWidth = style.borderWidth
+        g.fillStyle = style.background
+        g.strokeStyle = style.borderColor
 
         g.fillRect(r.x, height - (r.y + r.height), r.width, r.height);
         g.strokeRect(r.x, height - (r.y + r.height), r.width, r.height);
 
         if (r.lastHit) {
-            g.strokeStyle = '#c66';
+            g.strokeStyle = style.borderColorHit
             if (r.lastHit.edge === 'top')
                 g.strokeRect(r.x, height - (r.y + r.height), r.width, 2);
             else if (r.lastHit.edge === 'right')

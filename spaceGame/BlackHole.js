@@ -17,9 +17,17 @@ export class BlackHole extends Circle {
 
             const newArea = this.area + otherEntity.area / 2;
             const newR = Math.sqrt(newArea / 3.14);
-            console.log('new area ' + newArea)
-            console.log('new radius ' + newR)
             this._size = newR
         }
+    }
+
+    get style() {
+        const base = super.style;
+        base.background = '#111'
+        base.borderColor = '#333'
+        base.borderWidth = 2
+        base.borderColorHit = '#66c'
+
+        return base;
     }
 }
