@@ -12,47 +12,32 @@ export class SpaceGamePlugin extends Plugin {
     getInitialState(initialView = { width: 300, height: 150 }) {
         const { width, height } = initialView;
         //add black hole
-        this.blackHole = new BlackHole(width / 2, height / 2, 25)
+        this.blackHole = new BlackHole(width / 2, height / 2, 15)
         this.blackHole.isBlackHole = true
 
         const state = super.getInitialState();
-        state.entities = [
-            getRandomPlanet(width, height, 10),
-            getRandomPlanet(width, height, 10),
-            getRandomPlanet(width, height, 10),
-            getRandomPlanet(width, height, 10),
-            getRandomPlanet(width, height, 15),
-            getRandomPlanet(width, height, 15),
-            getRandomPlanet(width, height, 15),
-            getRandomPlanet(width, height, 15),
-            getRandomPlanet(width, height, 15),
-            getRandomPlanet(width, height, 20),
-            getRandomPlanet(width, height, 20),
-            getRandomPlanet(width, height, 20),
-            getRandomPlanet(width, height, 20),
-            getRandomPlanet(width, height, 25),
-            getRandomPlanet(width, height, 25),
-            getRandomPlanet(width, height, 25),
-            this.blackHole,
-            getRandomPlanet(width, height, 30),
-            getRandomPlanet(width, height, 30),
-            getRandomPlanet(width, height, 30),
-            getRandomPlanet(width, height, 30),
-            getRandomPlanet(width, height, 40),
-            getRandomPlanet(width, height, 40),
-            getRandomPlanet(width, height, 40),
-            getRandomPlanet(width, height, 40),
-            getRandomPlanet(width, height, 50),
-            getRandomPlanet(width, height, 50),
-            getRandomPlanet(width, height, 50),
-            getRandomPlanet(width, height, 50),
-            getRandomPlanet(width, height, 50),
-            getRandomPlanet(width, height, 60),
-            getRandomPlanet(width, height, 60),
-            getRandomPlanet(width, height, 60),
-            getRandomPlanet(width, height, 60),
-            getRandomPlanet(width, height, 100)
-        ]
+        state.entities = [this.blackHole]
+
+        //add 15 little rocky planets
+        for (let i = 0; i < 15; i++)
+            state.entities.push(getRandomPlanet(width, height, 18))
+
+        //add 10 small red planets
+        for (let i = 0; i < 10; i++)
+            state.entities.push(getRandomPlanet(width, height, 29))
+
+        //add 5 medium blue planets
+        for (let i = 0; i < 10; i++)
+            state.entities.push(getRandomPlanet(width, height, 39))
+
+        //add 3 large green planets
+        for (let i = 0; i < 10; i++)
+            state.entities.push(getRandomPlanet(width, height, 49))
+
+        //add one or two gas giants
+        state.entities.push(getRandomPlanet(width, height, 75))
+        state.entities.push(getRandomPlanet(width, height, 90))
+
 
         return state;
     }
