@@ -15,7 +15,7 @@ export class BlackHole extends Circle {
             console.log('black hole ate ', otherEntity)
             otherEntity._destroyed = true
 
-            const newArea = this.area + otherEntity.area
+            const newArea = this.area + otherEntity.area / 2;
             const newR = Math.sqrt(newArea / 3.14);
             console.log('new area ' + newArea)
             console.log('new radius ' + newR)

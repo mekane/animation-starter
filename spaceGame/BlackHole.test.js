@@ -50,6 +50,9 @@ describe('BlackHole class', () => {
         const oldState = { entities: [planet, blackHole] }
         const newState = game.step(oldState);
 
-        expect(blackHole.area).to.equal(354.82)
+        const gainedAllPlanetsArea = 354.82;
+        const gainedHalfPlanetsArea = 277.89;
+
+        expect(blackHole.area).to.equal(gainedHalfPlanetsArea)
     })
 })
