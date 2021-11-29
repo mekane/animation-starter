@@ -2,8 +2,8 @@ import chai from 'chai';
 
 const expect = chai.expect;
 
-import {Circle, Rectangle} from '../src/Entities.js';
-import {Vector} from "../src/Vector.js";
+import { Circle, Rectangle } from '../src/Entities.js';
+import { Vector } from "../src/Vector.js";
 
 describe('Circle class', () => {
     it('ignores bad values in constructor and defaults to 0 for x and y position', () => {
@@ -57,7 +57,7 @@ describe('Circle class', () => {
     })
 
     it('can be constructed with a velocity Vector-like object', () => {
-        const c = new Circle(0, 0, 10, {x: 3, y: 4})
+        const c = new Circle(0, 0, 10, { x: 3, y: 4 })
         expect(c.velocity).to.be.an('object')
         expect(c.velocity.x).to.equal(3)
         expect(c.velocity.y).to.equal(4)
@@ -75,7 +75,7 @@ describe('Circle class', () => {
 
     it('has a read-only centerPoint property which is the position', () => {
         const c = new Circle(77, 52, 3)
-        expect(c.centerPoint).to.deep.equal({x: 77, y: 52})
+        expect(c.centerPoint).to.deep.equal({ x: 77, y: 52 })
     })
 
     it('has an updatePosition method that applies its velocity and clears lastHit property', () => {
@@ -227,6 +227,19 @@ describe('Circle class', () => {
             expect(circle.hit(rectHitLeft)).to.deep.equal(expectedHitLeft)
         })
     })
+
+    describe('Styles', () => {
+        it('has a default set of styles', () => {
+            const c = new Circle(1, 1, 1)
+            expect(c.style).to.deep.equal({
+                background: '#333',
+                borderColor: '#666',
+                borderWidth: 2,
+                borderColorHit: '#c66',
+                borderWitdthHit: 2
+            })
+        })
+    })
 })
 
 describe('Rectangle class', () => {
@@ -281,7 +294,7 @@ describe('Rectangle class', () => {
     })
 
     it('can be constructed with a velocity Vector-like object', () => {
-        const r = new Rectangle(0, 0, 1, 2, {x: 3, y: 4})
+        const r = new Rectangle(0, 0, 1, 2, { x: 3, y: 4 })
         expect(r.velocity).to.be.an('object')
         expect(r.velocity.x).to.equal(3)
         expect(r.velocity.y).to.equal(4)
@@ -299,10 +312,10 @@ describe('Rectangle class', () => {
 
     it('has a computed centerPoint property', () => {
         const r1 = new Rectangle(0, 0, 10, 10)
-        expect(r1.centerPoint).to.deep.equal({x: 5, y: 5})
+        expect(r1.centerPoint).to.deep.equal({ x: 5, y: 5 })
 
         const r2 = new Rectangle(-10, -10, 20, 20)
-        expect(r2.centerPoint).to.deep.equal({x: 0, y: 0})
+        expect(r2.centerPoint).to.deep.equal({ x: 0, y: 0 })
     })
 
     it('has an updatePosition method that applies its velocity with a time parameter and clears lastHit property', () => {

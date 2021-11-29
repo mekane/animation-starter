@@ -131,6 +131,19 @@ export class Entity {
         this._yPosition += roundTo(this.velocity.y * time, 2)
     }
 
+    /**
+     * Gets styles for the entity. These are the baseline defaults for everything
+     * @return {Styles}
+     */
+    get style() {
+        return {
+            background: '#333',
+            borderColor: '#666',
+            borderWidth: 2,
+            borderColorHit: '#c66',
+            borderWitdthHit: 2
+        }
+    }
 }
 
 /**
