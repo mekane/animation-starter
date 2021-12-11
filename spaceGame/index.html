@@ -2,21 +2,22 @@
 <html>
 <head>
     <title>Black Hole Space Game</title>
-    <link rel="stylesheet" href="../main.css"/>
+    <style>
+body {
+    background: #112;
+}
+
+canvas {
+    height: 100vh;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100vw;
+}
+    </style>
 </head>
 <body>
 <canvas id="main"></canvas>
-<script type="module">
-    import {Game} from '../src/Game.js';
-    import {HtmlView} from "../src/View.js";
-    import {BrowserTimer} from "../src/Timer.js";
-    import {BrowserControls} from "../src/Controls.js";
-    import {SpaceGamePlugin} from "./SpaceGame.js";
-
-    const controls = new BrowserControls()
-    const view = HtmlView(window, document.getElementById('main'))
-    const timer = new BrowserTimer();
-    const game = Game(controls, view, timer, new SpaceGamePlugin(), {walls: true});
-</script>
+<script type="module" src="app.js"></script>
 </body>
 </html>
