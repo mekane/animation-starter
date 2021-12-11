@@ -38,7 +38,7 @@ export function Game(controls, view, timer, plugin, options = defaultGameOptions
     */
 
     showOneFrame(0);
-    mainLoop();
+    mainLoop(0);
 
     return { //game instance
         getOptions() {
