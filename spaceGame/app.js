@@ -8,4 +8,5 @@ const controls = new BrowserControls()
 const view = HtmlView(window, document.getElementById('main'))
 const timer = new BrowserTimer();
 const game = Game(controls, view, timer, new SpaceGamePlugin(), {walls: true});
+game.step();
 

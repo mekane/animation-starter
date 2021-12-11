@@ -72,6 +72,15 @@ describe('SpaceGame Plugin', () => {
         expect(velocity.y).to.be.lessThan(0)
     })
 
+    describe('adding more planets', () => {
+        it('adds a small one when the "m" key is pressed', () => {
+		const controls = {m: true};
+		const originalNumberOfEntities = state.entities.length;
+		plugin.preUpdate(state, controls);
+		expect(state.entities.length).to.equal(originalNumberOfEntities + 1);
+	});
+
+    });
 })
 
 function findBlackHole(entityList) {
