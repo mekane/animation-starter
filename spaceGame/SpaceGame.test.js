@@ -74,12 +74,31 @@ describe('SpaceGame Plugin', () => {
 
     describe('adding more planets', () => {
         it('adds a small one when the "m" key is pressed', () => {
-		const controls = {m: true};
-		const originalNumberOfEntities = state.entities.length;
-		plugin.preUpdate(state, controls);
-		expect(state.entities.length).to.equal(originalNumberOfEntities + 1);
-	});
+            const controls = { m: true };
+            const originalNumberOfEntities = state.entities.length;
+            plugin.preUpdate(state, controls);
+            expect(state.entities.length).to.equal(originalNumberOfEntities + 1);
+            expect(state.entities[state.entities.length - 1].size).to.be.greaterThan(10);
+            expect(state.entities[state.entities.length - 1].size).to.be.lessThan(20);
+        });
 
+        it('adds a medium one when the "e" key is pressed', () => {
+            const controls = { e: true };
+            const originalNumberOfEntities = state.entities.length;
+            plugin.preUpdate(state, controls);
+            expect(state.entities.length).to.equal(originalNumberOfEntities + 1);
+            expect(state.entities[state.entities.length - 1].size).to.be.greaterThan(19);
+            expect(state.entities[state.entities.length - 1].size).to.be.lessThan(40);
+        });
+
+        it('adds a jarge one when the "j" key is pressed', () => {
+            const controls = { j: true };
+            const originalNumberOfEntities = state.entities.length;
+            plugin.preUpdate(state, controls);
+            expect(state.entities.length).to.equal(originalNumberOfEntities + 1);
+            expect(state.entities[state.entities.length - 1].size).to.be.greaterThan(49);
+            expect(state.entities[state.entities.length - 1].size).to.be.lessThan(100);
+        });
     });
 })
 

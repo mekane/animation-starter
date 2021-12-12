@@ -16,21 +16,19 @@ export class SpaceGamePlugin extends Plugin {
     }
 
     addEarth(state) {
-        state.entities.push(getRandomPlanet(this.width, this.height, 39))
+        state.entities.push(getRandomPlanet(this.width, this.height, 39, 20))
     }
 
     addJupiter(state) {
-        state.entities.push(getRandomPlanet(this.width, this.height, 90))
+        state.entities.push(getRandomPlanet(this.width, this.height, 90, 50))
     }
 
 
     getInitialState(initialView = { width: 300, height: 150 }) {
-        this.width  = initialView.width;
-	this.height = initialView.height;
+        this.width = initialView.width;
+        this.height = initialView.height;
 
-	console.log(`get initial state (${this.width} x ${this.height})`);
-
-	//add black hole
+        //add black hole
         this.blackHole = new BlackHole(this.width / 2, this.height / 2, 15)
         this.blackHole.isBlackHole = true
 
@@ -39,11 +37,11 @@ export class SpaceGamePlugin extends Plugin {
 
         //add 15 little rocky planets
         for (let i = 0; i < 15; i++)
-            this.addMeteor(state) 
+            this.addMeteor(state)
 
         //add 10 small red planets
         for (let i = 0; i < 10; i++)
-            state.entities.push(getRandomPlanet(this.width, this.height, 29))
+            state.entities.push(getRandomPlanet(this.width, this.height, 29, 19))
 
         //add 5 medium blue planets
         for (let i = 0; i < 10; i++)
@@ -54,10 +52,8 @@ export class SpaceGamePlugin extends Plugin {
             state.entities.push(getRandomPlanet(this.width, this.height, 49))
 
         //add one or two gas giants
-	this.addJupiter(state)
-	this.addJupiter(state)
-
-	console.log(state.entities);
+        this.addJupiter(state)
+        this.addJupiter(state)
 
         return state;
     }
@@ -75,7 +71,14 @@ export class SpaceGamePlugin extends Plugin {
         if (controls.right)
             this.blackHole.accelerate(new Vector(controls.right / adjust, 0));
 
-        //console.log(this.blackHole.velocity)
+        if (controls.m)
+            this.addMeteor(state);
+
+        if (controls.e)
+            this.addEarth(state);
+
+        if (controls.j)
+            this.addJupiter(state);
 
         if (controls.reset)
             state.entities = this.getInitialState({ width: state.maxX, height: state.maxY })['entities']
@@ -88,13 +91,12 @@ function getRandomInt(rangeMin, rangeMax) {
     return Math.floor(Math.random() * Math.floor(max - min + 1)) + min;
 }
 
-function getRandomPlanet(w, h, maxSize = 25) {
+function getRandomPlanet(w, h, maxSize = 25, minSize = 10) {
     const p = new Planet(getRandomInt(50, w),
         getRandomInt(50, h),
-        getRandomInt(10, maxSize),
+        getRandomInt(minSize, maxSize),
         new Vector(getRandomInt(-15, 15), getRandomInt(-15, 15))
     );
-    
-	    console.log(`new planet(${w}, ${h})`, p);
-	return p;
+
+    return p;
 }

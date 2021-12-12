@@ -1,7 +1,7 @@
 import chai from 'chai'
 const expect = chai.expect
 
-import { Circle } from '../src/Entities.js'
+import { Rectangle } from '../src/Entities.js'
 import { Vector } from '../src/Vector.js'
 import { Controls } from '../src/Controls.js'
 import { Plugin } from '../src/Plugin.js'
@@ -54,6 +54,18 @@ describe('BlackHole class', () => {
         const gainedHalfPlanetsArea = 277.89;
 
         expect(blackHole.area).to.equal(gainedHalfPlanetsArea)
+    })
+
+    it('does not eat rectangles (walls)', () => {
+        const blackHole = new BlackHole(100, 100, 800, new Vector(0, 0))
+        const square = new Rectangle(100, 100, 5, 5)
+
+        const originalArea = blackHole.area;
+
+        const oldState = { entities: [square, blackHole] }
+        const newState = game.step(oldState);
+
+        expect(blackHole.area).to.equal(originalArea)
     })
 
     it('overrides base styles', () => {

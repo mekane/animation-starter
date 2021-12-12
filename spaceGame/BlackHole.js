@@ -1,4 +1,5 @@
-import { Circle } from "../src/Entities.js";
+import { Circle, Rectangle } from "../src/Entities.js";
+import { Planet } from "./Planet.js";
 
 export class BlackHole extends Circle {
 
@@ -9,7 +10,7 @@ export class BlackHole extends Circle {
     collision(acceleration, otherEntity) {
         super.collision(acceleration)
 
-        if (otherEntity.area > this.area)
+        if (otherEntity.area > this.area || otherEntity instanceof Rectangle)
             return;
         else {
             console.log('black hole ate ', otherEntity)
