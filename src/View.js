@@ -95,14 +95,14 @@ export function HtmlView(win, canvasElement) {
     }
 
     function showInfo(infoString) {
-	const boxWidth = infoString.length * 22;
+	const boxWidth = infoString.length * 16;
 	const boxHeight = 40;
 
 	g.fillStyle = 'white';
         g.fillRect(0, 0, boxWidth, boxHeight);
         g.font = '25px Arial';
         g.fillStyle = 'black';
-        g.fillText(`${fps} fps`, 10, boxHeight - 10);
+        g.fillText(infoString, 10, boxHeight - 10);
     }
 
     function showFPS(fps) {

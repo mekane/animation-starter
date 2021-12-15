@@ -55,6 +55,9 @@ export class SpaceGamePlugin extends Plugin {
         this.addJupiter(state)
         this.addJupiter(state)
 
+        state.showInfo = true;
+	state.info = '';
+
         return state;
     }
 
@@ -80,8 +83,10 @@ export class SpaceGamePlugin extends Plugin {
         if (controls.j)
             this.addJupiter(state);
 
+        state.info = `Mass: ${(this.blackHole.size * 10).toFixed(0)}`;
+
         if (controls.reset)
-            state.entities = this.getInitialState({ width: state.maxX, height: state.maxY })['entities']
+            state = this.getInitialState({ width: state.maxX, height: state.maxY })
     }
 }
 
