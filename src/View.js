@@ -85,11 +85,16 @@ export function HtmlView(win, canvasElement) {
     }
 
     function showFPS(fps) {
-        g.fillStyle = 'white';
-        g.fillRect(0, 0, 110, 40);
+	const boxWidth = 100;
+	const boxHeight = 40;
+	const bounds = getBounds();
+	const x = bounds.width - boxWidth;
+
+	g.fillStyle = 'white';
+        g.fillRect(x, 0, boxWidth, boxHeight);
         g.font = '25px Arial';
         g.fillStyle = 'black';
-        g.fillText(`${fps} fps`, 10, 30);
+        g.fillText(`${fps} fps`, x + 10, boxHeight - 10);
     }
 
     function showPosition(x, y) {
