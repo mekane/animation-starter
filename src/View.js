@@ -82,13 +82,17 @@ export function HtmlView(win, canvasElement) {
     }
 
     function showPaused() {
-        g.fillStyle = 'white';
-        g.fillRect(0, 0, 110, 40);
+        const boxWidth = 110;
+        const boxHeight = 40;
+        const bounds = getBounds();
+        const x = bounds.width / 2 - boxWidth / 2;
+
+	g.fillStyle = 'white';
+        g.fillRect(x, 0, boxWidth, boxHeight);
         g.font = '25px Arial';
         g.fillStyle = 'black';
-        g.fillText("Paused", 10, 30);
+        g.fillText("Paused", x + 12, boxHeight - 10);
     }
-
 
     function showInfo(infoString) {
 	const boxWidth = infoString.length * 22;
@@ -100,8 +104,6 @@ export function HtmlView(win, canvasElement) {
         g.fillStyle = 'black';
         g.fillText(`${fps} fps`, 10, boxHeight - 10);
     }
-
-
 
     function showFPS(fps) {
 	const boxWidth = 100;
