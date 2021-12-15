@@ -59,6 +59,8 @@ export function Game(controls, view, timer, plugin, options = defaultGameOptions
 
         controlState = controls.getControlState();
 
+	gameState.showFps = controlState.info;
+
         if (controlState.pause) {
             view.showPaused();
         } else {

@@ -35,7 +35,8 @@ export class BrowserControls extends Controls {
     left = 0;
     pause = false;
     fire = false;
-    reset = false;    
+    reset = false;
+    info = false;
     m = false;
     j = false;
     e = false;
@@ -96,7 +97,10 @@ export class BrowserControls extends Controls {
 	    case 'e':
 		this.e = true;
 		break;
-	    case 'j':
+	    case 'i':
+		this.info = !this.info;
+		break;
+           case 'j':
 		this.j = true;
 		break;
             default:
@@ -117,6 +121,7 @@ export class BrowserControls extends Controls {
 	    m: this.m,
             e: this.e,
 	    j: this.j,
+	    info: this.info,
             key: this.key
         })
         this.fire = false
