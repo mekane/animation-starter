@@ -85,8 +85,11 @@ export class SpaceGamePlugin extends Plugin {
 
         state.info = `Mass: ${(this.blackHole.size * 10).toFixed(0)}`;
 
-        if (controls.reset)
-            state = this.getInitialState({ width: state.maxX, height: state.maxY })
+        if (controls.reset) {
+            const reset = this.getInitialState({ width: state.maxX, height: state.maxY })
+            state.entities = reset.entities;
+	    state.info = reset.info;
+	}
     }
 }
 
