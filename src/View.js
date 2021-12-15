@@ -57,8 +57,13 @@ export function HtmlView(win, canvasElement) {
     function draw(state, time) {
         g.clearRect(0, 0, width, height);
 
-        const fps = Math.round(1 / time);
-        showFPS(fps)
+	if (state.showFps) {
+          const fps = Math.round(1 / time);
+          showFPS(fps)
+	}
+
+	if (state.showInfo && state.info) 
+	  showInfo(state.info)
 
         state.entities.forEach(e => {
             if (e.size) { //TODO: better Entity -> View function mapping (including injectable)
@@ -83,6 +88,20 @@ export function HtmlView(win, canvasElement) {
         g.fillStyle = 'black';
         g.fillText("Paused", 10, 30);
     }
+
+
+    function showInfo(infoString) {
+	const boxWidth = infoString.length * 22;
+	const boxHeight = 40;
+
+	g.fillStyle = 'white';
+        g.fillRect(0, 0, boxWidth, boxHeight);
+        g.font = '25px Arial';
+        g.fillStyle = 'black';
+        g.fillText(`${fps} fps`, 10, boxHeight - 10);
+    }
+
+
 
     function showFPS(fps) {
 	const boxWidth = 100;
