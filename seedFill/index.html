@@ -1,0 +1,75 @@
+<!doctype html>
+<html>
+<head>
+    <title>Seed Fill</title>
+    <style>
+body {
+    background: #112;
+}
+
+canvas {
+    height: 100vh;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100vw;
+}
+    </style>
+</head>
+<body>
+<canvas id="main"></canvas>
+<script>
+
+let timeoutRef = null;
+
+let speed = 300;
+let pause = true;
+let secondsSinceLastUpdate = 0;
+let previousTime = 0;
+
+function showOneFrame() {
+    console.log(`${(1000 / speed).toFixed(1)} fps`);
+}
+
+function mainLoop() {
+	if (!pause) {
+		showOneFrame();
+
+        timeoutRef = setTimeout(() => mainLoop(), speed);
+	}
+}
+
+
+//Setup controls
+window.addEventListener('keyup', e => {
+	if (e.key === 'p') {
+		pause = !pause;
+		if (!pause)
+			mainLoop(0);
+	}
+	else if (e.key === '-') {
+        if ( speed <= 10 )
+            return;
+        else if ( speed < 300 )
+    		speed -= 10;
+        else 
+            speed -= 100;
+		console.log(`speed ${speed}`);
+	}
+	else if (e.key === '=' || e.key === '+') {
+		if ( speed < 300 )
+            speed = 300;
+        else 
+            speed += 100;
+		console.log(`speed ${speed}`);
+	}
+});
+
+
+
+mainLoop();
+
+
+</script>
+</body>
+</html>
