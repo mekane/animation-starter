@@ -40,6 +40,8 @@ export class BrowserControls extends Controls {
     m = false;
     j = false;
     e = false;
+    minus = false;
+    plus = false;
     key = {};
 
     constructor() {
@@ -91,18 +93,25 @@ export class BrowserControls extends Controls {
             case 'r':
                 this.reset = true;
                 break;
-	    case 'm':	
-		this.m = true;
-		break;
-	    case 'e':
-		this.e = true;
-		break;
-	    case 'i':
-		this.info = !this.info;
-		break;
-           case 'j':
-		this.j = true;
-		break;
+            case 'm':
+                this.m = true;
+                break;
+            case 'e':
+                this.e = true;
+                break;
+            case 'i':
+                this.info = !this.info;
+                break;
+            case 'j':
+                this.j = true;
+                break;
+            case '-':
+                this.minus = true;
+                break;
+            case '=':
+            case '+':
+                this.plus = true;
+                break;
             default:
                 this.key[e.key] = false;
                 break;
@@ -118,17 +127,21 @@ export class BrowserControls extends Controls {
             pause: this.pause,
             fire: this.fire,
             reset: this.reset,
-	    m: this.m,
+            m: this.m,
             e: this.e,
-	    j: this.j,
-	    info: this.info,
+            j: this.j,
+            info: this.info,
+            minus: this.minus,
+            plus: this.plus,
             key: this.key
         })
         this.fire = false
         this.reset = false
-	this.m = false
-	this.e = false
-	this.j = false
+        this.m = false
+        this.e = false
+        this.j = false
+        this.minus = false
+        this.plus = false
         return state
     }
 }

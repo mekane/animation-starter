@@ -51,6 +51,13 @@ export class IntervalTimer extends Timer {
         this.msDelay = delay
     }
 
+    /**
+     * @param {number} newDelay new delay in ms
+     */
+    setDelay(newDelay) {
+        this.msDelay = newDelay
+    }
+
     tick(callback) {
         this.timeoutRef = setTimeout(() => callback(performance.now()), this.msDelay)
     }
