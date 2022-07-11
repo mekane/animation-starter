@@ -16,6 +16,13 @@ export class View {
         }
     }
 
+    /**
+     * Get an empty image data array of the correct size for the current view
+     * @returns Uint8ClampedArray
+     */
+    getImageData() {
+    }
+
     showPaused() {
     }
 }
@@ -40,6 +47,7 @@ export function HtmlView(win, canvasElement) {
     return {
         draw,
         getBounds,
+        getImageData,
         resize,
         showPaused
     }
@@ -55,8 +63,11 @@ export function HtmlView(win, canvasElement) {
     }
 
     function draw(state, time) {
-        console.log(g);
         g.clearRect(0, 0, width, height);
+
+        if (state.imageData) {
+            g.putImageData(state.imageData, 0, 0);
+        }
 
         if (state.showFps) {
             const fps = Math.round(1 / time);
@@ -78,6 +89,14 @@ export function HtmlView(win, canvasElement) {
         return {
             height, width
         }
+    }
+
+    function getImageData() {
+        //use this for cumulative drawing
+        //return g.getImageData(0, 0, width, height);
+
+        //use this to draw new pixels every time
+        return g.createImageData(width, height);
     }
 
     function showPaused() {

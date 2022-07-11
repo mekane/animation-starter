@@ -7,11 +7,15 @@
 export class Plugin {
     /**
      * This is how the plugin sets up the initial game state including Entities
+     * @param bounds {{
+     *   width: number,
+     *   height: number
+     * }}
      * @returns {{
      *   entities: Entity[]
      * }}
      */
-    getInitialState() {
+    getInitialState( bounds ) {
         return {entities: []}
     }
 
@@ -25,5 +29,17 @@ export class Plugin {
      */
     preUpdate(state, controls) {
         return state
+    }
+
+    /**
+     * Called every game loop before drawing to give the plugin a chance
+     * to draw pixels for the background. The plugin is given an array of
+     * unsigned bytes, four for each pixel RGBA. It should modify and return
+     * the pixel data.
+     * @param data Uint8ClampedArray
+     * @return Uint8ClampedArray
+     */
+    imageUpdate(data) {
+        return data
     }
 }

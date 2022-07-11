@@ -94,6 +94,12 @@ export function Game(controls, view, timer, plugin, options = defaultGameOptions
 
         const nextState = Object.assign({entities: []}, oldState);
 
+        if ( typeof plugin.imageUpdate === 'function' ) {
+            const imageData = view.getImageData();
+            plugin.imageUpdate(imageData);
+            nextState.imageData = imageData;
+        }
+
         plugin.preUpdate(nextState, controlState)
 
         nextState.entities.forEach(e => {
