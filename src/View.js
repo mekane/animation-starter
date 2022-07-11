@@ -12,8 +12,7 @@ export class View {
      */
     getBounds() {
         return {
-            height: 10,
-            width: 10
+            height: 10, width: 10
         }
     }
 
@@ -39,9 +38,7 @@ export function HtmlView(win, canvasElement) {
     resize();
 
     return {
-        draw,
-        getBounds,
-        showPaused
+        draw, getBounds, showPaused
     }
 
     function resize() {
@@ -57,13 +54,12 @@ export function HtmlView(win, canvasElement) {
     function draw(state, time) {
         g.clearRect(0, 0, width, height);
 
-	if (state.showFps) {
-          const fps = Math.round(1 / time);
-          showFPS(fps)
-	}
+        if (state.showFps) {
+            const fps = Math.round(1 / time);
+            showFPS(fps)
+        }
 
-	if (state.showInfo && state.info) 
-	  showInfo(state.info)
+        if (state.showInfo && state.info) showInfo(state.info)
 
         state.entities.forEach(e => {
             if (e.size) { //TODO: better Entity -> View function mapping (including injectable)
@@ -76,8 +72,7 @@ export function HtmlView(win, canvasElement) {
 
     function getBounds() {
         return {
-            height,
-            width
+            height, width
         }
     }
 
@@ -87,7 +82,7 @@ export function HtmlView(win, canvasElement) {
         const bounds = getBounds();
         const x = bounds.width / 2 - boxWidth / 2;
 
-	g.fillStyle = 'white';
+        g.fillStyle = 'white';
         g.fillRect(x, 0, boxWidth, boxHeight);
         g.font = '25px Arial';
         g.fillStyle = 'black';
@@ -95,10 +90,10 @@ export function HtmlView(win, canvasElement) {
     }
 
     function showInfo(infoString) {
-	const boxWidth = infoString.length * 16;
-	const boxHeight = 40;
+        const boxWidth = infoString.length * 16;
+        const boxHeight = 40;
 
-	g.fillStyle = 'white';
+        g.fillStyle = 'white';
         g.fillRect(0, 0, boxWidth, boxHeight);
         g.font = '25px Arial';
         g.fillStyle = 'black';
@@ -106,12 +101,12 @@ export function HtmlView(win, canvasElement) {
     }
 
     function showFPS(fps) {
-	const boxWidth = 100;
-	const boxHeight = 40;
-	const bounds = getBounds();
-	const x = bounds.width - boxWidth;
+        const boxWidth = 100;
+        const boxHeight = 40;
+        const bounds = getBounds();
+        const x = bounds.width - boxWidth;
 
-	g.fillStyle = 'white';
+        g.fillStyle = 'white';
         g.fillRect(x, 0, boxWidth, boxHeight);
         g.font = '25px Arial';
         g.fillStyle = 'black';
@@ -125,7 +120,7 @@ export function HtmlView(win, canvasElement) {
     }
 
     /**
-     * @param {Circle} c 
+     * @param {Circle} c
      */
     function drawCircle(c) {
         const style = c.style
@@ -133,10 +128,7 @@ export function HtmlView(win, canvasElement) {
         g.fillStyle = style.background
         g.lineWidth = style.borderWidth
 
-        if (c.lastHit) 
-            g.strokeStyle = style.borderColorHit
-        else 
-            g.strokeStyle = style.borderColor
+        if (c.lastHit) g.strokeStyle = style.borderColorHit else g.strokeStyle = style.borderColor
 
         g.beginPath();
         g.arc(c.x, height - c.y, c.size, 0, 2 * Math.PI);
@@ -145,7 +137,7 @@ export function HtmlView(win, canvasElement) {
     }
 
     /**
-     * @param {Rectangle} r 
+     * @param {Rectangle} r
      */
     function drawRectangle(r) {
         const style = c.style
@@ -159,16 +151,17 @@ export function HtmlView(win, canvasElement) {
 
         if (r.lastHit) {
             g.strokeStyle = style.borderColorHit
-            if (r.lastHit.edge === 'top')
+            if (r.lastHit.edge === 'top') {
                 g.strokeRect(r.x, height - (r.y + r.height), r.width, 2);
-            else if (r.lastHit.edge === 'right')
+            } else if (r.lastHit.edge === 'right') {
                 g.strokeRect(r.x + r.width, height - (r.y + r.height), 2, r.height);
-            else if (r.lastHit.edge === 'bottom')
+            } else if (r.lastHit.edge === 'bottom') {
                 g.strokeRect(r.x, height - r.y, r.width, 2);
-            else if (r.lastHit.edge === 'left')
+            } else if (r.lastHit.edge === 'left') {
                 g.strokeRect(r.x, height - (r.y + r.height), 2, r.height);
-            else
+            } else {
                 g.strokeRect(r.x, height - (r.y + r.height), r.width, r.height);
+            }
         }
     }
 }
