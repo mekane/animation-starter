@@ -6,6 +6,7 @@ import {Vector} from "../src/Vector.js";
 export class SeedFillPlugin extends Plugin {
     width = 300;
     height = 150;
+    f = 0;
 
     getInitialState(initialView = {width: 300, height: 150}) {
         this.width = initialView.width;
@@ -33,8 +34,15 @@ export class SeedFillPlugin extends Plugin {
         }
     }
 
-    imageUpdate(imageData) {
-        const data = imageData.data;
+    imageUpdate(currentImageData, newImageData) {
+        this.f++;
+
+        if ( this.f > 600 ) {
+            this.f = 0;
+            return newImageData;
+        }
+
+        const data = currentImageData.data;
 
         for (let i = 0; i < 1000; i++) {
             const w = getRandomInt(0, this.width);
@@ -48,7 +56,7 @@ export class SeedFillPlugin extends Plugin {
             data[p + 3] = 200; //alpha
         }
 
-        return data;
+        return currentImageData;
     }
 }
 

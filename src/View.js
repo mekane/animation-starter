@@ -17,10 +17,17 @@ export class View {
     }
 
     /**
-     * Get an empty image data array of the correct size for the current view
-     * @returns Uint8ClampedArray
+     * Get ImageData object with pixel data for the current view
+     * @returns ImageData
      */
-    getImageData() {
+    getCurrentPixelBuffer() {
+    }
+
+    /**
+     * Get an empty ImageData object of the correct size for the current view
+     * @returns ImageData
+     */
+    getNewPixelBuffer() {
     }
 
     showPaused() {
@@ -47,7 +54,8 @@ export function HtmlView(win, canvasElement) {
     return {
         draw,
         getBounds,
-        getImageData,
+        getCurrentPixelBuffer,
+        getNewPixelBuffer,
         resize,
         showPaused
     }
@@ -91,11 +99,11 @@ export function HtmlView(win, canvasElement) {
         }
     }
 
-    function getImageData() {
-        //use this for cumulative drawing
-        //return g.getImageData(0, 0, width, height);
+    function getCurrentPixelBuffer() {
+        return g.getImageData(0, 0, width, height);
+    }
 
-        //use this to draw new pixels every time
+    function getNewPixelBuffer() {
         return g.createImageData(width, height);
     }
 

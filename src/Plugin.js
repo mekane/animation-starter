@@ -33,13 +33,21 @@ export class Plugin {
 
     /**
      * Called every game loop before drawing to give the plugin a chance
-     * to draw pixels for the background. The plugin is given an array of
-     * unsigned bytes, four for each pixel RGBA. It should modify and return
-     * the pixel data.
-     * @param data Uint8ClampedArray
-     * @return Uint8ClampedArray
+     * to draw pixels for the background.
+     *
+     * The method will be called with two ImageData objects, the first
+     * one will have the current pixels and the second will be the
+     * same size but blank. The plugin is free to modify and return
+     * either one, which will be used to draw the next frame.
+     *
+     * Note that the current image data includes pixels drawn by any
+     * entities in the scene!
+     *
+     * @param currentPixels ImageData
+     * @param newPixels ImageData
+     * @return ImageData - the next set of pixels to draw
      */
-    imageUpdate(data) {
-        return data
+    imageUpdate(currentPixels, newPixels) {
+        return currentPixels;
     }
 }
