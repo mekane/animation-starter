@@ -38,7 +38,10 @@ export function HtmlView(win, canvasElement) {
     resize();
 
     return {
-        draw, getBounds, showPaused
+        draw,
+        getBounds,
+        resize,
+        showPaused
     }
 
     function resize() {
@@ -52,6 +55,7 @@ export function HtmlView(win, canvasElement) {
     }
 
     function draw(state, time) {
+        console.log(g);
         g.clearRect(0, 0, width, height);
 
         if (state.showFps) {
@@ -128,7 +132,11 @@ export function HtmlView(win, canvasElement) {
         g.fillStyle = style.background
         g.lineWidth = style.borderWidth
 
-        if (c.lastHit) g.strokeStyle = style.borderColorHit else g.strokeStyle = style.borderColor
+        if (c.lastHit) {
+            g.strokeStyle = style.borderColorHit
+        } else {
+            g.strokeStyle = style.borderColor
+        }
 
         g.beginPath();
         g.arc(c.x, height - c.y, c.size, 0, 2 * Math.PI);
