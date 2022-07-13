@@ -38,6 +38,10 @@ export class Vector {
     subtract(v2) {
         return new Vector(this.x - v2.x, this.y - v2.y)
     }
+
+    toString() {
+        return `(${this.x}, ${this.y})`;
+    }
 }
 
 function _number(n) {
