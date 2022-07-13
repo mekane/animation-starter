@@ -24,18 +24,18 @@ const billiards = [
 
     new Circle(318, 490, 10, new Vector(0, 0)),
 
-    new Circle(820, 490, 25, new Vector(-90, 0))
+    new Circle(820, 490, 25, new Vector(-180, 0))
 ]
 
 const bullets = [
-    new Rectangle(900, 540, 400, 300),
-    new Projectile(20, 525, 6, new Vector(44, 6)),
-    new Projectile(20, 500, 6, new Vector(43, 4)),
-    new Projectile(20, 475, 6, new Vector(41, 2)),
-    new Projectile(20, 450, 6, new Vector(40, 0)),
-    new Projectile(20, 425, 6, new Vector(42, -2)),
-    new Projectile(20, 400, 6, new Vector(45, -4)),
-    new Projectile(20, 375, 6, new Vector(48, -6)),
+    new Rectangle(800, 440, 400, 300),
+    new Projectile(20, 525, 6, new Vector(184, 6)),
+    new Projectile(20, 500, 6, new Vector(183, 4)),
+    new Projectile(20, 475, 6, new Vector(181, 2)),
+    new Projectile(20, 450, 6, new Vector(180, 0)),
+    new Projectile(20, 425, 6, new Vector(182, -2)),
+    new Projectile(20, 400, 6, new Vector(185, -4)),
+    new Projectile(20, 375, 6, new Vector(188, -8)),
 ]
 
 function convergeToCenterCircle() {
@@ -53,7 +53,7 @@ function convergeToCenterCircle() {
         const cx = x + x2 + getRandomInt(-12, 12);
         const cy = y + y2 + getRandomInt(-12, 12);
         const size = getRandomInt(7, 12);
-        entities.push(new Circle(cx, cy, size, new Vector(-x / 15, -y / 15)))
+        entities.push(new Circle(cx, cy, size, new Vector(-x / 10, -y / 10)))
     }
 
     for (let a = 0; a < 6.28; a += .15) {
@@ -63,7 +63,7 @@ function convergeToCenterCircle() {
         const cx = x + x2 + getRandomInt(-12, 12);
         const cy = y + y2 + getRandomInt(-12, 12);
         const size = getRandomInt(16, 22);
-        entities.push(new Circle(cx, cy, size, new Vector(-x / 40, -y / 40)))
+        entities.push(new Circle(cx, cy, size, new Vector(-x / 15, -y / 15)))
     }
 
     return entities;
@@ -78,12 +78,12 @@ function convergeToCenterTwoLines() {
         const y1 = getRandomInt(5, 35);
         const size = getRandomInt(8, 12);
         const vx1 = (600 - x) / getRandomInt(20, 25);
-        const vy1 = getRandomInt(20, 35);
+        const vy1 = getRandomInt(65, 90);
         entities.push(new Circle(x, y1, size, new Vector(vx1, vy1)))
 
         const y2 = getRandomInt(maxY - 5, maxY - 25);
         const vx2 = (600 - x) / getRandomInt(20, 25);
-        const vy2 = getRandomInt(-25, -40);
+        const vy2 = getRandomInt(-65, -90);
         const size2 = getRandomInt(8, 12)
         entities.push(new Circle(x, y2, size2, new Vector(vx2, vy2)))
     }

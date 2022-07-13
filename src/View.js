@@ -175,7 +175,7 @@ export function HtmlView(win, canvasElement) {
      * @param {Rectangle} r
      */
     function drawRectangle(r) {
-        const style = c.style
+        const style = r.style
 
         g.lineWidth = style.borderWidth
         g.fillStyle = style.background
