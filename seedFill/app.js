@@ -5,14 +5,15 @@ import {BrowserControls} from "../src/Controls.js";
 import {SeedFillPlugin} from "./SeedFill.js";
 import "../src/Help.js";
 
-const controls = new BrowserControls()
+const controls = new BrowserControls();
+controls.pause = true;
+
 const view = HtmlView(window, document.getElementById('main'))
 const timer = new BrowserTimer();
 const game = Game(controls, view, timer, new SeedFillPlugin());
-game.step();
-
 
 //Setup controls
+/*
 window.addEventListener('keyup', e => {
 	if (e.key === '-') {
         if ( speed <= 10 )
@@ -31,4 +32,4 @@ window.addEventListener('keyup', e => {
 		console.log(`speed ${speed}`);
 	}
 });
-
+*/

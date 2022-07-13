@@ -44,6 +44,8 @@ export class SeedFillPlugin extends Plugin {
     }
 
     preUpdate(state, controls) {
+        console.log('update');
+
         if (controls.plus) {
             console.log('controls plus');
         }
@@ -67,12 +69,12 @@ export class SeedFillPlugin extends Plugin {
         const nextIteration = [];
 
         iterations++;
-        if (iterations > 3) {
-            return currentImageData;
-        }
+        // if (iterations > 3) {
+        //     return currentImageData;
+        // }
 
-        // console.log(`Iteration ${iterations}`);
-        // console.log('  points length', this.pointsToTry.length);
+        console.log(`Iteration ${iterations}`);
+        console.log('  points length', this.pointsToTry.length);
 
         while (this.pointsToTry.length > 0) {
             const p = this.pointsToTry.pop();
