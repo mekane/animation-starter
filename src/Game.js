@@ -59,7 +59,7 @@ export function Game(controls, view, timer, plugin, options = defaultGameOptions
 
         controlState = controls.getControlState();
 
-	gameState.showFps = controlState.info;
+        gameState.showFps = controlState.info;
 
         if (controlState.pause) {
             view.showPaused();
@@ -78,7 +78,7 @@ export function Game(controls, view, timer, plugin, options = defaultGameOptions
 
 
     function updateBoundsOnState() {
-        const { width, height } = view.getBounds();
+        const {width, height} = view.getBounds();
         gameState.maxX = width;
         gameState.maxY = height;
     }
@@ -94,7 +94,7 @@ export function Game(controls, view, timer, plugin, options = defaultGameOptions
 
         const nextState = Object.assign({entities: []}, oldState);
 
-        if ( typeof plugin.imageUpdate === 'function' ) {
+        if (typeof plugin.imageUpdate === 'function') {
             const currentPixels = view.getCurrentPixelBuffer();
             const newPixels = view.getNewPixelBuffer();
             const nextImageData = plugin.imageUpdate(currentPixels, newPixels);
